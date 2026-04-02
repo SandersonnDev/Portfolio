@@ -1,16 +1,25 @@
-<header class="w-full shadow-md/30 backdrop-blur-sm mx-auto min-w-auto px-4 py-6 bg-gray-800">
-      <div class="flex justify-around items-center">
+<header class="w-full shadow-md/30 backdrop-blur-sm mx-auto min-w-auto bg-gray-800 px-12 py-2 md:px-6 md:py-2">
+      <div class="flex justify-between md:justify-around items-center">
       <div class="flex items-center">
         <a href="/" class="h-10 w-10 rounded-full text-indigo-400 flex items-center justify-center text-2xl font-bold">KOUZIA</a>
       </div>
-      <nav class="hidden md:flex space-x-8">
-        <a href="/" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">À propos</a>
-        <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Mes Stacks</a>
-        <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Mes Projets</a>
-        <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Contactez-moi</a>
+      <nav class="font-sen text-gray-800 dark:text-white uppercase text-md lg:flex items-center hidden">
+        <a href="/" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">À propos</a>
+        <a href="/404" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">Mes Stacks</a>
+        <a href="/404" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">Mes Projets</a>
+        <a href="/404" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">Contactez-moi</a>
       </nav>
       <div class="md:hidden">
-        <button class="text-indigo-400 focus:outline-none"><i class="fa-solid fa-bars text-2xl"></i></button>
+        <button id="menu-btn" class="text-indigo-400 focus:outline-none"><i class="fa-solid fa-bars text-2xl"></i></button>
       </div>
     </div>
   </header>
+
+  <div id="menu" class="hidden md:hidden top-0 left-0 w-full h-full bg-gray-800 z-10">
+    <nav class="flex flex-col space-y-4 text-center py-5">
+      <a href="/" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">À propos</a>
+      <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Mes Stacks</a>
+      <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Mes Projets</a>
+      <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Contactez-moi</a>
+    </nav>
+  </div>

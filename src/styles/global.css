@@ -1,3 +1,4 @@
 @import "tailwindcss";
 
 @import "../components/header.astro";
+@import "../styles/pages/index.css";
