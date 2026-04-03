@@ -1,15 +1,20 @@
 ---
-import "../styles/global.css"
-import Layout from "../layouts/Layout.astro"
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/portfolio/Hero.astro";
+import About from "../components/portfolio/About.astro";
+import Stack from "../components/portfolio/Stack.astro";
+import Projects from "../components/portfolio/Projects.astro";
+import Contact from "../components/portfolio/Contact.astro";
 ---
-<Layout >
-	<section>
-		<div class="fixed text-white text-center">
-			<div class="flex flex-col items-center justify-center p-20">
-				<h1 class="text-4xl font-bold">test</h1>
-				<p class="text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
-			</div>
+
+<Layout pageTitle="Accueil">
+	<div class="min-w-0" transition:name="main-content" transition:animate="slide">
+		<Hero />
+		<div class="pb-10 md:pb-14 lg:pb-16">
+			<About />
+			<Stack />
+			<Projects />
+			<Contact />
 		</div>
-		<canvas class="block w-full h-full bg-gray-900" id="grid"></canvas>
-	</section>
+	</div>
 </Layout>

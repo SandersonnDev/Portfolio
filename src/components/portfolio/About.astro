@@ -1,0 +1,49 @@
+---
+import Section from "./Section.astro";
+import { about, motivation } from "../../data/portfolio";
+
+const img = about.image;
+---
+
+<Section id="about" reveal revealAnim="zoom">
+	<div class="reveal-cascade space-y-14 md:space-y-20">
+		<div class="flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-12 xl:gap-14">
+			<div class="min-w-0 lg:pr-4">
+				<h2 class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400 md:mb-6">{about.title}</h2>
+				<p class="max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 md:text-lg md:leading-relaxed lg:text-xl">
+					{about.body}
+				</p>
+			</div>
+			<figure class="min-w-0 overflow-hidden rounded-xl border border-indigo-400/25 bg-zinc-200 dark:border-indigo-400/20 dark:bg-zinc-900">
+				{
+					img.src ? (
+						<img
+							src={img.src}
+							alt={img.alt}
+							class="aspect-[16/10] w-full object-cover sm:aspect-[2/1] lg:aspect-auto lg:max-h-[min(72vh,560px)] lg:min-h-[240px]"
+							loading="lazy"
+							width={1600}
+							height={1000}
+						/>
+					) : (
+						<div class="flex aspect-[16/10] w-full flex-col items-center justify-center gap-3 bg-zinc-100 px-6 py-20 sm:aspect-[2/1] lg:aspect-auto lg:min-h-[280px] dark:bg-zinc-950">
+							<i class="fa-regular fa-image text-5xl text-indigo-400/50 dark:text-indigo-400/45" aria-hidden="true" />
+							<p class="text-center text-sm text-zinc-500 dark:text-zinc-500">{img.alt}</p>
+						</div>
+					)
+				}
+				{
+					img.caption && (
+						<figcaption class="border-t border-indigo-400/15 px-4 py-3 text-sm text-zinc-600 dark:border-indigo-400/10 dark:text-zinc-500">
+							{img.caption}
+						</figcaption>
+					)
+				}
+			</figure>
+		</div>
+		<div class="border-t border-indigo-400/20 pt-14 dark:border-indigo-400/15 md:pt-20">
+			<h3 class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400 md:mb-6">{motivation.title}</h3>
+			<p class="text-base leading-relaxed text-zinc-600 dark:text-zinc-400 md:text-lg md:leading-relaxed lg:text-xl">{motivation.body}</p>
+		</div>
+	</div>
+</Section>

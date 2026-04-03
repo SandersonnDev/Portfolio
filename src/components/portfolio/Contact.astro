@@ -1,0 +1,34 @@
+---
+import Section from "./Section.astro";
+import { contact, site } from "../../data/portfolio";
+---
+
+<Section id="contact" title={contact.title} eyebrow="Échangeons" reveal revealAnim="zoom">
+	<div class="reveal-cascade flex flex-col gap-6">
+		<p class="text-base text-zinc-600 dark:text-zinc-400 md:text-lg">{contact.intro}</p>
+		<a
+			href={`mailto:${site.email}`}
+			class="text-on-indigo-btn neon-border transition-ui inline-flex w-full items-center justify-center gap-2 rounded-md border border-indigo-500/45 bg-indigo-700 px-4 py-3 text-sm font-medium hover:border-indigo-400/60 hover:bg-indigo-600 dark:border-indigo-400/35 dark:bg-indigo-950 dark:hover:border-indigo-400/55 dark:hover:bg-indigo-900 sm:w-fit sm:justify-start sm:py-2.5"
+		>
+			<i class="fa-solid fa-envelope text-on-indigo-btn" aria-hidden="true"></i>
+			{site.email}
+		</a>
+		<ul class="reveal-cascade-social mt-2 flex flex-wrap gap-4">
+			{
+				contact.social.map((s) => (
+					<li>
+						<a
+							href={s.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="transition-ui flex h-11 w-11 items-center justify-center rounded-full border border-indigo-400/35 bg-zinc-300 text-indigo-700 hover:border-indigo-500/50 hover:bg-zinc-400 dark:border-indigo-400/25 dark:bg-zinc-900 dark:text-indigo-400 dark:hover:border-indigo-400/50 dark:hover:bg-zinc-800 dark:hover:text-indigo-300"
+							aria-label={s.label}
+						>
+							<i class={`${s.icon} text-lg`} aria-hidden="true" />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</Section>

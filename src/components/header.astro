@@ -1,25 +1,89 @@
-<header class="w-full shadow-md/30 backdrop-blur-sm mx-auto min-w-auto bg-gray-800 px-12 py-2 md:px-6 md:py-2">
-      <div class="flex justify-between md:justify-around items-center">
-      <div class="flex items-center">
-        <a href="/" class="h-10 w-10 rounded-full text-indigo-400 flex items-center justify-center text-2xl font-bold">KOUZIA</a>
-      </div>
-      <nav class="font-sen text-gray-800 dark:text-white uppercase text-md lg:flex items-center hidden">
-        <a href="/" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">À propos</a>
-        <a href="/404" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">Mes Stacks</a>
-        <a href="/404" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">Mes Projets</a>
-        <a href="/404" class="py-2 px-6 flex hover:text-indigo-400 transition-colors duration-200">Contactez-moi</a>
-      </nav>
-      <div class="md:hidden">
-        <button id="menu-btn" class="text-indigo-400 focus:outline-none"><i class="fa-solid fa-bars text-2xl"></i></button>
-      </div>
-    </div>
-  </header>
+---
+import { navLinks, site } from "../data/portfolio";
+---
 
-  <div id="menu" class="hidden md:hidden top-0 left-0 w-full h-full bg-gray-800 z-10">
-    <nav class="flex flex-col space-y-4 text-center py-5">
-      <a href="/" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">À propos</a>
-      <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Mes Stacks</a>
-      <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Mes Projets</a>
-      <a href="/404" class="text-white font-semibold uppercase hover:text-indigo-400 transition-colors duration-200">Contactez-moi</a>
-    </nav>
-  </div>
+<div class="w-full min-w-0">
+	<header
+		data-site-header
+		class="fixed inset-x-0 top-0 z-40 w-full min-w-0 border-b border-indigo-400/20 dark:border-indigo-400/15"
+	>
+		<div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3.5 sm:gap-4 sm:px-6 lg:px-10">
+			<a
+				href="/"
+				class="shrink-0 text-sm font-bold uppercase tracking-[0.2em] text-indigo-600 transition-ui hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+			>
+				{site.name}
+			</a>
+			<div class="ml-auto flex min-w-0 shrink-0 items-center gap-1 sm:gap-2">
+				<nav class="hidden items-center gap-0.5 md:flex" aria-label="Navigation principale">
+					{
+						navLinks.map((item) => (
+							<a
+								href={item.href}
+								class="rounded-md px-3 py-2 text-xs font-medium uppercase tracking-wider text-zinc-600 transition-ui hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
+							>
+								{item.label}
+							</a>
+						))
+					}
+				</nav>
+				<button
+					type="button"
+					id="theme-toggle"
+					class="theme-toggle"
+					aria-pressed="false"
+					aria-label="Passer en thème clair"
+				>
+					<i class="fa-solid fa-moon text-base" data-theme-icon aria-hidden="true"></i>
+				</button>
+				<button
+					type="button"
+					id="menu-btn"
+					class="inline-flex items-center justify-center rounded-md border border-zinc-300 bg-zinc-200 p-2 text-indigo-700 transition-ui hover:bg-zinc-300 dark:border-transparent dark:bg-zinc-800 dark:text-indigo-400 dark:hover:bg-zinc-700 md:hidden"
+					aria-label="Ouvrir le menu"
+					aria-expanded="false"
+					aria-controls="menu"
+				>
+					<i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<div
+		id="menu"
+		class="menu-closed fixed inset-0 z-50 flex flex-col bg-zinc-100/98 backdrop-blur-lg dark:bg-zinc-950/95 md:hidden"
+	>
+		<div class="flex items-center justify-between gap-3 border-b border-indigo-400/15 px-4 py-3.5 sm:px-6">
+			<button
+				type="button"
+				class="theme-toggle"
+				id="theme-toggle-menu"
+				aria-pressed="false"
+				aria-label="Passer en thème clair"
+			>
+				<i class="fa-solid fa-moon text-lg" data-theme-icon aria-hidden="true"></i>
+			</button>
+			<button
+				type="button"
+				class="inline-flex items-center justify-center rounded-md border border-zinc-300 bg-zinc-200 p-2 text-indigo-700 transition-ui hover:bg-zinc-300 dark:border-transparent dark:bg-zinc-800 dark:text-indigo-400 dark:hover:bg-zinc-700"
+				aria-label="Fermer le menu"
+				data-close-menu
+			>
+				<i class="fa-solid fa-xmark text-2xl" aria-hidden="true"></i>
+			</button>
+		</div>
+		<nav class="flex flex-1 flex-col items-center justify-center gap-8 px-6" aria-label="Navigation mobile">
+			{
+				navLinks.map((item) => (
+					<a
+						href={item.href}
+						class="text-sm font-semibold uppercase tracking-[0.25em] text-zinc-800 transition-ui hover:text-indigo-600 dark:text-zinc-200 dark:hover:text-indigo-400"
+					>
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</div>

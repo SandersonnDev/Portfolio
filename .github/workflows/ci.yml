@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (sync GitHub + Astro)
+        run: npm run build
+        env:
+          # Secret dépôt : même valeur que ton PAT (Settings → Secrets → API_KEY_PORTFOLIO)
+          API_KEY_PORTFOLIO: ${{ secrets.API_KEY_PORTFOLIO }}

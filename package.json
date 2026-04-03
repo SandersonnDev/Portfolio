@@ -6,8 +6,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "predev": "node scripts/ensure-env.mjs",
+    "dev": "node scripts/sync-github-projects.mjs && astro dev",
+    "prebuild": "node scripts/sync-github-projects.mjs",
     "build": "astro build",
+    "sync:github": "node scripts/sync-github-projects.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

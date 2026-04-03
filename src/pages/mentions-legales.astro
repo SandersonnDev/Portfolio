@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site } from "../data/portfolio";
+---
+
+<Layout pageTitle="Mentions légales" description="Mentions légales du site portfolio.">
+	<div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-10" transition:name="main-content" transition:animate="slide">
+		<h1 class="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Mentions légales</h1>
+		<div class="mt-8 max-w-none space-y-4 text-zinc-700 dark:text-zinc-300">
+			<p>
+				Complétez cette page avec l’identité de l’éditeur, l’hébergeur, les conditions d’utilisation et les obligations légales
+				applicables à votre activité.
+			</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-500">
+				Éditeur du site : {site.name} — contact :{" "}
+				<a href={`mailto:${site.email}`} class="text-indigo-600 underline dark:text-indigo-400">
+					{site.email}
+				</a>
+			</p>
+		</div>
+		<a
+			href="/"
+			class="mt-10 inline-block text-sm font-medium text-indigo-700 transition-ui hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+		>
+			← Retour à l’accueil
+		</a>
+	</div>
+</Layout>

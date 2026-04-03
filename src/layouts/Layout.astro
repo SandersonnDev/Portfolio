@@ -1,24 +1,88 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/header.astro";
 import Footer from "../components/footer.astro";
+import "../styles/global.css";
+import burgerMenuUrl from "../js/burger-menu.js?url";
+import revealUrl from "../js/reveal.js?url";
+import gridCursorUrl from "../js/grid-cursor.js?url";
+import headerScrollUrl from "../js/header-scroll.js?url";
+import lightboxUrl from "../js/lightbox.js?url";
+import themeToggleUrl from "../js/theme-toggle.js?url";
+import projectCarouselUrl from "../js/project-carousel.js?url";
+import ViewTransitionSlide from "../components/ViewTransitionSlide.astro";
+import { site } from "../data/portfolio";
+
+interface Props {
+	/** Fragment après « Nom du site | … » (ex. Accueil, CV, titre projet). */
+	pageTitle?: string;
+	description?: string;
+}
+
+const {
+	pageTitle = site.tagline,
+	description = "Portfolio — développement web et applications, stack moderne.",
+} = Astro.props;
+const documentTitle = `${site.name} | ${pageTitle}`;
 ---
 <!doctype html>
-<html lang="fr">
+<html lang="fr" class="dark">
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>
+			(function () {
+				try {
+					var t = localStorage.getItem("portfolio-theme");
+					var r = document.documentElement;
+					if (t === "light") {
+						r.classList.remove("dark");
+						r.classList.add("light");
+					} else {
+						r.classList.add("dark");
+						r.classList.remove("light");
+					}
+				} catch (e) {}
+			})();
+		</script>
 		<meta name="viewport" content="width=device-width" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-		<link rel="stylesheet" href="../styles/layouts/Layouts.css">
+		<meta name="description" content={description} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>KOUZIA</title>
+		<title>{documentTitle}</title>
+		<ClientRouter />
 	</head>
-	<body>
+	<body
+		class="min-h-dvh min-w-0 bg-zinc-100 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100"
+	>
+		<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+			<div
+				class="absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_-22%,rgba(99,102,241,0.14),transparent_58%)] dark:bg-[radial-gradient(ellipse_90%_60%_at_50%_-22%,rgba(129,140,248,0.22),transparent_58%)]"
+			>
+			</div>
+			<div class="grid-bg-radials absolute inset-0"></div>
+			<div class="grid-bg-base absolute inset-0"></div>
+			<div class="grid-bg-spotlight absolute inset-0"></div>
+		</div>
 		<Header />
-		<slot />
+		<main class="flex-1 w-full">
+			<slot />
+		</main>
 		<Footer />
+		<ViewTransitionSlide />
+		<script src={burgerMenuUrl} defer></script>
+		<script src={revealUrl} defer></script>
+		<script src={gridCursorUrl} defer></script>
+		<script src={headerScrollUrl} defer></script>
+		<script src={lightboxUrl} defer></script>
+		<script src={themeToggleUrl} defer></script>
+		<script src={projectCarouselUrl} defer></script>
 	</body>
-	<script src="../public/js/burger-menu.js" defer></script>
-	<script src="../public/js/canvas.js" defer></script>
 </html>

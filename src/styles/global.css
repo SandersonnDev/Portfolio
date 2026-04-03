@@ -1,4 +1,17 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-@import "../components/header.astro";
-@import "../styles/pages/index.css";
+@import "./layouts/normalize.css";
+@import "./base/root.css";
+@import "./modules/grid.css";
+@import "./modules/header-nav.css";
+@import "./modules/lightbox.css";
+@import "./modules/menu.css";
+@import "./modules/utilities.css";
+@import "./modules/animations.css";
+@import "./modules/project-carousel.css";
+
+@theme {
+	--font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+	--color-accent: oklch(0.673 0.182 276.935);
+}

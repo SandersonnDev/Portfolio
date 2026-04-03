@@ -1,0 +1,109 @@
+{
+	"syncedAt": "2026-04-03T14:24:55.415Z",
+	"sourceUser": "SandersonnDev",
+	"projects": [
+		{
+			"slug": "convertalllocal",
+			"title": "ConvertAllLocal",
+			"description": "ConvertAllLocal est une application locale qui permet de convertir tous les formats vidéo, image et icônes les plus utilisés dans le web et le développement d'applications, sans téléchargement ni envoi de fichiers vers des services externes.",
+			"stack": [],
+			"href": "https://github.com/SandersonnDev/ConvertAllLocal",
+			"liveHref": null,
+			"sections": [
+				{
+					"type": "paragraph",
+					"text": "ConvertAllLocal est une application locale qui permet de convertir tous les formats vidéo, image et icônes les plus utilisés dans le web et le développement d'applications, sans téléchargement ni envoi de fichiers vers des services externes. Conversion 100% locale : Tout se passe sur votre machine (via FFmpeg pour vidéo/audio, ImageMagick/Sharp pour images). Formats supportés : Couvre 95% des besoins web/apps modernes. Interface simple : Drag & drop ou sélection fichier, choix format de sortie, conversion en 1 clic. Batch processing : Convertir plusieurs fichiers d'un coup. Optimisé web : Présets pour tailles/résolutions (ex: WebP 80% qualité, MP4 H.264). Aucun internet requis : Fonctionne offline après installation. Présets suggérés : ICO (Windows), ICNS (macOS), PNG 256x256 (Linux), WebP/SVG (web moderne)."
+				}
+			]
+		},
+		{
+			"slug": "workspace",
+			"title": "workspace",
+			"description": "Application de bureau (Electron) conçue pour centraliser et gérer les activités quotidiennes d'une structure. Elle s'appuie sur un serveur backend déployé séparément (sur Proxmox) auquel elle se connecte via HTTP REST et WebSocket.",
+			"stack": [
+				"JavaScript",
+				"CSS",
+				"HTML",
+				"Shell"
+			],
+			"href": "https://github.com/SandersonnDev/workspace",
+			"liveHref": null,
+			"sections": [
+				{
+					"type": "paragraph",
+					"text": "Application de bureau (Electron) conçue pour centraliser et gérer les activités quotidiennes d'une structure. Elle s'appuie sur un serveur backend déployé séparément (sur Proxmox) auquel elle se connecte via HTTP REST et WebSocket. Workspace est une interface unifiée qui regroupe plusieurs modules fonctionnels accessibles depuis un seul client : Page principale affichant un tableau de bord avec l'heure et la date en temps réel, ainsi qu'un aperçu des informations importantes de la structure (La Capsule). Calendrier interactif permettant de consulter et gérer les événements. Les vues semaine, mois et année sont disponibles. Les événements sont créés, modifiés et supprimés directement depuis l'interface."
+				},
+				{
+					"type": "paragraph",
+					"text": "Module dédié à la gestion du matériel reconditionné, composé de quatre sous-sections : Entrée : saisie des nouveaux lots de machines (numéros de série, marques, modèles) Inventaire : état des stocks en cours, filtrage par état, assignation des techniciens Historique : suivi de l'ensemble des mouvements de matériel Traçabilité : lien entre les machines et leur historique de reconditionnement Gestionnaire de fichiers donnant accès aux documents internes de la structure, organisés par entité. Raccourcis vers les applications internes regroupées par catégorie (Développement, Streaming, Bureautique, etc.), gérées dynamiquement depuis le serveur. Accès rapide aux liens et outils fréquemment utilisés. Paramètres de l'application : configuration de la connexion au serveur, préférences d'affichage et gestion du compte utilisateur."
+				},
+				{
+					"type": "paragraph",
+					"text": "L'application suit une architecture client/serveur distincte : Le client Electron tourne localement sur la machine de l'utilisateur. Il gère l'interface, les interactions utilisateur et toutes les communications avec le serveur via un module API centralisé ( ). Le serveur backend est déployé sur une machine Proxmox (192.168.1.62:4000). Il expose une API REST et un canal WebSocket pour les mises à jour en temps réel. La configuration de connexion (URL du serveur, endpoints) est centralisée dans un unique fichier , ce qui permet de basculer facilement entre les environnements local, Proxmox et production."
+				}
+			]
+		},
+		{
+			"slug": "mjc_safenet",
+			"title": "MJC_Safenet",
+			"description": "Projet pour la MJC de Morlaix, journée Safenet",
+			"stack": [
+				"JavaScript",
+				"CSS",
+				"HTML"
+			],
+			"href": "https://github.com/SandersonnDev/MJC_Safenet",
+			"liveHref": null,
+			"sections": [
+				{
+					"type": "paragraph",
+					"text": "Fichiers à créer : : Structure de la page : Habillage visuel (animation, fond binaire, esthétique du terminal) : Gestion du minuteur, du code de désactivation et du menu admin Section principale du scénario : - Conteneur global ( ) - Logo en haut à droite ( ) - Champ de texte pour entrer le code ( ) Menu administrateur masqué (accès par Alt + A) : - Fenêtre modale ( ) - Champs : - Durée du minuteur (HH:MM:SS) - Mot de passe de désactivation - Pénalité pour erreur - Boutons : - Démarrer minuteur - Réinitialiser - Sauvegarder paramètres Effets visuels : - Fond animé de chiffres binaires ( ) - Sons (explosion, validation) Principaux éléments : Corps : fond noir, police monospace. Fond binaire : animation verticale lente avec opacité. Timer : police large, couleur changeant (vert → orange → rouge selon le temps restant). Zone de saisie : effet terminal (texte vert, curseur clignotant)."
+				},
+				{
+					"type": "paragraph",
+					"text": "Popup d’erreur : animation “shake”, couleur rouge, disparition après 5 secondes. Menu admin : design minimaliste avec bordures lumineuses et fond semi-transparent. Variables principales : (par défaut 3600 s) (par défaut \"netsafe\") Fonctionnalités clés : Initialisation du minuteur - Afficher les heures, minutes, secondes. - Décrémentation chaque 100 ms. - Changement de couleur lors du seuil critique (par exemple < 5 min). Validation du code - Comparer la saisie avec le code secret. - Si correct → Arrêt minuteur + message succès. - Si incorrect → pénalité + animation rouge + popup “Code invalide”. Menu admin (Alt + A) - Ouverture/fermeture du panneau. - Application des réglages personnalisés. Fin du compte à rebours* - Arrêt minuteur. - Animation explosion + son."
+				}
+			]
+		},
+		{
+			"slug": "lacapsule-ssa_capsule",
+			"title": "lacapsule/SSA_Capsule",
+			"description": "Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou M…",
+			"stack": [
+				"PHP",
+				"JavaScript",
+				"Hack",
+				"CSS",
+				"Shell",
+				"Makefile",
+				"Dockerfile"
+			],
+			"href": "https://github.com/lacapsule/SSA_Capsule",
+			"liveHref": null,
+			"sections": [
+				{
+					"type": "paragraph",
+					"text": "Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou MySQL sans ORM ni dépendance externe Appliquer le modèle MVC minimal Gérer les routes, les vues, et l’authentification proprement Offrir une architecture modulaire type framework Ou via Apache : 🔑 Système simple basé sur (PHP pur) 🔒 Middleware à inclure dans toute route protégée ✅ Gestion de session, mot de passe hashé, redirections 🧱 100% PHP natif, aucun framework externe 🔍 Code clair et lisible pour apprentissage ou projet associatif 🧩 Architecture extensible par dossiers ( ) 📦 Support multilingue, sécurité headers, layouts, middleware, SQLite [ ] Middleware CSRF"
+				}
+			]
+		},
+		{
+			"slug": "lacapsule-deffinovmjc",
+			"title": "lacapsule/deffinovMJC",
+			"description": "Un jeu de quizz pour les visiteurs de la MJC dans le cadre de l'appel à projet DEFFINOV",
+			"stack": [
+				"JavaScript",
+				"CSS",
+				"HTML"
+			],
+			"href": "https://github.com/lacapsule/deffinovMJC",
+			"liveHref": null,
+			"sections": [
+				{
+					"type": "paragraph",
+					"text": "Un jeu de quizz pour les visiteurs de la MJC dans le cadre de l'appel à projet DEFFINOV"
+				}
+			]
+		}
+	]
+}
