@@ -1,5 +1,5 @@
 {
-	"syncedAt": "2026-04-03T14:24:55.415Z",
+	"syncedAt": "2026-04-03T16:40:34.243Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
 		{
@@ -62,46 +62,6 @@
 				{
 					"type": "paragraph",
 					"text": "Popup d’erreur : animation “shake”, couleur rouge, disparition après 5 secondes. Menu admin : design minimaliste avec bordures lumineuses et fond semi-transparent. Variables principales : (par défaut 3600 s) (par défaut \"netsafe\") Fonctionnalités clés : Initialisation du minuteur - Afficher les heures, minutes, secondes. - Décrémentation chaque 100 ms. - Changement de couleur lors du seuil critique (par exemple < 5 min). Validation du code - Comparer la saisie avec le code secret. - Si correct → Arrêt minuteur + message succès. - Si incorrect → pénalité + animation rouge + popup “Code invalide”. Menu admin (Alt + A) - Ouverture/fermeture du panneau. - Application des réglages personnalisés. Fin du compte à rebours* - Arrêt minuteur. - Animation explosion + son."
-				}
-			]
-		},
-		{
-			"slug": "lacapsule-ssa_capsule",
-			"title": "lacapsule/SSA_Capsule",
-			"description": "Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou M…",
-			"stack": [
-				"PHP",
-				"JavaScript",
-				"Hack",
-				"CSS",
-				"Shell",
-				"Makefile",
-				"Dockerfile"
-			],
-			"href": "https://github.com/lacapsule/SSA_Capsule",
-			"liveHref": null,
-			"sections": [
-				{
-					"type": "paragraph",
-					"text": "Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou MySQL sans ORM ni dépendance externe Appliquer le modèle MVC minimal Gérer les routes, les vues, et l’authentification proprement Offrir une architecture modulaire type framework Ou via Apache : 🔑 Système simple basé sur (PHP pur) 🔒 Middleware à inclure dans toute route protégée ✅ Gestion de session, mot de passe hashé, redirections 🧱 100% PHP natif, aucun framework externe 🔍 Code clair et lisible pour apprentissage ou projet associatif 🧩 Architecture extensible par dossiers ( ) 📦 Support multilingue, sécurité headers, layouts, middleware, SQLite [ ] Middleware CSRF"
-				}
-			]
-		},
-		{
-			"slug": "lacapsule-deffinovmjc",
-			"title": "lacapsule/deffinovMJC",
-			"description": "Un jeu de quizz pour les visiteurs de la MJC dans le cadre de l'appel à projet DEFFINOV",
-			"stack": [
-				"JavaScript",
-				"CSS",
-				"HTML"
-			],
-			"href": "https://github.com/lacapsule/deffinovMJC",
-			"liveHref": null,
-			"sections": [
-				{
-					"type": "paragraph",
-					"text": "Un jeu de quizz pour les visiteurs de la MJC dans le cadre de l'appel à projet DEFFINOV"
 				}
 			]
 		}
