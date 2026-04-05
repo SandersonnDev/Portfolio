@@ -416,7 +416,8 @@ function tryExitWithExistingJson(err) {
 	if (n < 1) return false;
 	console.warn(`[sync-github] API GitHub indisponible ou quota dépassé — conservation du fichier existant (${n} projet(s)).`);
 	console.warn("[sync-github] Pour resynchroniser : API_KEY_PORTFOLIO ou GITHUB_TOKEN dans .env (ou secret en CI).");
-	process.exit(0);
+	/* process.exit() après fetch (undici) peut déclencher une assertion libuv sur Windows ; on s’en remet à exitCode. */
+	process.exitCode = 0;
 	return true;
 }
 
@@ -429,7 +430,7 @@ async function main() {
 	try {
 		repos = await fetchAllPublicReposForPortfolio();
 	} catch (e) {
-		tryExitWithExistingJson(e);
+		if (tryExitWithExistingJson(e)) return;
 		throw e;
 	}
 	console.info(`[sync-github] ${repos.length} dépôt(s) public(s) à traiter`);
@@ -475,5 +476,5 @@ async function main() {
 
 main().catch((e) => {
 	console.error("[sync-github] Erreur :", e);
-	process.exit(1);
+	process.exitCode = 1;
 });
