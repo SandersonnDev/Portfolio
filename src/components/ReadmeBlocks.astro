@@ -1,0 +1,95 @@
+---
+import type { ReadmeBlock, ReadmeInlinePart } from "../types/readme-blocks";
+
+interface Props {
+	blocks: ReadmeBlock[];
+}
+
+const { blocks } = Astro.props;
+
+function partsForParagraph(b: Extract<ReadmeBlock, { type: "paragraph" }>): ReadmeInlinePart[] {
+	if (b.parts?.length) return b.parts;
+	if (b.text != null && b.text !== "") return [{ k: "text", v: b.text }];
+	return [];
+}
+---
+
+<div class="readme-content">
+	{
+		blocks.map((block) => {
+			if (block.type === "heading") {
+				const Tag = block.level >= 3 ? "h4" : block.level === 2 ? "h3" : "h2";
+				return (
+					<Tag class:list={["readme-heading", `readme-heading--l${block.level}`]}>{block.text}</Tag>
+				);
+			}
+			if (block.type === "paragraph") {
+				const parts = partsForParagraph(block);
+				return (
+					<p class="readme-p">
+						{parts.map((p) =>
+							p.k === "bold" ? (
+								<strong class="readme-strong">{p.v}</strong>
+							) : p.k === "code" ? (
+								<code class="readme-code readme-code--inline">{p.v}</code>
+							) : (
+								<span>{p.v}</span>
+							),
+						)}
+					</p>
+				);
+			}
+			if (block.type === "list") {
+				const ListTag = block.ordered ? "ol" : "ul";
+				return (
+					<ListTag class:list={["readme-list", block.ordered && "readme-list--ordered"]}>
+						{block.items.map((itemParts) => (
+							<li class="readme-li">
+								{itemParts.map((p) =>
+									p.k === "bold" ? (
+										<strong class="readme-strong">{p.v}</strong>
+									) : p.k === "code" ? (
+										<code class="readme-code readme-code--inline">{p.v}</code>
+									) : (
+										<span>{p.v}</span>
+									),
+								)}
+							</li>
+						))}
+					</ListTag>
+				);
+			}
+			if (block.type === "code") {
+				return (
+					<div class="readme-pre-wrap">
+						{block.lang ? (
+							<p class="readme-pre-label sys-mono">{block.lang}</p>
+						) : null}
+						<pre class="readme-pre">
+							<code>{block.code}</code>
+						</pre>
+					</div>
+				);
+			}
+			if (block.type === "rule") {
+				return <hr class="readme-hr" />;
+			}
+			if (block.type === "quote") {
+				return (
+					<blockquote class="readme-quote">
+						{block.parts.map((p) =>
+							p.k === "bold" ? (
+								<strong class="readme-strong">{p.v}</strong>
+							) : p.k === "code" ? (
+								<code class="readme-code readme-code--inline">{p.v}</code>
+							) : (
+								<span>{p.v}</span>
+							),
+						)}
+					</blockquote>
+				);
+			}
+			return null;
+		})
+	}
+</div>

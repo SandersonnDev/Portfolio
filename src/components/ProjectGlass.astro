@@ -1,0 +1,49 @@
+---
+import { copy } from "../site.config";
+
+interface Props {
+	slug: string;
+	title: string;
+	description: string;
+	href: string;
+	index: number;
+}
+
+const { slug, title, description, href, index } = Astro.props;
+const id = String(index + 1).padStart(2, "0");
+const ficheUrl = `/projets/${slug}`;
+---
+
+<article
+	class="project-card glass glass--panel flex h-full flex-col rounded-lg p-6 md:p-7"
+	data-rise
+	style={`--rise-delay: ${index * 110}ms`}
+>
+	<header>
+		<span class="sys-mono text-[10px] tracking-[0.35em] text-(--cyan)">OBJ.{id}</span>
+		<h3 class="font-display mt-3 text-lg font-light tracking-wide text-(--fg) md:text-xl">{title}</h3>
+		<p class="mt-3 text-sm leading-relaxed text-(--fg-dim) line-clamp-3">{description}</p>
+	</header>
+	<div class="tile-actions mt-auto grid grid-cols-1 gap-2 border-t border-[color-mix(in_srgb,var(--cyan)_12%,transparent)] pt-5 sm:grid-cols-2">
+		<a
+			href={ficheUrl}
+			class="tile-action tile-action--primary"
+			title={copy.tileTitleFiche(title)}
+			aria-label={copy.tileTitleFiche(title)}
+		>
+			<i class="fa-solid fa-file-lines text-xs opacity-80" aria-hidden="true"></i>
+			{copy.ctaViewFiche}
+		</a>
+		<a
+			href={href}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="tile-action tile-action--secondary"
+			title={copy.tileTitleGithub(title)}
+			aria-label={copy.tileTitleGithub(title)}
+		>
+			<i class="fa-brands fa-github text-sm opacity-90" aria-hidden="true"></i>
+			{copy.ctaViewSourceFull}
+		</a>
+	</div>
+</article>

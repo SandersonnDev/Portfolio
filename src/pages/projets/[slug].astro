@@ -1,268 +1,192 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ProjectCard from "../../components/portfolio/ProjectCard.astro";
-import { projects, type Project, type ProjectSection } from "../../data/portfolio";
+import { site, copy } from "../../site.config";
+import gh from "../../data/github-projects.generated.json";
+import ReadmeBlocks from "../../components/ReadmeBlocks.astro";
+import ProjectArticleNav from "../../components/ProjectArticleNav.astro";
+import type { ReadmeBlock } from "../../types/readme-blocks";
+
+type Project = {
+	slug: string;
+	title: string;
+	description: string;
+	href: string;
+	liveHref: string | null;
+	stack: string[];
+	sections: ReadmeBlock[];
+	coverImage?: string | null;
+};
 
 export function getStaticPaths() {
-	return projects.map((project) => ({
-		params: { slug: project.slug },
-		props: { project },
-	}));
+	const projects = gh.projects as Project[];
+	return projects.map((p) => ({ params: { slug: p.slug } }));
 }
 
-interface Props {
-	project: Project;
-}
+const { slug } = Astro.params;
+const projects = gh.projects as Project[];
+const project = projects.find((p) => p.slug === slug);
 
-const { project } = Astro.props;
+if (!project) throw new Error(`Projet inconnu : ${slug}`);
 
-type ImgSection = Extract<ProjectSection, { type: "image" }>;
-type BlockGroup =
-	| { kind: "block"; section: ProjectSection }
-	| { kind: "images"; items: ImgSection[] };
-
-function groupSections(sections: ProjectSection[]): BlockGroup[] {
-	const out: BlockGroup[] = [];
-	let buf: ImgSection[] = [];
-	for (const s of sections) {
-		if (s.type === "image") {
-			buf.push(s);
-		} else {
-			if (buf.length) {
-				out.push({ kind: "images", items: buf });
-				buf = [];
-			}
-			out.push({ kind: "block", section: s });
-		}
-	}
-	if (buf.length) out.push({ kind: "images", items: buf });
-	return out;
-}
-
-const grouped = groupSections(project.sections);
-
-function embedSrc(url: string | undefined): string {
-	if (!url?.trim()) return "";
-	try {
-		if (url.includes("youtu.be/")) {
-			const id = url.split("youtu.be/")[1]?.split(/[?#]/)[0];
-			return id ? `https://www.youtube.com/embed/${id}` : url;
-		}
-		if (url.includes("youtube.com/watch")) {
-			const id = new URL(url).searchParams.get("v");
-			return id ? `https://www.youtube.com/embed/${id}` : url;
-		}
-		if (url.includes("youtube.com/embed")) {
-			return url;
-		}
-		if (url.includes("vimeo.com/") && !url.includes("player.vimeo")) {
-			const id = url.split("vimeo.com/")[1]?.split(/[?#]/)[0];
-			return id ? `https://player.vimeo.com/video/${id}` : url;
-		}
-		return url;
-	} catch {
-		return url;
-	}
-}
-
-const pageDescription = project.description;
+const title = `${project.title} · ${site.displayName}`;
+const repoPath = project.href.replace(/^https?:\/\/(www\.)?github\.com\//i, "");
+const contentBlocks = (project.sections ?? []) as ReadmeBlock[];
+const idx = projects.findIndex((p) => p.slug === slug);
+const prev = idx > 0 ? projects[idx - 1]! : null;
+const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 ---
 
-<Layout pageTitle={project.title} description={pageDescription}>
+<Layout title={title} description={project.description}>
 	<article
-		class="mx-auto max-w-3xl px-4 py-16 text-zinc-900 sm:px-6 sm:py-20 lg:max-w-4xl lg:px-10 dark:text-zinc-100"
-		transition:name="main-content"
-		transition:animate="slide"
+		class="project-page mx-auto max-w-5xl px-5 pb-28 pt-20 md:px-12 md:pt-24"
+		transition:name="project-fiche"
 	>
-		<nav class="mb-8 text-sm" aria-label="Fil d’Ariane">
-			<a
-				href="/#projects"
-				class="text-zinc-600 transition-ui hover:text-indigo-700 dark:text-zinc-500 dark:hover:text-indigo-400"
-			>
-				← Projets
-			</a>
-		</nav>
-
-		<header class="mb-12 max-w-2xl">
-			<h1 class="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 md:text-4xl">{project.title}</h1>
-			<p class="mt-5 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 md:text-xl">{project.description}</p>
-			<div class="mt-6 flex flex-wrap gap-2">
-				{project.stack.map((t) => (
-					<span class="rounded-md bg-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-						{t}
-					</span>
-				))}
-			</div>
-			<div class="mt-8 flex flex-wrap gap-3">
-				<a
-					href={project.href}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="text-on-indigo-btn neon-border transition-ui inline-flex items-center gap-2 rounded-md border border-indigo-500/45 bg-indigo-700 px-4 py-2.5 text-sm font-medium hover:border-indigo-400/60 hover:bg-indigo-600 dark:border-indigo-400/35 dark:bg-indigo-950 dark:hover:border-indigo-400/55 dark:hover:bg-indigo-900"
-				>
-					<i class="fa-brands fa-github text-on-indigo-btn" aria-hidden="true"></i>
-					Code source
-				</a>
-				{
-					project.liveHref && (
-						<a
-							href={project.liveHref}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="transition-ui inline-flex items-center gap-2 rounded-md border border-zinc-400 bg-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-900 hover:border-indigo-500/45 hover:bg-zinc-300 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-indigo-400/45 dark:hover:bg-zinc-800"
-						>
-							<i class="fa-solid fa-arrow-up-right-from-square text-xs" aria-hidden="true" />
-							Voir en ligne
-						</a>
-					)
-				}
-			</div>
-		</header>
-
-		<div class="space-y-14">
-			{
-				grouped.map((g) => {
-					if (g.kind === "block") {
-						const section = g.section;
-						if (section.type === "paragraph") {
-							return (
-								<p class="max-w-2xl text-base leading-[1.75] text-zinc-700 dark:text-zinc-300 md:text-lg">
-									{section.text}
-								</p>
-							);
-						}
-						if (section.type === "video") {
-							const embed = embedSrc(section.embedUrl);
-							const hasMp4 = Boolean(section.mp4Url?.trim());
-							const hasEmbed = Boolean(embed);
-							const showPlaceholder = !hasEmbed && !hasMp4;
-							return (
-								<figure class="overflow-hidden rounded-xl bg-zinc-200 dark:bg-zinc-900">
-									{hasEmbed && (
-										<div class="aspect-video w-full bg-black">
-											<iframe
-												src={embed}
-												class="h-full w-full"
-												title={section.caption || "Vidéo du projet"}
-												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-												allowfullscreen
-											/>
-										</div>
-									)}
-									{!hasEmbed && hasMp4 && (
-										<video class="aspect-video w-full bg-black object-contain" controls preload="metadata">
-											<source src={section.mp4Url} type="video/mp4" />
-											Votre navigateur ne lit pas la vidéo HTML5.
-										</video>
-									)}
-									{showPlaceholder && (
-										<div class="flex aspect-video w-full flex-col items-center justify-center gap-3 bg-zinc-100 px-6 dark:bg-zinc-950">
-											<i class="fa-solid fa-film text-4xl text-indigo-500/50 dark:text-indigo-400/45" aria-hidden="true" />
-											<p class="px-4 text-center text-sm text-zinc-600 dark:text-zinc-500">
-												{section.caption || "Ajoutez embedUrl (YouTube/Vimeo) ou mp4Url dans les données du projet."}
-											</p>
-										</div>
-									)}
-									{section.caption && !showPlaceholder && (
-										<figcaption class="px-4 pb-4 pt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-											{section.caption}
-										</figcaption>
-									)}
-								</figure>
-							);
-						}
-						return null;
-					}
-
-					const cols = g.items.length > 1 ? "project-img-grid cols-2" : "project-img-grid";
-					return (
-						<div class={cols}>
-							{g.items.map((section) => {
-								const hasSrc = Boolean(section.src?.trim());
-								return (
-									<figure class="overflow-hidden rounded-xl bg-zinc-200 dark:bg-zinc-900">
-										{hasSrc ? (
-											<button
-												type="button"
-												class="group w-full border-0 bg-transparent p-0 text-left"
-												data-lightbox-open
-												data-lightbox-src={section.src}
-												data-lightbox-alt={section.alt}
-											>
-												<img
-													src={section.src}
-													alt={section.alt}
-													class="project-img-trigger max-h-[min(70vh,560px)] w-full object-cover transition-opacity group-hover:opacity-95"
-													loading="lazy"
-												/>
-											</button>
-										) : (
-											<div class="flex aspect-video w-full flex-col items-center justify-center gap-3 bg-zinc-100 px-6 py-16 dark:bg-zinc-950">
-												<i class="fa-regular fa-image text-4xl text-indigo-500/45 dark:text-indigo-400/45" aria-hidden="true" />
-												<p class="text-center text-sm text-zinc-600 dark:text-zinc-500">{section.alt}</p>
-											</div>
-										)}
-										{section.caption && (
-											<figcaption class="px-4 pb-4 pt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-												{section.caption}
-											</figcaption>
-										)}
-									</figure>
-								);
-							})}
-						</div>
-					);
-				})
-			}
-		</div>
-
-		<section class="mt-20" aria-labelledby="project-carousel-heading">
-			<h2 id="project-carousel-heading" class="mb-8 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-				Tous les projets
-			</h2>
-			<div class="project-carousel" data-project-carousel>
-				<button
-					type="button"
-					class="project-carousel-nav project-carousel-nav-prev"
-					data-carousel-prev
-					aria-label="Faire défiler les projets vers la gauche"
-				>
-					<i class="fa-solid fa-chevron-left text-sm" aria-hidden="true"></i>
-				</button>
-				<ul
-					class="project-carousel-track"
-					data-carousel-track
-					role="list"
-					aria-label="Liste des projets"
-				>
-					{
-						projects.map((p) => (
-							<li
-								class="project-carousel-slide"
-								{...(p.slug === project.slug ? { "data-carousel-current": "true" } : {})}
-							>
-								<ProjectCard project={p} highlight={p.slug === project.slug} cardLinkOverlay />
-							</li>
-						))
-					}
-				</ul>
-				<button
-					type="button"
-					class="project-carousel-nav project-carousel-nav-next"
-					data-carousel-next
-					aria-label="Faire défiler les projets vers la droite"
-				>
-					<i class="fa-solid fa-chevron-right text-sm" aria-hidden="true"></i>
-				</button>
-			</div>
-		</section>
-
 		<a
 			href="/#projects"
-			class="neon-border mt-12 inline-flex items-center gap-2 rounded-md bg-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-900 transition-ui hover:bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+			class="sys-mono inline-flex items-center gap-2 text-[10px] tracking-[0.25em] text-(--fg-dim) transition-colors hover:text-(--cyan)"
+			title={copy.projectBackTitle}
+			aria-label={copy.projectBackTitle}
 		>
-			<i class="fa-solid fa-arrow-left text-xs" aria-hidden="true" />
-			Retour aux projets
+			<i class="fa-solid fa-arrow-left-long text-[10px]" aria-hidden="true"></i>
+			{copy.projectBackLabel}
 		</a>
+
+		{
+			prev || next ? (
+				<div class="project-page__jump sys-mono mt-6 flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.18em]">
+					{prev ? (
+						<a
+							href={`/projets/${prev.slug}`}
+							class="max-w-[min(100%,16rem)] truncate text-(--fg-dim) transition-colors hover:text-(--cyan) md:max-w-[20rem]"
+						>
+							← {prev.title}
+						</a>
+					) : (
+						<span />
+					)}
+					{next ? (
+						<a
+							href={`/projets/${next.slug}`}
+							class="max-w-[min(100%,16rem)] truncate text-right text-(--fg-dim) transition-colors hover:text-(--cyan) md:max-w-[20rem]"
+						>
+							{next.title} →
+						</a>
+					) : (
+						<span />
+					)}
+				</div>
+			) : null
+		}
+
+		<p class="project-page__repo sys-mono mt-10 text-[10px] tracking-[0.22em]">
+			<a
+				href={project.href}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-(--cyan) transition-opacity hover:opacity-90"
+				title={copy.tileTitleGithub(project.title)}
+			>
+				<span class="text-(--fg-dim)">GitHub · </span>{repoPath}
+			</a>
+		</p>
+
+		<div
+			class="project-page__hero mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_min(100%,17.5rem)] lg:items-start lg:gap-14 xl:grid-cols-[minmax(0,1fr)_19.5rem]"
+		>
+			<div class="min-w-0">
+				<h1 class="article-title text-3xl md:text-4xl lg:text-[2.35rem]" aria-label={project.title}>
+					<span data-scramble data-scramble-final={project.title} class="inline-block min-h-[1.2em]"></span>
+				</h1>
+				<p
+					class="project-page__lead tw-paragraph mt-6 min-h-16 text-base leading-relaxed text-(--fg-dim) md:text-lg"
+					data-typewriter
+					data-tw-final={project.description}
+					data-tw-speed="18"
+				>
+				</p>
+			</div>
+
+			<aside class="project-page__aside flex min-w-0 flex-col gap-5 lg:sticky lg:top-24 lg:self-start">
+				<div class="glass glass--panel rounded-xl p-6 md:p-7">
+					<p class="about-block__label mb-0">{copy.projectDetailLinks}</p>
+					<div class="mt-5 flex flex-col gap-2.5">
+						<a
+							href={project.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="btn-sys btn-sys--sm justify-center"
+							title={copy.tileTitleGithub(project.title)}
+						>
+							<i class="fa-brands fa-github mr-2" aria-hidden="true"></i>
+							Dépôt
+						</a>
+						{
+							project.liveHref ? (
+								<a
+									href={project.liveHref}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="btn-sys btn-sys--sm btn-sys--muted justify-center"
+									title="Ouvrir la démo dans un nouvel onglet"
+								>
+									<i class="fa-solid fa-globe mr-2" aria-hidden="true"></i>
+									Démo
+								</a>
+							) : null
+						}
+					</div>
+				</div>
+
+				{
+					project.stack?.length ? (
+						<div class="glass glass--panel rounded-xl p-6 md:p-7">
+							<p class="about-block__label mb-0">{copy.projectDetailTech}</p>
+							<ul class="mt-5 flex flex-wrap gap-2" aria-label={copy.projectDetailTech}>
+								{project.stack.map((t) => (
+									<li>
+										<span class="chip">{t}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					) : null
+				}
+			</aside>
+		</div>
+
+		{
+			project.coverImage ? (
+				<div class="project-page__cover mt-12 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--cyan)_14%,transparent)]">
+					<img
+						src={project.coverImage}
+						alt=""
+						class="h-auto w-full object-cover"
+						loading="lazy"
+						decoding="async"
+					/>
+				</div>
+			) : null
+		}
+
+		{
+			contentBlocks.length ? (
+				<section class="project-page__journal mt-16 md:mt-20" aria-labelledby="project-journal-h">
+					<h2 id="project-journal-h" class="display-heading display-heading--lg">
+						{copy.projectJournalHeading}
+					</h2>
+					<p class="project-page__journal-intro sys-mono mt-4 text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim)">
+						{copy.projectReadmeIntro}
+					</p>
+					<div class="project-page__readme mt-10">
+						<ReadmeBlocks blocks={contentBlocks} />
+					</div>
+				</section>
+			) : null
+		}
+
+		<ProjectArticleNav
+			prev={prev ? { slug: prev.slug, title: prev.title } : null}
+			next={next ? { slug: next.slug, title: next.title } : null}
+		/>
 	</article>
 </Layout>

@@ -1,27 +1,13 @@
 ---
-import Layout404 from "../layouts/Layout404.astro";
+import Layout from "../layouts/Layout.astro";
+import { site } from "../site.config";
 ---
 
-<Layout404>
-	<main
-		class="flex flex-1 flex-col items-center justify-center px-6 py-24 sm:py-32 lg:px-8"
-		transition:name="main-content"
-		transition:animate="slide"
-	>
-		<div class="text-center">
-			<p class="text-4xl font-semibold text-indigo-600 sm:text-6xl dark:text-indigo-400">404</p>
-			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-100">Page introuvable</h1>
-			<p class="mt-6 max-w-lg text-lg text-zinc-600 dark:text-zinc-400">
-				Désolé, nous n’avons pas trouvé la page que vous recherchez.
-			</p>
-			<div class="mt-10">
-				<a
-					href="/"
-					class="neon-border inline-flex rounded-md border border-indigo-500/45 bg-indigo-700 px-5 py-2.5 text-sm font-semibold text-white transition-ui hover:border-indigo-400/60 hover:bg-indigo-600 dark:border-indigo-400/35 dark:bg-indigo-950 dark:text-indigo-200 dark:hover:border-indigo-400/55 dark:hover:bg-indigo-900"
-				>
-					Retour à l’accueil
-				</a>
-			</div>
-		</div>
+<Layout title={`Signal perdu · ${site.displayName}`} description="404">
+	<main class="flex min-h-[75dvh] flex-col items-center justify-center px-6 text-center">
+		<p class="sys-mono text-[10px] tracking-[0.5em] text-(--cyan)">404</p>
+		<h1 class="font-display mt-6 text-3xl font-light tracking-[0.15em] text-(--fg) md:text-4xl">HORS GRILLE</h1>
+		<p class="mt-4 max-w-sm text-sm text-(--fg-dim)">Aucune ressource à ces coordonnées.</p>
+		<a href="/" class="btn-sys mt-12">Revenir au vaisseau</a>
 	</main>
-</Layout404>
+</Layout>

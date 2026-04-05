@@ -1,80 +1,30 @@
 ---
-import { footer as siteMeta, navLinks, projects, site } from "../data/portfolio";
+import { site } from "../site.config";
+import gh from "../data/github-projects.generated.json";
 
+const profile = `https://github.com/${gh.sourceUser}`;
 const year = new Date().getFullYear();
 ---
 
-<footer
-	class="mt-16 min-w-0 border-t border-indigo-400/20 bg-zinc-100/95 px-4 py-14 backdrop-blur-md supports-[backdrop-filter]:bg-zinc-100/85 dark:border-indigo-400/15 dark:bg-zinc-950/90 dark:supports-[backdrop-filter]:bg-zinc-950/75 sm:mt-20 sm:px-6 lg:px-10"
->
-	<div class="mx-auto grid min-w-0 max-w-6xl gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-10">
-		<div class="flex flex-col gap-4">
-			<a
-				href="/"
-				class="text-sm font-bold uppercase tracking-[0.2em] text-indigo-600 transition-ui hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-			>
-				{site.name}
-			</a>
-			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-500">
-				© {year} {siteMeta.copyrightName}. Tous droits réservés.
+<footer class="border-t border-[color-mix(in_srgb,var(--color-hud)_20%,transparent)] py-12 shadow-[0_-1px_0_color-mix(in_srgb,var(--color-hud)_6%,transparent)]">
+	<div class="mx-auto flex max-w-6xl flex-col gap-8 px-5 md:flex-row md:items-center md:justify-between md:px-8">
+		<div>
+			<p class="font-mono text-[10px] uppercase tracking-[0.28em] text-(--color-muted)">
+				© {year} · {site.displayName}
+			</p>
+			<p class="mt-2 max-w-xs text-xs text-(--color-muted-2)">
+				Terminal perso · sync projets GitHub.
 			</p>
 		</div>
-
-		<div>
-			<h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">Plan du site</h2>
-			<ul class="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-				{
-					siteMeta.siteTree.map((item) => (
-						<li>
-							<a href={item.href} class="transition-ui hover:text-indigo-600 dark:hover:text-indigo-400">
-								{item.label}
-							</a>
-						</li>
-					))
-				}
-				<li class="pt-2 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-600">Projets</li>
-				{
-					projects.map((p) => (
-						<li>
-							<a href={`/projets/${p.slug}`} class="transition-ui hover:text-indigo-600 dark:hover:text-indigo-400">
-								{p.title}
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</div>
-
-		<div>
-			<h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">Navigation</h2>
-			<nav aria-label="Liens rapides">
-				<ul class="flex flex-col gap-2 text-sm text-zinc-700 dark:text-zinc-400">
-					{
-						navLinks.map((item) => (
-							<li>
-								<a href={item.href} class="transition-ui hover:text-indigo-600 dark:hover:text-indigo-400">
-									{item.label}
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</nav>
-		</div>
-
-		<div>
-			<h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-400">Informations légales</h2>
-			<ul class="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-				{
-					siteMeta.legal.map((item) => (
-						<li>
-							<a href={item.href} class="transition-ui hover:text-indigo-600 dark:hover:text-indigo-400">
-								{item.label}
-							</a>
-						</li>
-					))
-				}
-			</ul>
+		<div class="flex flex-wrap items-center gap-2">
+			<a href="/#hero" class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Accueil</a>
+			<a href="/#about" class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">À propos</a>
+			<a href="/#projects" class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Projets</a>
+			<a href={`mailto:${site.email}`} class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Mail</a>
+			<a href={profile} class="btn-tactical py-2! text-[9px]!" target="_blank" rel="noopener noreferrer">
+				<i class="fa-brands fa-github" aria-hidden="true"></i>
+				{gh.sourceUser}
+			</a>
 		</div>
 	</div>
 </footer>

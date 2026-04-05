@@ -187,32 +187,184 @@ function readmeSummary(raw, maxLen = 2200) {
 	return last > 400 ? cut.slice(0, last + 1) : `${cut.trim()}…`;
 }
 
-/** Découpe un résumé en paragraphes (page détail). */
-function sectionsFromReadme(summary, description) {
-	const desc = (description || "").trim();
-	if (!summary?.trim()) {
-		if (desc) return [{ type: "paragraph", text: desc }];
-		return [
-			{
-				type: "paragraph",
-				text: "Aucun README détecté sur ce dépôt — ajoute un README sur GitHub pour enrichir cette page.",
-			},
-		];
-	}
-	const sentences = summary.split(/(?<=[.!?])\s+/).filter(Boolean);
+/** Fragment inline pour titres / listes (gras, code court). */
+function parseInlineParts(str) {
+	if (!str) return [{ k: "text", v: "" }];
 	const parts = [];
-	let buf = "";
-	for (const sentence of sentences) {
-		if (buf.length + sentence.length > 900 && buf) {
-			parts.push(buf.trim());
-			buf = sentence;
-		} else {
-			buf = buf ? `${buf} ${sentence}` : sentence;
+	let s = String(str);
+	while (s.length) {
+		if (s.startsWith("**")) {
+			const end = s.indexOf("**", 2);
+			if (end === -1) {
+				parts.push({ k: "text", v: s });
+				break;
+			}
+			parts.push({ k: "bold", v: s.slice(2, end) });
+			s = s.slice(end + 2);
+			continue;
 		}
+		if (s[0] === "`") {
+			const end = s.indexOf("`", 1);
+			if (end === -1) {
+				parts.push({ k: "text", v: s });
+				break;
+			}
+			parts.push({ k: "code", v: s.slice(1, end) });
+			s = s.slice(end + 1);
+			continue;
+		}
+		let n = s.length;
+		const bi = s.indexOf("**");
+		const ci = s.indexOf("`");
+		if (bi !== -1) n = Math.min(n, bi);
+		if (ci !== -1) n = Math.min(n, ci);
+		parts.push({ k: "text", v: s.slice(0, n) });
+		s = s.slice(n);
 	}
-	if (buf.trim()) parts.push(buf.trim());
-	const out = parts.slice(0, 5).map((text) => ({ type: "paragraph", text }));
-	return out.length ? out : [{ type: "paragraph", text: summary }];
+	const merged = [];
+	for (const p of parts) {
+		if (p.k === "text" && p.v === "") continue;
+		const last = merged[merged.length - 1];
+		if (last?.k === "text" && p.k === "text") last.v += p.v;
+		else merged.push({ k: p.k, v: p.v });
+	}
+	return merged.length ? merged : [{ k: "text", v: str }];
+}
+
+function isTableLine(line) {
+	const t = line.trim();
+	return t.startsWith("|") && t.includes("|", 1);
+}
+
+function isLikelyTableSep(t) {
+	const x = t.trim();
+	return x.includes("|") && x.includes("-") && /^[\s|\-:]+$/.test(x);
+}
+
+/** README brut → blocs structurés pour la page détail (titres, listes, code, citations). */
+function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000 } = {}) {
+	if (!raw?.trim()) return [];
+	const lines = raw.replace(/\r\n/g, "\n").split("\n");
+	const blocks = [];
+	let i = 0;
+
+	while (i < lines.length && blocks.length < maxBlocks) {
+		const line = lines[i];
+		const t = line.trim();
+
+		if (isTableLine(line) || isLikelyTableSep(t)) {
+			while (i < lines.length && (isTableLine(lines[i]) || isLikelyTableSep(lines[i].trim()))) i++;
+			continue;
+		}
+
+		if (t.startsWith("```")) {
+			const lang = t.slice(3).trim() || null;
+			i++;
+			const codeLines = [];
+			while (i < lines.length && !lines[i].trim().startsWith("```")) {
+				codeLines.push(lines[i]);
+				i++;
+			}
+			if (i < lines.length) i++;
+			let code = codeLines.join("\n");
+			if (code.length > maxCode) code = `${code.slice(0, maxCode)}\n…`;
+			blocks.push({ type: "code", lang, code });
+			continue;
+		}
+
+		const hm = t.match(/^(#{1,3})\s+(.+)$/);
+		if (hm) {
+			blocks.push({ type: "heading", level: hm[1].length, text: hm[2].trim() });
+			i++;
+			continue;
+		}
+
+		if (/^(-{3,}|\*{3,}|_{3,})$/.test(t)) {
+			blocks.push({ type: "rule" });
+			i++;
+			continue;
+		}
+
+		if (t.startsWith(">")) {
+			const q = [];
+			while (i < lines.length) {
+				const tr = lines[i].trim();
+				if (!tr) break;
+				if (!tr.startsWith(">")) break;
+				q.push(tr.replace(/^>\s?/, ""));
+				i++;
+			}
+			if (q.length) blocks.push({ type: "quote", parts: parseInlineParts(q.join(" ")) });
+			continue;
+		}
+
+		if (/^[-*+]\s/.test(t) || /^\d+\.\s/.test(t)) {
+			const ordered = /^\d+\.\s/.test(t);
+			const items = [];
+			while (i < lines.length) {
+				const L = lines[i];
+				const tr = L.trim();
+				if (!tr) break;
+				const ul = /^[-*+]\s+(.*)$/.exec(tr);
+				const ol = /^(\d+)\.\s+(.*)$/.exec(tr);
+				if (ordered && ol) {
+					items.push(parseInlineParts(ol[2]));
+					i++;
+					continue;
+				}
+				if (!ordered && ul) {
+					items.push(parseInlineParts(ul[1]));
+					i++;
+					continue;
+				}
+				if (ordered && ul) break;
+				if (!ordered && ol) break;
+				break;
+			}
+			if (items.length) blocks.push({ type: "list", ordered, items });
+			continue;
+		}
+
+		if (!t) {
+			i++;
+			continue;
+		}
+
+		const para = [];
+		while (i < lines.length) {
+			const L = lines[i];
+			const tr = L.trim();
+			if (!tr) break;
+			if (tr.startsWith("```")) break;
+			if (/^(#{1,3})\s/.test(tr)) break;
+			if (/^(-{3,}|\*{3,}|_{3,})$/.test(tr)) break;
+			if (tr.startsWith(">")) break;
+			if (/^[-*+]\s/.test(tr) || /^\d+\.\s/.test(tr)) break;
+			if (isTableLine(L) || isLikelyTableSep(tr)) break;
+			para.push(L.trimEnd());
+			i++;
+		}
+		const text = para.join(" ").replace(/\s+/g, " ").trim();
+		if (text) blocks.push({ type: "paragraph", parts: parseInlineParts(text) });
+	}
+
+	return blocks;
+}
+
+/** Sections page détail : blocs README ou repli description / message. */
+function sectionsFromReadme(readmeRaw, description) {
+	const desc = (description || "").trim();
+	const blocks = readmeToBlocks(readmeRaw);
+	if (blocks.length) return blocks;
+	if (desc) return [{ type: "paragraph", parts: parseInlineParts(desc) }];
+	return [
+		{
+			type: "paragraph",
+			parts: parseInlineParts(
+				"Aucun README détecté sur ce dépôt. Ajoute un README sur GitHub pour enrichir cette page.",
+			),
+		},
+	];
 }
 
 async function mapRepo(r) {
@@ -229,8 +381,7 @@ async function mapRepo(r) {
 	]);
 	const stack = topics.length > 0 ? topics : langs;
 	const description = (r.description || "").trim() || readmeSummary(readmeRaw, 280) || name;
-	const summary = readmeSummary(readmeRaw);
-	const sections = sectionsFromReadme(summary, r.description);
+	const sections = sectionsFromReadme(readmeRaw, r.description);
 
 	return {
 		slug,
@@ -239,6 +390,7 @@ async function mapRepo(r) {
 		stack,
 		href: r.html_url,
 		liveHref: null,
+		coverImage: null,
 		sections,
 	};
 }

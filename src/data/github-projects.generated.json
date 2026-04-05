@@ -1,5 +1,5 @@
 {
-	"syncedAt": "2026-04-03T16:40:34.243Z",
+	"syncedAt": "2026-04-05T19:37:31.199Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
 		{
@@ -9,10 +9,129 @@
 			"stack": [],
 			"href": "https://github.com/SandersonnDev/ConvertAllLocal",
 			"liveHref": null,
+			"coverImage": null,
 			"sections": [
 				{
+					"type": "heading",
+					"level": 1,
+					"text": "ConvertAllLocal - FR"
+				},
+				{
 					"type": "paragraph",
-					"text": "ConvertAllLocal est une application locale qui permet de convertir tous les formats vidéo, image et icônes les plus utilisés dans le web et le développement d'applications, sans téléchargement ni envoi de fichiers vers des services externes. Conversion 100% locale : Tout se passe sur votre machine (via FFmpeg pour vidéo/audio, ImageMagick/Sharp pour images). Formats supportés : Couvre 95% des besoins web/apps modernes. Interface simple : Drag & drop ou sélection fichier, choix format de sortie, conversion en 1 clic. Batch processing : Convertir plusieurs fichiers d'un coup. Optimisé web : Présets pour tailles/résolutions (ex: WebP 80% qualité, MP4 H.264). Aucun internet requis : Fonctionne offline après installation. Présets suggérés : ICO (Windows), ICNS (macOS), PNG 256x256 (Linux), WebP/SVG (web moderne)."
+					"parts": [
+						{
+							"k": "text",
+							"v": "[EN_Readme.md](https://github.com/SandersonnDev/ConvertAllLocal/blob/b9ca7b7e0815930338f5391ad77236c5f6d4a2dc/EN_Readme.md)"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "ConvertAllLocal est une application locale qui permet de convertir tous les formats vidéo, image et icônes les plus utilisés dans le web et le développement d'applications, sans téléchargement ni envoi de fichiers vers des services externes."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Fonctionnalités"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Conversion 100% locale"
+							},
+							{
+								"k": "text",
+								"v": " : Tout se passe sur votre machine (via FFmpeg pour vidéo/audio, ImageMagick/Sharp pour images)."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Formats supportés"
+							},
+							{
+								"k": "text",
+								"v": " : Couvre 95% des besoins web/apps modernes."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Interface simple"
+							},
+							{
+								"k": "text",
+								"v": " : Drag & drop ou sélection fichier, choix format de sortie, conversion en 1 clic."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Batch processing"
+							},
+							{
+								"k": "text",
+								"v": " : Convertir plusieurs fichiers d'un coup."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Optimisé web"
+							},
+							{
+								"k": "text",
+								"v": " : Présets pour tailles/résolutions (ex: WebP 80% qualité, MP4 H.264)."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Aucun internet requis"
+							},
+							{
+								"k": "text",
+								"v": " : Fonctionne offline après installation."
+							}
+						]
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Formats Supportés"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Vidéo"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Images & Icônes (Web + Multi-OS)"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Présets suggérés"
+						},
+						{
+							"k": "text",
+							"v": " : ICO (Windows), ICNS (macOS), PNG 256x256 (Linux), WebP/SVG (web moderne)."
+						}
+					]
 				}
 			]
 		},
@@ -28,18 +147,434 @@
 			],
 			"href": "https://github.com/SandersonnDev/workspace",
 			"liveHref": null,
+			"coverImage": null,
 			"sections": [
 				{
-					"type": "paragraph",
-					"text": "Application de bureau (Electron) conçue pour centraliser et gérer les activités quotidiennes d'une structure. Elle s'appuie sur un serveur backend déployé séparément (sur Proxmox) auquel elle se connecte via HTTP REST et WebSocket. Workspace est une interface unifiée qui regroupe plusieurs modules fonctionnels accessibles depuis un seul client : Page principale affichant un tableau de bord avec l'heure et la date en temps réel, ainsi qu'un aperçu des informations importantes de la structure (La Capsule). Calendrier interactif permettant de consulter et gérer les événements. Les vues semaine, mois et année sont disponibles. Les événements sont créés, modifiés et supprimés directement depuis l'interface."
+					"type": "heading",
+					"level": 1,
+					"text": "Workspace v3"
 				},
 				{
 					"type": "paragraph",
-					"text": "Module dédié à la gestion du matériel reconditionné, composé de quatre sous-sections : Entrée : saisie des nouveaux lots de machines (numéros de série, marques, modèles) Inventaire : état des stocks en cours, filtrage par état, assignation des techniciens Historique : suivi de l'ensemble des mouvements de matériel Traçabilité : lien entre les machines et leur historique de reconditionnement Gestionnaire de fichiers donnant accès aux documents internes de la structure, organisés par entité. Raccourcis vers les applications internes regroupées par catégorie (Développement, Streaming, Bureautique, etc.), gérées dynamiquement depuis le serveur. Accès rapide aux liens et outils fréquemment utilisés. Paramètres de l'application : configuration de la connexion au serveur, préférences d'affichage et gestion du compte utilisateur."
+					"parts": [
+						{
+							"k": "text",
+							"v": "Application de bureau (Electron) conçue pour centraliser et gérer les activités quotidiennes d'une structure. Elle s'appuie sur un serveur backend déployé séparément (sur Proxmox) auquel elle se connecte via HTTP REST et WebSocket."
+						}
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Ce que fait l'application"
 				},
 				{
 					"type": "paragraph",
-					"text": "L'application suit une architecture client/serveur distincte : Le client Electron tourne localement sur la machine de l'utilisateur. Il gère l'interface, les interactions utilisateur et toutes les communications avec le serveur via un module API centralisé ( ). Le serveur backend est déployé sur une machine Proxmox (192.168.1.62:4000). Il expose une API REST et un canal WebSocket pour les mises à jour en temps réel. La configuration de connexion (URL du serveur, endpoints) est centralisée dans un unique fichier , ce qui permet de basculer facilement entre les environnements local, Proxmox et production."
+					"parts": [
+						{
+							"k": "text",
+							"v": "Workspace est une interface unifiée qui regroupe plusieurs modules fonctionnels accessibles depuis un seul client :"
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Accueil"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Page principale affichant un tableau de bord avec l'heure et la date en temps réel, ainsi qu'un aperçu des informations importantes de la structure (La Capsule)."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Agenda"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Calendrier interactif permettant de consulter et gérer les événements. Les vues semaine, mois et année sont disponibles. Les événements sont créés, modifiés et supprimés directement depuis l'interface."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Réception"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Module dédié à la gestion du matériel reconditionné, composé de quatre sous-sections :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Entrée"
+							},
+							{
+								"k": "text",
+								"v": " : saisie des nouveaux lots de machines (numéros de série, marques, modèles)"
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Inventaire"
+							},
+							{
+								"k": "text",
+								"v": " : état des stocks en cours, filtrage par état, assignation des techniciens"
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Historique"
+							},
+							{
+								"k": "text",
+								"v": " : suivi de l'ensemble des mouvements de matériel"
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Traçabilité"
+							},
+							{
+								"k": "text",
+								"v": " : lien entre les machines et leur historique de reconditionnement"
+							}
+						]
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Dossier interne"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Gestionnaire de fichiers donnant accès aux documents internes de la structure, organisés par entité."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Applications"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Raccourcis vers les applications internes regroupées par catégorie (Développement, Streaming, Bureautique, etc.), gérées dynamiquement depuis le serveur."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Raccourcis"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Accès rapide aux liens et outils fréquemment utilisés."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Options"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Paramètres de l'application : configuration de la connexion au serveur, préférences d'affichage et gestion du compte utilisateur."
+						}
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Architecture"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "L'application suit une architecture client/serveur distincte :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Le "
+							},
+							{
+								"k": "bold",
+								"v": "client Electron"
+							},
+							{
+								"k": "text",
+								"v": " tourne localement sur la machine de l'utilisateur. Il gère l'interface, les interactions utilisateur et toutes les communications avec le serveur via un module API centralisé ("
+							},
+							{
+								"k": "code",
+								"v": "api.js"
+							},
+							{
+								"k": "text",
+								"v": ")."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Le "
+							},
+							{
+								"k": "bold",
+								"v": "serveur backend"
+							},
+							{
+								"k": "text",
+								"v": " est déployé sur une machine Proxmox (192.168.1.62:4000). Il expose une API REST et un canal WebSocket pour les mises à jour en temps réel."
+							}
+						]
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "La configuration de connexion (URL du serveur, endpoints) est centralisée dans un unique fichier "
+						},
+						{
+							"k": "code",
+							"v": "connection.json"
+						},
+						{
+							"k": "text",
+							"v": ", ce qui permet de basculer facilement entre les environnements local, Proxmox et production."
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "L'authentification est gérée par JWT : chaque client s'authentifie et toutes les requêtes sont automatiquement signées par le module API."
+						}
+					]
+				},
+				{
+					"type": "code",
+					"lang": null,
+					"code": "┌─────────────────────────┐        HTTP / WebSocket        ┌──────────────────────────┐\n│   Client Electron       │  ◄────────────────────────►    │   Serveur Backend        │\n│   (machine locale)      │                                 │   (Proxmox :4000)        │\n│                         │                                 │                          │\n│   Interface utilisateur │                                 │   API REST + WebSocket   │\n│   Module API centralisé │                                 │   Authentification JWT   │\n└─────────────────────────┘                                 └──────────────────────────┘"
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Structure du projet"
+				},
+				{
+					"type": "code",
+					"lang": null,
+					"code": "workspace/\n├── apps/\n│   └── client/                   Application Electron\n│       ├── public/\n│       │   ├── pages/            Pages HTML de chaque section\n│       │   ├── components/       Composants réutilisables (header, footer, modales)\n│       │   ├── assets/\n│       │   │   └── js/\n│       │   │       ├── config/\n│       │   │       │   └── api.js        Module API centralisé\n│       │   │       └── modules/          Modules fonctionnels (agenda, chat, reception…)\n│       │   └── index.html        Point d'entrée de l'interface\n│       ├── config/\n│       │   └── connection.json   Configuration serveur et endpoints\n│       ├── main.js               Point d'entrée Electron\n│       └── preload.js            Bridge sécurisé Electron/renderer\n│\n├── data/                         Données locales\n├── docs/                         Documentation complémentaire\n├── Jarvis/                       Standards et patterns du projet\n└── package.json                  Monorepo npm workspaces"
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Déploiement et mises à jour"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Le client est distribué sous forme d'exécutable (AppImage sur Linux, installeur sur Windows/Mac). Les mises à jour sont gérées automatiquement par "
+						},
+						{
+							"k": "code",
+							"v": "electron-updater"
+						},
+						{
+							"k": "text",
+							"v": " : l'application détecte si une version plus récente est disponible sur les Releases GitHub et propose la mise à jour à l'utilisateur sans intervention manuelle."
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Build en local"
+						},
+						{
+							"k": "text",
+							"v": " (depuis "
+						},
+						{
+							"k": "code",
+							"v": "apps/client"
+						},
+						{
+							"k": "text",
+							"v": ") : "
+						},
+						{
+							"k": "code",
+							"v": "npm run build:linux"
+						},
+						{
+							"k": "text",
+							"v": " (ou "
+						},
+						{
+							"k": "code",
+							"v": "build:prod:linux:local"
+						},
+						{
+							"k": "text",
+							"v": " pour un build prod sans publication). Aucun token nécessaire. "
+						},
+						{
+							"k": "bold",
+							"v": "Publication (Release GitHub)"
+						},
+						{
+							"k": "text",
+							"v": " : effectuée uniquement par la CI ("
+						},
+						{
+							"k": "code",
+							"v": ".github/workflows/build-client.yml"
+						},
+						{
+							"k": "text",
+							"v": ") au push sur "
+						},
+						{
+							"k": "code",
+							"v": "main"
+						},
+						{
+							"k": "text",
+							"v": " ; le token est fourni par le secret du dépôt ("
+						},
+						{
+							"k": "code",
+							"v": "GH_TOKEN"
+						},
+						{
+							"k": "text",
+							"v": " ou "
+						},
+						{
+							"k": "code",
+							"v": "GITHUB_TOKEN"
+						},
+						{
+							"k": "text",
+							"v": "), jamais en clair dans les fichiers."
+						}
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Sécurité"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Content Security Policy (CSP)"
+							},
+							{
+								"k": "text",
+								"v": " configurée dans Electron pour limiter les ressources autorisées"
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Authentification JWT"
+							},
+							{
+								"k": "text",
+								"v": " : chaque session est authentifiée, les tokens sont gérés automatiquement par le module API"
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Preload Electron"
+							},
+							{
+								"k": "text",
+								"v": " : isolation stricte entre le processus principal et le renderer via contextBridge"
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
 				}
 			]
 		},
@@ -54,14 +589,507 @@
 			],
 			"href": "https://github.com/SandersonnDev/MJC_Safenet",
 			"liveHref": null,
+			"coverImage": null,
 			"sections": [
 				{
-					"type": "paragraph",
-					"text": "Fichiers à créer : : Structure de la page : Habillage visuel (animation, fond binaire, esthétique du terminal) : Gestion du minuteur, du code de désactivation et du menu admin Section principale du scénario : - Conteneur global ( ) - Logo en haut à droite ( ) - Champ de texte pour entrer le code ( ) Menu administrateur masqué (accès par Alt + A) : - Fenêtre modale ( ) - Champs : - Durée du minuteur (HH:MM:SS) - Mot de passe de désactivation - Pénalité pour erreur - Boutons : - Démarrer minuteur - Réinitialiser - Sauvegarder paramètres Effets visuels : - Fond animé de chiffres binaires ( ) - Sons (explosion, validation) Principaux éléments : Corps : fond noir, police monospace. Fond binaire : animation verticale lente avec opacité. Timer : police large, couleur changeant (vert → orange → rouge selon le temps restant). Zone de saisie : effet terminal (texte vert, curseur clignotant)."
+					"type": "heading",
+					"level": 3,
+					"text": "Structure générale du projet"
 				},
 				{
 					"type": "paragraph",
-					"text": "Popup d’erreur : animation “shake”, couleur rouge, disparition après 5 secondes. Menu admin : design minimaliste avec bordures lumineuses et fond semi-transparent. Variables principales : (par défaut 3600 s) (par défaut \"netsafe\") Fonctionnalités clés : Initialisation du minuteur - Afficher les heures, minutes, secondes. - Décrémentation chaque 100 ms. - Changement de couleur lors du seuil critique (par exemple < 5 min). Validation du code - Comparer la saisie avec le code secret. - Si correct → Arrêt minuteur + message succès. - Si incorrect → pénalité + animation rouge + popup “Code invalide”. Menu admin (Alt + A) - Ouverture/fermeture du panneau. - Application des réglages personnalisés. Fin du compte à rebours* - Arrêt minuteur. - Animation explosion + son."
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Fichiers à créer :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "code",
+								"v": "index.html"
+							},
+							{
+								"k": "text",
+								"v": " : Structure de la page"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "style.css"
+							},
+							{
+								"k": "text",
+								"v": " : Habillage visuel (animation, fond binaire, esthétique du terminal)"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "script.js"
+							},
+							{
+								"k": "text",
+								"v": " : Gestion du minuteur, du code de désactivation et du menu admin"
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "1. Structure HTML (index.html)"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Section principale du scénario :"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Conteneur global ("
+							},
+							{
+								"k": "code",
+								"v": "<div id=\"app\">"
+							},
+							{
+								"k": "text",
+								"v": ")"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Logo en haut à droite ("
+							},
+							{
+								"k": "code",
+								"v": "<img id=\"logo\">"
+							},
+							{
+								"k": "text",
+								"v": ")"
+							}
+						]
+					]
+				},
+				{
+					"type": "code",
+					"lang": null,
+					"code": "- Compteur au centre (`<div id=\"timer\">HH:MM:SS:MS</div>`)"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Champ de texte pour entrer le code ("
+							},
+							{
+								"k": "code",
+								"v": "<input id=\"codeInput\" type=\"text\">"
+							},
+							{
+								"k": "text",
+								"v": ")"
+							}
+						]
+					]
+				},
+				{
+					"type": "code",
+					"lang": null,
+					"code": "- Bouton de validation du code (`<button id=\"validateBtn\">Valider</button>`)"
+				},
+				{
+					"type": "code",
+					"lang": null,
+					"code": "- Zone des messages de feedback (`<div id=\"feedback\"></div>`)"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Menu administrateur masqué (accès par Alt + A) :"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Fenêtre modale ("
+							},
+							{
+								"k": "code",
+								"v": "<div id=\"adminPanel\">"
+							},
+							{
+								"k": "text",
+								"v": ")"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Champs :"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Durée du minuteur (HH:MM:SS)"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Mot de passe de désactivation"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Pénalité pour erreur"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Boutons :"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Démarrer minuteur"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Réinitialiser"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Sauvegarder paramètres"
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Effets visuels :"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Fond animé de chiffres binaires ("
+							},
+							{
+								"k": "code",
+								"v": "<canvas id=\"binaryBackground\">"
+							},
+							{
+								"k": "text",
+								"v": ")"
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Sons (explosion, validation)"
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "2. Style CSS (style.css)"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Principaux éléments :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Corps : fond noir, police monospace."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Fond binaire : animation verticale lente avec opacité."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Timer : police large, couleur changeant (vert → orange → rouge selon le temps restant)."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Zone de saisie : effet terminal (texte vert, curseur clignotant)."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Popup d’erreur : animation “shake”, couleur rouge, disparition après 5 secondes."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Menu admin : design minimaliste avec bordures lumineuses et fond semi-transparent."
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "3. Script JavaScript (script.js)"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Variables principales :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "code",
+								"v": "timerDuration"
+							},
+							{
+								"k": "text",
+								"v": " (par défaut 3600 s)"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "deactivationCode"
+							},
+							{
+								"k": "text",
+								"v": " (par défaut \"netsafe\")"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "penaltySeconds"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "remainingTime"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "timerInterval"
+							}
+						],
+						[
+							{
+								"k": "code",
+								"v": "isRunning"
+							}
+						]
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Fonctionnalités clés :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Initialisation du minuteur"
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Afficher les heures, minutes, secondes."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Décrémentation chaque 100 ms."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Changement de couleur lors du seuil critique (par exemple < 5 min)."
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Validation du code"
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Comparer la saisie avec le code secret."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Si correct → Arrêt minuteur + message succès."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Si incorrect → pénalité + animation rouge + popup “Code invalide”."
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Menu admin (Alt + A)"
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Ouverture/fermeture du panneau."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Application des réglages personnalisés."
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": true,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Fin du compte à rebours"
+							}
+						]
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "text",
+								"v": "Arrêt minuteur."
+							}
+						],
+						[
+							{
+								"k": "text",
+								"v": "Animation explosion + son."
+							}
+						]
+					]
 				}
 			]
 		}

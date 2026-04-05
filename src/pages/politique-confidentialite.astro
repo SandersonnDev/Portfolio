@@ -1,28 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { site } from "../data/portfolio";
+import { site } from "../site.config";
 ---
 
-<Layout pageTitle="Politique de confidentialité" description="Politique de confidentialité et données personnelles.">
-	<div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-10" transition:name="main-content" transition:animate="slide">
-		<h1 class="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Politique de confidentialité</h1>
-		<div class="mt-8 max-w-none space-y-4 text-zinc-700 dark:text-zinc-300">
-			<p>
-				Décrivez ici la collecte des données (formulaires, analytics, cookies), la durée de conservation, les droits RGPD (accès,
-				rectification, suppression) et le DPO ou contact pour les demandes.
-			</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-500">
-				Pour toute question :{" "}
-				<a href={`mailto:${site.email}`} class="text-indigo-600 underline dark:text-indigo-400">
-					{site.email}
-				</a>
-			</p>
-		</div>
-		<a
-			href="/"
-			class="mt-10 inline-block text-sm font-medium text-indigo-700 transition-ui hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-		>
-			← Retour à l’accueil
-		</a>
-	</div>
+<Layout title={`Politique de confidentialité · ${site.displayName}`}>
+	<main class="mx-auto max-w-3xl px-5 py-32 md:px-8">
+		<h1 class="text-3xl font-normal tracking-tight md:text-4xl">
+			Politique de confidentialité
+		</h1>
+		<p class="mt-8 text-(--fg-dim) leading-relaxed">
+			Décrivez ici les données collectées, leur finalité, la durée de conservation, les droits des
+			utilisateurs (RGPD) et les cookies éventuels.
+		</p>
+		<p class="mt-4 text-(--fg-dim) leading-relaxed">
+			Contact : <a href={`mailto:${site.email}`} class="link-underline text-(--fg)">{site.email}</a>
+		</p>
+	</main>
 </Layout>

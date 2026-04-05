@@ -1,20 +1,261 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Hero from "../components/portfolio/Hero.astro";
-import About from "../components/portfolio/About.astro";
-import Stack from "../components/portfolio/Stack.astro";
-import Projects from "../components/portfolio/Projects.astro";
-import Contact from "../components/portfolio/Contact.astro";
+import { site, copy, brand } from "../site.config";
+import ProjectGlass from "../components/ProjectGlass.astro";
+import gh from "../data/github-projects.generated.json";
+
+type P = { slug: string; title: string; description: string; href: string };
+const projects = gh.projects as P[];
+const ghProfile = `https://github.com/${gh.sourceUser}`;
+const year = new Date().getFullYear();
 ---
 
-<Layout pageTitle="Accueil">
-	<div class="min-w-0" transition:name="main-content" transition:animate="slide">
-		<Hero />
-		<div class="pb-10 md:pb-14 lg:pb-16">
-			<About />
-			<Stack />
-			<Projects />
-			<Contact />
+<Layout>
+	<main>
+		<!-- 1 Hero -->
+		<section id="hero" data-section class="snap-section is-active border-b border-[color-mix(in_srgb,var(--cyan)_8%,transparent)]" aria-label="Accueil">
+			<div class="section-inner flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
+				<div class="mx-auto w-full max-w-5xl">
+					<div class="mb-10 flex flex-col gap-8 md:mb-12 md:flex-row md:items-end md:justify-between md:gap-10">
+						<div class="flex flex-wrap items-end gap-5 md:gap-8">
+							<div class="logo-slot shrink-0" title={copy.logoAstroTitle}>
+								<img src={brand.placeholderLogo} width="44" height="44" alt="" decoding="async" />
+							</div>
+							<div class="min-w-0 pb-0.5">
+								<p class="sys-mono text-[10px] tracking-[0.22em] text-(--cyan)">
+									◆ {site.codename.toUpperCase()} · {copy.heroStatusSuffix}
+								</p>
+								<p class="mt-2 font-display text-sm font-light tracking-wide text-(--fg-dim) md:text-base">
+									{site.displayName}
+								</p>
+							</div>
+						</div>
+						<div class="sys-mono text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim) md:max-w-56 md:text-right">
+							<span class="block text-(--fg-dim) opacity-80">{copy.heroClockLabel}</span>
+							<span id="sys-clock" class="mt-1.5 block text-(--cyan)">…</span>
+						</div>
+					</div>
+
+					<div data-parallax data-parallax-max="14" class="will-change-transform">
+						<h1 class="hero-title text-4xl md:text-6xl lg:text-7xl" aria-label={site.displayName}>
+							<span data-scramble data-scramble-final={site.displayName} class="inline-block min-h-[1.05em]"></span>
+						</h1>
+					</div>
+
+					<p
+						class="tw-paragraph mt-8 max-w-2xl min-h-14 font-light text-lg leading-relaxed text-(--fg-dim) md:text-xl"
+						data-typewriter
+						data-tw-final={site.role}
+						data-tw-speed="28"
+					>
+					</p>
+					<p
+						class="tw-paragraph mt-6 max-w-xl min-h-18 text-sm leading-relaxed text-(--fg-dim) md:min-h-20 md:text-base"
+						data-typewriter
+						data-tw-final={site.pitch}
+						data-tw-speed="22"
+					>
+					</p>
+
+					<div class="mt-12 flex flex-wrap gap-4">
+						<a href="/#projects" class="btn-sys" title={copy.ctaProjectsTitle} aria-label={copy.ctaProjectsTitle}>
+							<i class="fa-solid fa-layer-group mr-2 text-[10px]" aria-hidden="true"></i>
+							{copy.ctaProjects}
+						</a>
+						<a
+							href="/#about"
+							class="btn-sys btn-sys--muted"
+							title={copy.ctaHeroAboutTitle}
+							aria-label={copy.ctaHeroAboutTitle}
+						>
+							<i class="fa-solid fa-user mr-2 text-[10px]" aria-hidden="true"></i>
+							{copy.ctaHeroAbout}
+						</a>
+					</div>
+
+					<div class="mt-20 flex justify-center md:mt-24">
+						<a
+							href="/#about"
+							class="scroll-hint text-(--fg-dim) transition-colors hover:text-(--cyan)"
+							title={copy.ctaScrollAboutTitle}
+							aria-label={copy.ctaScrollAbout}
+						>
+							<i class="fa-solid fa-chevron-down text-xl" aria-hidden="true"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 2 À propos -->
+		<section id="about" data-section class="snap-section border-b border-[color-mix(in_srgb,var(--cyan)_8%,transparent)]" aria-labelledby="ab">
+			<div class="section-inner flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
+				<div class="mx-auto w-full max-w-5xl">
+					<h2 id="ab" class="display-heading display-heading--lg" data-rise>
+						<span data-scramble data-scramble-final="Segment · identité" class="inline-block min-h-[1.35em]"></span>
+					</h2>
+
+					<div class="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
+						<!-- Présentation : colonne principale -->
+						<div class="about-block about-block--present lg:col-span-7" data-rise>
+							<div class="about-panel rounded-xl border border-[color-mix(in_srgb,var(--cyan)_14%,transparent)] bg-[color-mix(in_srgb,var(--haze)_40%,transparent)] p-8 md:p-10">
+								<p class="about-block__label">{copy.aboutBlockPresent}</p>
+								<div class="mt-8 space-y-8 text-base leading-relaxed text-(--fg-dim)">
+									{
+										site.bio.map((text) => (
+											<p
+												class="tw-paragraph min-h-13"
+												data-typewriter
+												data-tw-final={text}
+												data-tw-speed="20"
+											>
+											</p>
+										))
+									}
+								</div>
+							</div>
+						</div>
+
+						<!-- Stack + contact : colonne latérale -->
+						<div class="flex flex-col gap-10 lg:col-span-5">
+							<div class="glass glass--panel rounded-xl p-8 md:p-9" data-rise>
+								<p class="about-block__label mb-0">{copy.aboutBlockStack}</p>
+								<ul class="mt-6 flex flex-wrap gap-2" aria-label="Technologies maîtrisées">
+									{
+										site.stack.map((s) => (
+											<li>
+												<span class="chip">
+													<i class={s.icon} aria-hidden="true"></i>
+													{s.label}
+												</span>
+											</li>
+										))
+									}
+								</ul>
+							</div>
+
+							<div class="glass glass--panel rounded-xl p-8 md:p-9" data-rise>
+								<p class="about-block__label mb-0">{copy.aboutBlockContact}</p>
+								<div class="mt-6 flex flex-col gap-3">
+									<a
+										href={`mailto:${site.email}`}
+										class="btn-sys btn-sys--sm justify-center sm:justify-start"
+										title={copy.aboutMailTitle}
+										aria-label={copy.aboutMailTitle}
+									>
+										<i class="fa-regular fa-envelope mr-2" aria-hidden="true"></i>
+										{site.email}
+									</a>
+									<a
+										href={ghProfile}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="btn-sys btn-sys--sm justify-center sm:justify-start"
+										title={copy.aboutGithubTitle}
+										aria-label={copy.aboutGithubTitle}
+									>
+										<i class="fa-brands fa-github mr-2" aria-hidden="true"></i>
+										GitHub · {gh.sourceUser}
+									</a>
+									<a
+										href={site.linkedinUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="btn-sys btn-sys--sm justify-center sm:justify-start"
+										title={copy.aboutLinkedinTitle}
+										aria-label={copy.aboutLinkedinTitle}
+									>
+										<i class="fa-brands fa-linkedin-in mr-2" aria-hidden="true"></i>
+										LinkedIn
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 3 Projets -->
+		<section id="projects" data-section class="snap-section" aria-labelledby="pj">
+			<div class="section-inner flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
+				<div class="mx-auto w-full max-w-5xl">
+					<h2 id="pj" class="display-heading display-heading--lg" data-rise>
+						<span data-scramble data-scramble-final="Segment · artefacts" class="inline-block min-h-[1.35em]"></span>
+					</h2>
+					<p
+						class="tw-paragraph mt-6 max-w-xl min-h-16 text-sm leading-relaxed text-(--fg-dim)"
+						data-rise
+						data-typewriter
+						data-tw-final={copy.projectsIntro(gh.sourceUser)}
+						data-tw-speed="18"
+					>
+					</p>
+					<div class="mt-12 grid gap-8 sm:grid-cols-2">
+						{projects.map((p, i) => <ProjectGlass {...p} index={i} />)}
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer border-t border-[color-mix(in_srgb,var(--cyan)_8%,transparent)] px-4 py-10 md:px-12">
+		<div class="mx-auto flex max-w-5xl flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
+			<div class="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
+				<div class="flex flex-wrap items-center justify-center gap-4 md:justify-start" aria-label="Logo">
+					<div class="logo-slot" title={copy.logoAstroTitle}>
+						<img src={brand.placeholderLogo} width="40" height="40" alt="" decoding="async" />
+					</div>
+				</div>
+				<div>
+					<p class="sys-mono text-[10px] tracking-[0.25em] text-(--fg)">
+						© {year} · {site.codename} · {site.displayName}
+					</p>
+					<p class="mt-2 max-w-md text-xs leading-relaxed text-(--fg-dim)">{copy.footerTagline}</p>
+					<p class="mt-1 font-data text-[10px] text-(--fg-dim)">{copy.builtWith}</p>
+				</div>
+			</div>
+			<nav class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sys-mono text-[10px] tracking-[0.15em] md:justify-end" aria-label="Pied de page">
+				<a href="/#hero" class="text-(--fg-dim) transition-colors hover:text-(--cyan)" title={copy.railHome}>
+					Accueil
+				</a>
+				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
+				<a href="/#about" class="text-(--fg-dim) transition-colors hover:text-(--cyan)" title={copy.railAbout}>
+					À propos
+				</a>
+				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
+				<a href="/#projects" class="text-(--fg-dim) transition-colors hover:text-(--cyan)" title={copy.railProjects}>
+					Projets
+				</a>
+				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
+				<a
+					href={ghProfile}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-(--fg-dim) transition-colors hover:text-(--cyan)"
+					title={copy.aboutGithubTitle}
+				>
+					GitHub
+				</a>
+				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
+				<a
+					href={site.linkedinUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-(--fg-dim) transition-colors hover:text-(--cyan)"
+					title={copy.aboutLinkedinTitle}
+				>
+					LinkedIn
+				</a>
+				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
+				<a
+					href={`mailto:${site.email}`}
+					class="text-(--fg-dim) transition-colors hover:text-(--cyan)"
+					title={copy.ctaEmailTitle}
+				>
+					Contact
+				</a>
+			</nav>
 		</div>
-	</div>
+	</footer>
 </Layout>

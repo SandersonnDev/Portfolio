@@ -1,0 +1,53 @@
+---
+import { site, copy } from "../site.config";
+import gh from "../data/github-projects.generated.json";
+
+const ghUrl = `https://github.com/${gh.sourceUser}`;
+---
+
+<aside class="rail" aria-label={copy.railNavAria} transition:persist="rail">
+	<div class="rail__dock">
+		<nav class="rail__cluster">
+			<a href="/#hero" class="rail__link" title={copy.railHome} aria-label={copy.railHome}>
+				<i class="fa-solid fa-house" aria-hidden="true"></i>
+			</a>
+			<a href="/#about" class="rail__link" title={copy.railAbout} aria-label={copy.railAbout}>
+				<i class="fa-solid fa-address-card" aria-hidden="true"></i>
+			</a>
+			<a href="/#projects" class="rail__link" title={copy.railProjects} aria-label={copy.railProjects}>
+				<i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+			</a>
+		</nav>
+
+		<div class="rail__social" role="group" aria-label="Contact et réseaux">
+			<a
+				href={ghUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="rail__social-btn"
+				title={copy.aboutGithubTitle}
+				aria-label={copy.aboutGithubTitle}
+			>
+				<i class="fa-brands fa-github" aria-hidden="true"></i>
+			</a>
+			<a
+				href={site.linkedinUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="rail__social-btn"
+				title={copy.aboutLinkedinTitle}
+				aria-label={copy.aboutLinkedinTitle}
+			>
+				<i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+			</a>
+			<a
+				href={`mailto:${site.email}`}
+				class="rail__social-btn"
+				title={copy.aboutMailTitle}
+				aria-label={copy.aboutMailTitle}
+			>
+				<i class="fa-regular fa-envelope" aria-hidden="true"></i>
+			</a>
+		</div>
+	</div>
+</aside>
