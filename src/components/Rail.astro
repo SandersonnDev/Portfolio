@@ -1,5 +1,6 @@
 ---
 import { site, copy } from "../site.config";
+import { withBase } from "../lib/paths";
 import gh from "../data/github-projects.generated.json";
 
 const ghUrl = `https://github.com/${gh.sourceUser}`;
@@ -8,13 +9,13 @@ const ghUrl = `https://github.com/${gh.sourceUser}`;
 <aside class="rail" aria-label={copy.railNavAria} transition:persist="rail">
 	<div class="rail__dock">
 		<nav class="rail__cluster">
-			<a href="/#hero" class="rail__link" title={copy.railHome} aria-label={copy.railHome}>
+			<a href={withBase("#hero")} class="rail__link" title={copy.railHome} aria-label={copy.railHome}>
 				<i class="fa-solid fa-house" aria-hidden="true"></i>
 			</a>
-			<a href="/#about" class="rail__link" title={copy.railAbout} aria-label={copy.railAbout}>
+			<a href={withBase("#about")} class="rail__link" title={copy.railAbout} aria-label={copy.railAbout}>
 				<i class="fa-solid fa-address-card" aria-hidden="true"></i>
 			</a>
-			<a href="/#projects" class="rail__link" title={copy.railProjects} aria-label={copy.railProjects}>
+			<a href={withBase("#projects")} class="rail__link" title={copy.railProjects} aria-label={copy.railProjects}>
 				<i class="fa-solid fa-layer-group" aria-hidden="true"></i>
 			</a>
 		</nav>

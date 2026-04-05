@@ -382,6 +382,24 @@ function initSections(ac: AbortController) {
 	update();
 }
 
+function normalizePathname(p: string): string {
+	const x = p.replace(/\/$/, "");
+	return x === "" ? "/" : x;
+}
+
+/** Ancre même page (ex. `/Portfolio/#about`) — compatible GitHub Pages sous-chemin. */
+function hashForSamePageNav(href: string): string | null {
+	try {
+		const u = new URL(href, location.href);
+		if (u.origin !== location.origin) return null;
+		if (!u.hash) return null;
+		if (normalizePathname(u.pathname) !== normalizePathname(location.pathname)) return null;
+		return u.hash;
+	} catch {
+		return null;
+	}
+}
+
 function initSmoothNav(ac: AbortController) {
 	if (reduce()) return;
 	document.addEventListener(
@@ -392,18 +410,16 @@ function initSmoothNav(ac: AbortController) {
 			const href = a.getAttribute("href");
 			if (!href) return;
 
-			let hash = "";
-			if (href.startsWith("#")) hash = href;
-			else if (href.startsWith("/#")) hash = href.slice(1);
-			else return;
-
-			if (location.pathname !== "/" && location.pathname !== "/index.html") return;
+			const hash = hashForSamePageNav(href);
+			if (!hash) return;
 
 			const target = document.querySelector(hash);
 			if (!target) return;
 			e.preventDefault();
 			target.scrollIntoView({ behavior: "smooth", block: "start" });
-			history.pushState(null, "", `/${hash}`);
+			const u = new URL(location.href);
+			u.hash = hash;
+			history.pushState(null, "", u.pathname + u.search + hash);
 			setTimeout(() => {
 				window.dispatchEvent(new Event("scroll"));
 			}, 480);

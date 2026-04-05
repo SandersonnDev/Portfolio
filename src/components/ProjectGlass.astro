@@ -1,5 +1,6 @@
 ---
 import { copy } from "../site.config";
+import { withBase } from "../lib/paths";
 
 interface Props {
 	slug: string;
@@ -11,7 +12,7 @@ interface Props {
 
 const { slug, title, description, href, index } = Astro.props;
 const id = String(index + 1).padStart(2, "0");
-const ficheUrl = `/projets/${slug}`;
+const ficheUrl = withBase(`projets/${slug}`);
 ---
 
 <article

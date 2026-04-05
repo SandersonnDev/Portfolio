@@ -1,6 +1,7 @@
 ---
 import { site } from "../site.config";
 import gh from "../data/github-projects.generated.json";
+import { withBase } from "../lib/paths";
 
 const profile = `https://github.com/${gh.sourceUser}`;
 const year = new Date().getFullYear();
@@ -17,9 +18,9 @@ const year = new Date().getFullYear();
 			</p>
 		</div>
 		<div class="flex flex-wrap items-center gap-2">
-			<a href="/#hero" class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Accueil</a>
-			<a href="/#about" class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">À propos</a>
-			<a href="/#projects" class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Projets</a>
+			<a href={withBase("#hero")} class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Accueil</a>
+			<a href={withBase("#about")} class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">À propos</a>
+			<a href={withBase("#projects")} class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Projets</a>
 			<a href={`mailto:${site.email}`} class="btn-tactical btn-tactical--ghost py-2! text-[9px]!">Mail</a>
 			<a href={profile} class="btn-tactical py-2! text-[9px]!" target="_blank" rel="noopener noreferrer">
 				<i class="fa-brands fa-github" aria-hidden="true"></i>

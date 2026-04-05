@@ -1,7 +1,106 @@
 {
-	"syncedAt": "2026-04-05T19:37:31.199Z",
+	"syncedAt": "2026-04-05T20:25:03.328Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
+		{
+			"slug": "portfolio",
+			"title": "Portfolio",
+			"description": "> 🧑‍🚀 Seasoned astronaut? Delete this file. Have fun! Inside of your Astro project, you'll see the following folders and files: To learn more about the folder structure of an Astro project, refer to our guide on project structure. All commands are run from the root of the proje…",
+			"stack": [
+				"Astro",
+				"JavaScript",
+				"CSS",
+				"TypeScript"
+			],
+			"href": "https://github.com/SandersonnDev/Portfolio",
+			"liveHref": null,
+			"coverImage": null,
+			"sections": [
+				{
+					"type": "heading",
+					"level": 1,
+					"text": "Astro Starter Kit: Basics"
+				},
+				{
+					"type": "code",
+					"lang": "sh",
+					"code": "npm create astro@latest -- --template basics"
+				},
+				{
+					"type": "quote",
+					"parts": [
+						{
+							"k": "text",
+							"v": "🧑‍🚀 "
+						},
+						{
+							"k": "bold",
+							"v": "Seasoned astronaut?"
+						},
+						{
+							"k": "text",
+							"v": " Delete this file. Have fun!"
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "🚀 Project Structure"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Inside of your Astro project, you'll see the following folders and files:"
+						}
+					]
+				},
+				{
+					"type": "code",
+					"lang": "text",
+					"code": "/\n├── public/\n│   └── favicon.svg\n├── src\n│   ├── assets\n│   │   └── astro.svg\n│   ├── components\n│   │   └── Welcome.astro\n│   ├── layouts\n│   │   └── Layout.astro\n│   └── pages\n│       └── index.astro\n└── package.json"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/)."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "🧞 Commands"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "All commands are run from the root of the project, from a terminal:"
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "👀 Want to learn more?"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat)."
+						}
+					]
+				}
+			]
+		},
 		{
 			"slug": "convertalllocal",
 			"title": "ConvertAllLocal",

@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { site, copy } from "../../site.config";
+import { withBase } from "../../lib/paths";
 import gh from "../../data/github-projects.generated.json";
 import ReadmeBlocks from "../../components/ReadmeBlocks.astro";
 import ProjectArticleNav from "../../components/ProjectArticleNav.astro";
@@ -42,7 +43,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 		transition:name="project-fiche"
 	>
 		<a
-			href="/#projects"
+			href={withBase("#projects")}
 			class="sys-mono inline-flex items-center gap-2 text-[10px] tracking-[0.25em] text-(--fg-dim) transition-colors hover:text-(--cyan)"
 			title={copy.projectBackTitle}
 			aria-label={copy.projectBackTitle}
@@ -56,7 +57,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 				<div class="project-page__jump sys-mono mt-6 flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.18em]">
 					{prev ? (
 						<a
-							href={`/projets/${prev.slug}`}
+							href={withBase(`projets/${prev.slug}`)}
 							class="max-w-[min(100%,16rem)] truncate text-(--fg-dim) transition-colors hover:text-(--cyan) md:max-w-[20rem]"
 						>
 							← {prev.title}
@@ -66,7 +67,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 					)}
 					{next ? (
 						<a
-							href={`/projets/${next.slug}`}
+							href={withBase(`projets/${next.slug}`)}
 							class="max-w-[min(100%,16rem)] truncate text-right text-(--fg-dim) transition-colors hover:text-(--cyan) md:max-w-[20rem]"
 						>
 							{next.title} →

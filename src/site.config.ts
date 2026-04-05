@@ -1,7 +1,9 @@
+import { withBase } from "./lib/paths";
+
 /** Marques / logos (placeholders, remplacer par vos fichiers). */
 export const brand = {
 	/** Logo Astro en attendant vos assets (fichier dans `public/`). */
-	placeholderLogo: "/logo-astro.svg",
+	placeholderLogo: withBase("logo-astro.svg"),
 } as const;
 
 /** Contenu (hors JSON GitHub). Aligné sur le CV (MonCV/CV). */

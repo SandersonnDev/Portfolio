@@ -1,12 +1,13 @@
 ---
 import { site } from "../site.config";
 import gh from "../data/github-projects.generated.json";
+import { withBase } from "../lib/paths";
 
 const profile = `https://github.com/${gh.sourceUser}`;
 const nav = [
-	{ href: "/#hero", label: "Accueil" },
-	{ href: "/#about", label: "À propos" },
-	{ href: "/#projects", label: "Projets" },
+	{ href: withBase("#hero"), label: "Accueil" },
+	{ href: withBase("#about"), label: "À propos" },
+	{ href: withBase("#projects"), label: "Projets" },
 	{ href: `mailto:${site.email}`, label: "Mail" },
 ];
 ---
@@ -17,7 +18,7 @@ const nav = [
 >
 	<div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 md:px-8">
 		<a
-			href="/#hero"
+			href={withBase("#hero")}
 			class="group flex min-w-0 items-center gap-2 font-mono text-[10px] uppercase tracking-[0.32em] text-(--color-muted) transition-colors hover:text-(--color-hud-bright) hover:drop-shadow-[0_0_10px_var(--color-hud-dim)]"
 		>
 			<span class="font-bold text-(--color-amber-bright) opacity-80 transition-opacity group-hover:opacity-100">//</span>

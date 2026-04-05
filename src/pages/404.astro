@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { site } from "../site.config";
+import { withBase } from "../lib/paths";
 ---
 
 <Layout title={`Signal perdu · ${site.displayName}`} description="404">
@@ -8,6 +9,6 @@ import { site } from "../site.config";
 		<p class="sys-mono text-[10px] tracking-[0.5em] text-(--cyan)">404</p>
 		<h1 class="font-display mt-6 text-3xl font-light tracking-[0.15em] text-(--fg) md:text-4xl">HORS GRILLE</h1>
 		<p class="mt-4 max-w-sm text-sm text-(--fg-dim)">Aucune ressource à ces coordonnées.</p>
-		<a href="/" class="btn-sys mt-12">Revenir au vaisseau</a>
+		<a href={withBase("")} class="btn-sys mt-12">Revenir au vaisseau</a>
 	</main>
 </Layout>
