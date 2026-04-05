@@ -16,20 +16,21 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outPath = path.join(root, "src", "data", "github-projects.generated.json");
 
 const USERNAME = (process.env.GITHUB_USERNAME || "SandersonnDev").trim();
-/** Secret dépôt (API_KEY_PORTFOLIO) ou GITHUB_TOKEN / GH_TOKEN */
-const TOKEN = (
+/** Secret dépôt (API_KEY_PORTFOLIO) ou GITHUB_TOKEN / GH_TOKEN — peut être vidé si l’API renvoie 401. */
+let authToken = (
 	process.env.API_KEY_PORTFOLIO ||
 	process.env.GITHUB_TOKEN ||
 	process.env.GH_TOKEN ||
 	""
 ).trim();
+const tokenWasConfigured = authToken.length > 0;
 
 function ghHeaders() {
 	const h = {
 		Accept: "application/vnd.github+json",
 		"X-GitHub-Api-Version": "2022-11-28",
 	};
-	if (TOKEN) h.Authorization = `Bearer ${TOKEN}`;
+	if (authToken) h.Authorization = `Bearer ${authToken}`;
 	return h;
 }
 
@@ -101,10 +102,20 @@ async function fetchAllPublicReposAsAuthenticatedUser() {
 }
 
 async function fetchAllPublicReposForPortfolio() {
-	if (TOKEN) {
-		return fetchAllPublicReposAsAuthenticatedUser();
+	if (!authToken) {
+		return fetchAllPublicReposForUser(USERNAME);
 	}
-	return fetchAllPublicReposForUser(USERNAME);
+	try {
+		return await fetchAllPublicReposAsAuthenticatedUser();
+	} catch (e) {
+		const msg = String(e?.message || e);
+		if (!/GitHub 401\b/.test(msg)) throw e;
+		console.warn(
+			"[sync-github] Token refusé (401 Bad credentials) — poursuite sans ce token (dépôts publics du compte uniquement). En CI : vérifie le secret API_KEY_PORTFOLIO (PAT valide, non expiré).",
+		);
+		authToken = "";
+		return fetchAllPublicReposForUser(USERNAME);
+	}
 }
 
 async function fetchTopics(owner, repo) {
@@ -405,9 +416,8 @@ function countProjectsInExistingFile() {
 	}
 }
 
-/** En local uniquement : si l’API échoue (rate limit, réseau…) mais qu’on a déjà un JSON, on garde le dev qui tourne. */
+/** Si l’API échoue (rate limit, réseau, token invalide après échecs…) mais qu’on a déjà un JSON, on conserve le fichier (local + CI). */
 function tryExitWithExistingJson(err) {
-	if (process.env.GITHUB_ACTIONS === "true") return false;
 	const msg = String(err?.message || err);
 	const recoverable =
 		/403|401|rate limit|fetch failed|ENOTFOUND|ECONNREFUSED|ETIMEDOUT|socket/i.test(msg);
@@ -423,7 +433,7 @@ function tryExitWithExistingJson(err) {
 
 async function main() {
 	console.info(
-		`[sync-github] Compte cible : ${USERNAME}${TOKEN ? " (token présent — dépôts perso + collaborateur publics)" : " (sans token — uniquement dépôts publics du compte, limite API basse)"}`,
+		`[sync-github] Compte cible : ${USERNAME}${tokenWasConfigured ? " (token configuré — dépôts perso + collaborateur si le token est valide)" : " (sans token — uniquement dépôts publics du compte, limite API basse)"}`,
 	);
 
 	let repos;
@@ -444,7 +454,7 @@ async function main() {
 		} catch (e) {
 			console.warn(`\n[sync-github] Ignoré ${r.name}:`, e.message || e);
 		}
-		if (!TOKEN && i < repos.length - 1) {
+		if (!authToken && i < repos.length - 1) {
 			await new Promise((res) => setTimeout(res, 150));
 		}
 	}
