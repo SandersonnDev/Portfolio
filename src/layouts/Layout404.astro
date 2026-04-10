@@ -1,5 +1,5 @@
 ---
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../styles/icons.css";
 import "../styles/app.css";
 import { ClientRouter } from "astro:transitions";
 import { site } from "../site.config";
@@ -17,9 +17,9 @@ import { withBase } from "../lib/paths";
 	</head>
 	<body class="font-sans text-(--fg)">
 		<main class="flex min-h-dvh flex-col items-center justify-center px-6">
-			<p class="font-mono text-xs uppercase tracking-[0.35em] text-(--cyan)">404</p>
+			<p class="font-mono text-xs uppercase tracking-[0.35em] text-(--accent)">404</p>
 			<h1 class="mt-4 text-3xl font-normal md:text-4xl">Cette page n’existe pas</h1>
-			<p class="mt-3 max-w-md text-center text-(--fg-dim) leading-relaxed">
+			<p class="mx-auto mt-3 max-w-md text-center leading-relaxed text-(--fg-dim)">
 				Le lien est peut-être expiré ou l’URL est incorrecte.
 			</p>
 			<a href={withBase("")} class="btn-glass mt-10" data-astro-reload>

@@ -16,16 +16,18 @@ const ficheUrl = withBase(`projets/${slug}`);
 ---
 
 <article
-	class="project-card glass glass--panel flex h-full flex-col rounded-lg p-6 md:p-7"
+	class="flex h-full flex-col rounded-lg p-6 md:p-7 project-card glass glass--panel"
 	data-rise
 	style={`--rise-delay: ${index * 110}ms`}
 >
 	<header>
-		<span class="sys-mono text-[10px] tracking-[0.35em] text-(--cyan)">OBJ.{id}</span>
+		<span class="sys-mono text-[10px] tracking-[0.35em] text-(--amber)">OBJ.{id}</span>
 		<h3 class="font-display mt-3 text-lg font-light tracking-wide text-(--fg) md:text-xl">{title}</h3>
 		<p class="mt-3 text-sm leading-relaxed text-(--fg-dim) line-clamp-3">{description}</p>
 	</header>
-	<div class="tile-actions mt-auto grid grid-cols-1 gap-2 border-t border-[color-mix(in_srgb,var(--cyan)_12%,transparent)] pt-5 sm:grid-cols-2">
+	<div
+		class="mt-auto grid grid-cols-1 gap-2 border-t border-[color-mix(in_srgb,var(--accent)_12%,transparent)] pt-5 tile-actions sm:grid-cols-2"
+	>
 		<a
 			href={ficheUrl}
 			class="tile-action tile-action--primary"

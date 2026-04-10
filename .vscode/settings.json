@@ -1,0 +1,17 @@
+{
+    "piny.project_settings": {
+        "open-pages": [
+            "pinyfakepage.html"
+        ],
+        "urls": {
+            "pinyfakepage.html": {
+                "open-page-views": [
+                    {
+                        "w": 1920,
+                        "h": 1080
+                    }
+                ]
+            }
+        }
+    }
+}

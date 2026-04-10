@@ -1,22 +1,34 @@
 @import "tailwindcss";
 
-@theme {
-	--void: #020308;
-	--haze: #0a1624;
-	--glass: color-mix(in srgb, var(--haze) 55%, transparent);
-	--fg: #e6f4ff;
-	--fg-dim: #6b8a9e;
-	--cyan: #3ddbff;
-	--cyan-dim: color-mix(in srgb, var(--cyan) 25%, transparent);
-	--amber: #ffb020;
-	--font-display: "Exo 2", ui-sans-serif, system-ui, sans-serif;
-	--font-mono: "Share Tech Mono", ui-monospace, monospace;
+/* Fond décoratif plein hero (z-0) ; le contenu reste au-dessus (#hero-content z-10). */
+.hero-logo-panel {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	min-height: 100dvh;
+	pointer-events: none;
+	background: radial-gradient(
+		ellipse 120% 80% at 70% 18%,
+		color-mix(in srgb, var(--accent) 9%, var(--void)) 0%,
+		var(--void) 58%
+	);
 }
 
-@media (prefers-reduced-motion: reduce) {
-	#field-canvas {
-		display: none;
-	}
+@theme {
+	--void: #070712;
+	--haze: #0e1022;
+	--glass: color-mix(in srgb, var(--haze) 55%, transparent);
+	--fg: #e8eaf8;
+	--fg-dim: #8b92b0;
+	/* Accent principal (indigo) */
+	--accent: #818cf8;
+	--accent-dim: color-mix(in srgb, var(--accent) 26%, transparent);
+	/* Accent chaud (amber) — titres, horloge, rappels */
+	--amber: #fbbf24;
+	--amber-dim: color-mix(in srgb, var(--amber) 32%, transparent);
+	--font-display: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Share Tech Mono", ui-monospace, monospace;
 }
 
 @layer base {
@@ -25,7 +37,6 @@
 		background: var(--void);
 		color: var(--fg);
 		scroll-behavior: smooth;
-		scroll-snap-type: y proximity;
 		@apply antialiased;
 	}
 
@@ -84,7 +95,13 @@
 	top: 50%;
 	pointer-events: none;
 	z-index: 4;
-	background: linear-gradient(90deg, transparent, var(--cyan-dim), transparent);
+	background: linear-gradient(
+		90deg,
+		transparent,
+		var(--accent-dim),
+		var(--amber-dim),
+		transparent
+	);
 	opacity: 0.12;
 	transform: translateY(-50%);
 }
@@ -130,7 +147,7 @@
 	gap: 0.4rem;
 	padding: 0.55rem 0.35rem;
 	border-radius: 12px;
-	border: 1px solid color-mix(in srgb, var(--cyan) 12%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
 	background: color-mix(in srgb, var(--void) 78%, transparent);
 	backdrop-filter: blur(16px);
 	box-shadow: 0 8px 32px color-mix(in srgb, var(--void) 90%, transparent);
@@ -143,7 +160,7 @@
 	gap: 0.45rem;
 	padding: 0.5rem 0.35rem;
 	border-radius: 12px;
-	border: 1px solid color-mix(in srgb, var(--cyan) 10%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
 	background: color-mix(in srgb, var(--void) 72%, transparent);
 	backdrop-filter: blur(14px);
 	box-shadow: 0 8px 28px color-mix(in srgb, var(--void) 88%, transparent);
@@ -166,15 +183,15 @@
 }
 
 .rail__link:hover {
-	color: var(--cyan);
-	background: color-mix(in srgb, var(--cyan) 10%, transparent);
-	box-shadow: 0 0 20px var(--cyan-dim);
+	color: var(--accent);
+	background: color-mix(in srgb, var(--accent) 10%, transparent);
+	box-shadow: 0 0 20px var(--accent-dim);
 	transform: scale(1.04);
 }
 
 .rail__link--active {
-	color: var(--cyan);
-	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cyan) 38%, transparent);
+	color: var(--accent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent);
 }
 
 .rail__social-btn {
@@ -183,7 +200,7 @@
 	width: 2.65rem;
 	height: 2.65rem;
 	border-radius: 8px;
-	border: 1px solid color-mix(in srgb, var(--cyan) 10%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
 	color: var(--fg-dim);
 	background: color-mix(in srgb, var(--haze) 40%, transparent);
 	text-decoration: none;
@@ -197,10 +214,10 @@
 }
 
 .rail__social-btn:hover {
-	color: var(--cyan);
-	border-color: color-mix(in srgb, var(--cyan) 35%, transparent);
-	background: color-mix(in srgb, var(--cyan) 8%, transparent);
-	box-shadow: 0 0 18px var(--cyan-dim);
+	color: var(--accent);
+	border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+	background: color-mix(in srgb, var(--accent) 8%, transparent);
+	box-shadow: 0 0 18px var(--accent-dim);
 	transform: scale(1.04);
 }
 
@@ -251,7 +268,7 @@
 		background: linear-gradient(
 			180deg,
 			transparent,
-			color-mix(in srgb, var(--cyan) 28%, transparent),
+			color-mix(in srgb, var(--accent) 28%, transparent),
 			transparent
 		);
 		pointer-events: none;
@@ -309,7 +326,7 @@
 .glass {
 	background: color-mix(in srgb, var(--haze) 42%, transparent);
 	backdrop-filter: blur(22px) saturate(1.15);
-	border: 1px solid color-mix(in srgb, var(--cyan) 14%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
 	box-shadow:
 		inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent),
 		0 24px 80px color-mix(in srgb, #000 55%, transparent);
@@ -320,11 +337,11 @@
 }
 
 .glass:hover {
-	border-color: color-mix(in srgb, var(--cyan) 32%, transparent);
+	border-color: color-mix(in srgb, var(--accent) 32%, transparent);
 	box-shadow:
 		inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
 		0 32px 90px color-mix(in srgb, #000 50%, transparent),
-		0 0 40px var(--cyan-dim);
+		0 0 40px var(--accent-dim);
 	transform: translateY(-3px);
 }
 
@@ -358,7 +375,7 @@
 	text-transform: uppercase;
 	text-decoration: none;
 	padding: 0.65rem 0.75rem;
-	border: 1px solid color-mix(in srgb, var(--cyan) 22%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
 	color: var(--fg-dim);
 	background: color-mix(in srgb, var(--void) 45%, transparent);
 	transition:
@@ -369,15 +386,15 @@
 }
 
 .tile-action:hover {
-	border-color: color-mix(in srgb, var(--cyan) 50%, transparent);
-	color: var(--cyan);
-	box-shadow: 0 0 18px var(--cyan-dim);
-	background: color-mix(in srgb, var(--cyan) 8%, transparent);
+	border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+	color: var(--accent);
+	box-shadow: 0 0 18px var(--accent-dim);
+	background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .tile-action--primary {
-	color: var(--cyan);
-	border-color: color-mix(in srgb, var(--cyan) 35%, transparent);
+	color: var(--accent);
+	border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .tile-action--secondary {
@@ -398,14 +415,15 @@
 	background: linear-gradient(
 		105deg,
 		var(--fg) 0%,
-		var(--cyan) 45%,
-		color-mix(in srgb, var(--fg) 90%, var(--cyan)) 100%
+		var(--accent) 36%,
+		var(--amber) 62%,
+		color-mix(in srgb, var(--fg) 88%, var(--accent)) 100%
 	);
 	background-size: 200% auto;
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
-	filter: drop-shadow(0 0 40px var(--cyan-dim));
+	filter: drop-shadow(0 0 36px var(--accent-dim)) drop-shadow(0 0 24px var(--amber-dim));
 }
 
 /* Titres hero : scramble (même dégradé que le h1) */
@@ -413,8 +431,9 @@
 	background: linear-gradient(
 		105deg,
 		var(--fg) 0%,
-		var(--cyan) 45%,
-		color-mix(in srgb, var(--fg) 90%, var(--cyan)) 100%
+		var(--accent) 36%,
+		var(--amber) 62%,
+		color-mix(in srgb, var(--fg) 88%, var(--accent)) 100%
 	);
 	background-size: 200% auto;
 	-webkit-background-clip: text;
@@ -449,7 +468,7 @@
 }
 
 .about-panel {
-	box-shadow: 0 0 0 1px color-mix(in srgb, var(--cyan) 6%, transparent);
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 /* Curseur machine à écrire (hors glitch) */
@@ -459,8 +478,8 @@
 	min-height: 0.72em;
 	margin-left: 0.12em;
 	vertical-align: -0.06em;
-	background: var(--cyan);
-	box-shadow: 0 0 10px var(--cyan-dim);
+	background: linear-gradient(180deg, var(--accent), var(--amber));
+	box-shadow: 0 0 10px var(--accent-dim), 0 0 6px var(--amber-dim);
 	animation: tw-blink 0.82s steps(2, end) infinite;
 }
 
@@ -491,15 +510,16 @@
 	font-weight: 400;
 	letter-spacing: 0.42em;
 	text-transform: uppercase;
-	color: var(--cyan);
+	color: var(--amber);
 	padding: 0.4rem 0.85rem 0.4rem 0.85rem;
-	border-left: 2px solid color-mix(in srgb, var(--cyan) 55%, transparent);
+	border-left: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
 	background: linear-gradient(
 		90deg,
-		color-mix(in srgb, var(--cyan) 8%, transparent) 0%,
-		transparent 65%
+		color-mix(in srgb, var(--accent) 10%, transparent) 0%,
+		color-mix(in srgb, var(--amber) 5%, transparent) 40%,
+		transparent 72%
 	);
-	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cyan) 10%, transparent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .display-heading::before {
@@ -546,7 +566,7 @@
 	bottom: 0;
 	width: min(5rem, 40%);
 	height: 2px;
-	background: linear-gradient(90deg, var(--cyan), transparent);
+	background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--amber) 70%, var(--accent)), transparent);
 	opacity: 0.85;
 }
 
@@ -558,7 +578,7 @@
 /* README structuré (titres, listes, code) */
 .project-page__readme {
 	border-radius: 0.75rem;
-	border: 1px solid color-mix(in srgb, var(--cyan) 12%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
 	background: color-mix(in srgb, var(--haze) 28%, transparent);
 	padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.1rem, 2.5vw, 2rem);
 }
@@ -582,7 +602,7 @@
 	line-height: 1.25;
 	margin: 2.25rem 0 0.85rem;
 	padding-left: 0.85rem;
-	border-left: 3px solid color-mix(in srgb, var(--cyan) 55%, transparent);
+	border-left: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .readme-heading--l1 {
@@ -601,7 +621,7 @@
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	font-family: var(--font-mono);
-	color: var(--cyan);
+	color: var(--accent);
 	border-left-width: 2px;
 	margin-top: 1.5rem;
 }
@@ -621,7 +641,7 @@
 }
 
 .readme-strong {
-	color: color-mix(in srgb, var(--fg) 92%, var(--cyan));
+	color: color-mix(in srgb, var(--fg) 92%, var(--accent));
 	font-weight: 600;
 }
 
@@ -631,8 +651,8 @@
 	padding: 0.12em 0.35em;
 	border-radius: 4px;
 	background: color-mix(in srgb, var(--void) 75%, transparent);
-	border: 1px solid color-mix(in srgb, var(--cyan) 18%, transparent);
-	color: var(--cyan);
+	border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+	color: var(--accent);
 }
 
 .readme-list {
@@ -665,8 +685,8 @@
 	width: 5px;
 	height: 5px;
 	border-radius: 1px;
-	background: var(--cyan);
-	box-shadow: 0 0 10px var(--cyan-dim);
+	background: var(--accent);
+	box-shadow: 0 0 10px var(--accent-dim);
 	opacity: 0.85;
 }
 
@@ -715,7 +735,7 @@
 	line-height: 1.55;
 	color: color-mix(in srgb, var(--fg-dim) 95%, white);
 	background: color-mix(in srgb, var(--void) 92%, transparent);
-	border: 1px solid color-mix(in srgb, var(--cyan) 14%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
 	box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
 }
 
@@ -731,7 +751,7 @@
 	background: linear-gradient(
 		90deg,
 		transparent,
-		color-mix(in srgb, var(--cyan) 35%, transparent),
+		color-mix(in srgb, var(--accent) 35%, transparent),
 		transparent
 	);
 }
@@ -752,9 +772,9 @@
 	margin-top: clamp(2.5rem, 5vw, 3.5rem);
 	border-radius: 0.75rem;
 	overflow: hidden;
-	border: 1px solid color-mix(in srgb, var(--cyan) 16%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
 	background: color-mix(in srgb, var(--void) 55%, transparent);
-	box-shadow: 0 0 0 1px color-mix(in srgb, var(--cyan) 5%, transparent);
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 5%, transparent);
 }
 
 .project-article-nav__inner {
@@ -772,7 +792,7 @@
 .project-article-nav__cell {
 	display: flex;
 	min-width: 0;
-	border-right: 1px solid color-mix(in srgb, var(--cyan) 10%, transparent);
+	border-right: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .project-article-nav__cell--end {
@@ -783,7 +803,7 @@
 @media (max-width: 639px) {
 	.project-article-nav__cell {
 		border-right: none;
-		border-bottom: 1px solid color-mix(in srgb, var(--cyan) 10%, transparent);
+		border-bottom: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
 	}
 
 	.project-article-nav__cell--end {
@@ -812,7 +832,7 @@
 }
 
 .project-article-nav__link:hover {
-	background: color-mix(in srgb, var(--cyan) 8%, transparent);
+	background: color-mix(in srgb, var(--accent) 8%, transparent);
 	color: var(--fg);
 }
 
@@ -823,7 +843,7 @@
 	font-size: 0.58rem;
 	letter-spacing: 0.22em;
 	text-transform: uppercase;
-	color: var(--cyan);
+	color: var(--accent);
 }
 
 .project-article-nav__title {
@@ -851,7 +871,7 @@
 	height: 3.5rem;
 	flex-shrink: 0;
 	border-radius: 8px;
-	border: 1px solid color-mix(in srgb, var(--cyan) 20%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
 	background: color-mix(in srgb, var(--void) 88%, transparent);
 	transition:
 		border-color 0.25s ease,
@@ -859,8 +879,8 @@
 }
 
 .logo-slot:hover {
-	border-color: color-mix(in srgb, var(--cyan) 42%, transparent);
-	box-shadow: 0 0 16px var(--cyan-dim);
+	border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+	box-shadow: 0 0 16px var(--accent-dim);
 }
 
 .logo-slot img {
@@ -878,7 +898,7 @@
 
 .logo-slot--empty:hover {
 	box-shadow: none;
-	border-color: color-mix(in srgb, var(--cyan) 28%, transparent);
+	border-color: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .logo-slot--empty span {
@@ -913,15 +933,11 @@
 	}
 }
 
-/* Révélation sections */
+/* Révélation au scroll (GSAP ScrollTrigger ; état initial / repli) */
 [data-rise] {
 	opacity: 0;
 	transform: translateY(2.5rem) scale(0.98);
 	filter: saturate(0.85);
-	transition:
-		opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-		transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-		filter 0.9s ease;
 }
 
 [data-rise].is-visible {
@@ -930,27 +946,16 @@
 	filter: saturate(1);
 }
 
-/*
- * Cartes projets : révélation + cascade via --rise-delay.
- * Important : `transition-delay` doit venir APRÈS le raccourci `transition`,
- * sinon le shorthand remet le délai à 0 et la cascade est invisible.
- */
+/* Cartes projet : cascade `--rise-delay` via GSAP ; ombre finale en CSS. */
 .project-card[data-rise] {
-	--rise-dur: 1.2s;
-	transition:
-		opacity var(--rise-dur) cubic-bezier(0.22, 1, 0.36, 1),
-		transform var(--rise-dur) cubic-bezier(0.22, 1, 0.36, 1),
-		filter var(--rise-dur) ease,
-		box-shadow var(--rise-dur) cubic-bezier(0.22, 1, 0.36, 1);
-	transition-delay: var(--rise-delay, 0ms);
 	transform: translateY(3rem) scale(0.96);
 	filter: saturate(0.75) brightness(0.9);
-	box-shadow: 0 0 0 0 color-mix(in srgb, var(--cyan) 0%, transparent);
+	box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
 }
 
 .project-card[data-rise].is-visible {
 	filter: saturate(1) brightness(1);
-	box-shadow: 0 18px 48px -28px color-mix(in srgb, var(--cyan) 22%, transparent);
+	box-shadow: 0 18px 48px -28px color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1024,8 +1029,8 @@ body:not(.has-custom-cursor) .cursor-layer {
 	height: 5px;
 	margin: 0;
 	border-radius: 50%;
-	background: color-mix(in srgb, var(--cyan) 92%, white);
-	box-shadow: 0 0 12px var(--cyan-dim);
+	background: color-mix(in srgb, var(--accent) 92%, white);
+	box-shadow: 0 0 12px var(--accent-dim);
 }
 
 #cursor-ring {
@@ -1033,7 +1038,7 @@ body:not(.has-custom-cursor) .cursor-layer {
 	height: 2rem;
 	margin: 0;
 	border-radius: 50%;
-	border: 1px solid color-mix(in srgb, var(--cyan) 35%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
 	background: transparent;
 	transition:
 		width 0.22s ease,
@@ -1045,8 +1050,8 @@ body:not(.has-custom-cursor) .cursor-layer {
 body.cursor-hover #cursor-ring {
 	width: 2.75rem;
 	height: 2.75rem;
-	border-color: color-mix(in srgb, var(--cyan) 65%, transparent);
-	box-shadow: 0 0 20px var(--cyan-dim);
+	border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+	box-shadow: 0 0 20px var(--accent-dim);
 }
 
 @media (pointer: fine) {
@@ -1086,7 +1091,7 @@ body.cursor-hover #cursor-ring {
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	padding: 0.35rem 0.65rem;
-	border: 1px solid color-mix(in srgb, var(--cyan) 18%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
 	color: var(--fg-dim);
 	background: color-mix(in srgb, var(--void) 60%, transparent);
 	transition:
@@ -1096,9 +1101,9 @@ body.cursor-hover #cursor-ring {
 }
 
 .chip:hover {
-	border-color: color-mix(in srgb, var(--cyan) 45%, transparent);
-	color: var(--cyan);
-	box-shadow: 0 0 16px var(--cyan-dim);
+	border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	color: var(--accent);
+	box-shadow: 0 0 16px var(--accent-dim);
 }
 
 .btn-sys {
@@ -1107,10 +1112,10 @@ body.cursor-hover #cursor-ring {
 	letter-spacing: 0.18em;
 	text-transform: uppercase;
 	padding: 0.65rem 1.2rem;
-	border: 1px solid color-mix(in srgb, var(--cyan) 28%, transparent);
-	color: var(--cyan);
+	border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+	color: var(--accent);
 	text-decoration: none;
-	background: color-mix(in srgb, var(--cyan) 6%, transparent);
+	background: color-mix(in srgb, var(--accent) 6%, transparent);
 	transition:
 		background 0.35s ease,
 		box-shadow 0.35s ease,
@@ -1118,9 +1123,9 @@ body.cursor-hover #cursor-ring {
 }
 
 .btn-sys:hover {
-	background: color-mix(in srgb, var(--cyan) 14%, transparent);
-	box-shadow: 0 0 28px var(--cyan-dim);
-	border-color: color-mix(in srgb, var(--cyan) 55%, transparent);
+	background: color-mix(in srgb, var(--accent) 14%, transparent);
+	box-shadow: 0 0 28px var(--accent-dim);
+	border-color: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 .btn-sys--muted {
@@ -1130,9 +1135,9 @@ body.cursor-hover #cursor-ring {
 }
 
 .btn-sys--muted:hover {
-	color: var(--cyan);
-	border-color: color-mix(in srgb, var(--cyan) 40%, transparent);
-	background: color-mix(in srgb, var(--cyan) 6%, transparent);
+	color: var(--accent);
+	border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+	background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .btn-sys--sm {

@@ -1,8 +1,8 @@
 import { withBase } from "./lib/paths";
 
-/** Marques / logos (placeholders, remplacer par vos fichiers). */
+/** Marques / logos (fichiers dans `public/`). */
 export const brand = {
-	/** Logo Astro en attendant vos assets (fichier dans `public/`). */
+	/** Logo Astro (fusée officielle, tracé Simple Icons CC0 — `public/logo-astro.svg`). */
 	placeholderLogo: withBase("logo-astro.svg"),
 } as const;
 
@@ -11,14 +11,15 @@ export const site = {
 	/** Libellé court (rail, onglet, copyright). */
 	codename: "Sandersonn",
 	displayName: "Alexandre Kouziaeff",
-	role: "Concepteur développeur d’applications web · alternance CDA",
+	role: "Concepteur·développeur d’interfaces, du print au web moderne",
 	pitch:
-		"Titulaire d’une licence CDUI et en formation CDA à l’ENI, je recherche une alternance en conception et développement d’applications : du support utilisateur sur le terrain aux interfaces web utiles et ergonomiques.",
+		"Issu de l’infographie et de la mise en page, diplômé en CDUI, je travaille en ESN sur des sites statiques et des stacks Jamstack, avec un renfort net sur JavaScript, TypeScript et l’écosystème associé.",
 	bio: [
-		"Parcours tourné vers le support utilisateur, les sites (CMS, HTML/CSS) et la refactorisation vers du code maison.",
-		"J’ai aussi participé à la création d’un framework PHP/JS pour des sites adaptés aux TPE et PME, avec une démarche RSE, une réduction des coûts, une meilleure gestion du trafic et une intégration de contenu plus simple.",
-		"Je renforce mes compétences en JavaScript/TypeScript et dans l’écosystème outillé (Git, Docker, SQL) pour livrer des solutions alignées sur les métiers.",
-		"Je suis aussi contributeur de projets privés que je ne peux pas dévoiler ici.",
+		"Mon parcours commence en infographie et mise en page, sur une base de niveau bac : chaîne graphique, typographie, et supports print comme numériques.",
+		"La licence Conception, développement et univers interactifs (CDUI) m’a fait passer de la mise en page à la conception d’interfaces et de livrables interactifs, entre design, ergonomie et mise en œuvre technique.",
+		"En entreprise de services du numérique, j’interviens sur des sites (CMS, HTML/CSS), le support utilisateur et la refactorisation vers du code maison. J’ai aussi participé à la création d'un framework PHP/JS pour des sites orientés TPE et PME, avec une démarche RSE (Responsabilité sociétale des entreprises), des gains sur les coûts et le trafic, et une intégration de contenu simplifiée.",
+		"Les missions autour des sites statiques, du Jamstack et des générateurs de sites (SSG) ont été le bon terrain pour consolider JavaScript et TypeScript, les pipelines de build, le déploiement et la performance côté front.",
+		"Aujourd’hui je renforce Git, Docker, SQL et l’écosystème outillé pour livrer des solutions alignées sur les métiers. Je contribue aussi à des projets privés que je ne peux pas exposer ici.",
 	],
 	email: "kouziaeffa.pro@gmail.com",
 	stack: [
@@ -73,7 +74,7 @@ export const copy = {
 	aboutBlockPresent: "Présentation",
 	aboutBlockStack: "Stack maîtrisée",
 	aboutBlockContact: "Contact & réseaux",
-	logoAstroTitle: "Logo Astro (placeholder, à remplacer par votre identité visuelle)",
+	logoAstroTitle: "Astro — framework utilisé pour ce site",
 	railNavAria: "Navigation du portfolio",
 	projectBackLabel: "Retour aux projets",
 	projectBackTitle: "Revenir à la liste des projets sur l’accueil",

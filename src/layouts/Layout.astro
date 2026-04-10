@@ -1,5 +1,5 @@
 ---
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import "../styles/icons.css";
 import "../styles/app.css";
 import { ClientRouter, slide } from "astro:transitions";
 import { site } from "../site.config";
@@ -33,19 +33,12 @@ const pageSlide = slide({ duration: "400ms" });
 		<ClientRouter />
 	</head>
 	<body>
-		<div id="cursor-ring" class="cursor-layer" aria-hidden="true"></div>
-		<div id="cursor-dot" class="cursor-layer" aria-hidden="true"></div>
-		<canvas id="field-canvas" class="fixed inset-0 z-1 h-full w-full" aria-hidden="true"></canvas>
-		<div class="cockpit-scan" aria-hidden="true"></div>
-		<div class="cockpit-vignette" aria-hidden="true"></div>
 		<Rail />
-		<div class="main-shift relative z-10" transition:animate={pageSlide}>
+		<div class="relative z-10 main-shift" transition:animate={pageSlide}>
 			<slot />
 		</div>
 		<script>
 			import { boot } from "../scripts/client";
-			import * as THREE from "three";
-			import gsap from "gsap";
 			document.addEventListener("astro:page-load", boot);
 		</script>
 	</body>

@@ -39,12 +39,12 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 
 <Layout title={title} description={project.description}>
 	<article
-		class="project-page mx-auto max-w-5xl px-5 pb-28 pt-20 md:px-12 md:pt-24"
+		class="mx-auto max-w-5xl px-5 pb-28 pt-20 project-page md:px-12 md:pt-24"
 		transition:name="project-fiche"
 	>
 		<a
 			href={withBase("#projects")}
-			class="sys-mono inline-flex items-center gap-2 text-[10px] tracking-[0.25em] text-(--fg-dim) transition-colors hover:text-(--cyan)"
+			class="inline-flex items-center gap-2 sys-mono text-[10px] tracking-[0.25em] text-(--fg-dim) transition-colors hover:text-(--accent)"
 			title={copy.projectBackTitle}
 			aria-label={copy.projectBackTitle}
 		>
@@ -54,11 +54,11 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 
 		{
 			prev || next ? (
-				<div class="project-page__jump sys-mono mt-6 flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.18em]">
+				<div class="mt-6 flex flex-wrap items-center justify-between gap-4 sys-mono text-[10px] tracking-[0.18em] project-page__jump">
 					{prev ? (
 						<a
 							href={withBase(`projets/${prev.slug}`)}
-							class="max-w-[min(100%,16rem)] truncate text-(--fg-dim) transition-colors hover:text-(--cyan) md:max-w-[20rem]"
+							class="max-w-[min(100%,16rem)] truncate text-(--fg-dim) transition-colors hover:text-(--accent) md:max-w-[20rem]"
 						>
 							← {prev.title}
 						</a>
@@ -68,7 +68,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 					{next ? (
 						<a
 							href={withBase(`projets/${next.slug}`)}
-							class="max-w-[min(100%,16rem)] truncate text-right text-(--fg-dim) transition-colors hover:text-(--cyan) md:max-w-[20rem]"
+							class="max-w-[min(100%,16rem)] truncate text-right text-(--fg-dim) transition-colors hover:text-(--accent) md:max-w-[20rem]"
 						>
 							{next.title} →
 						</a>
@@ -79,12 +79,12 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 			) : null
 		}
 
-		<p class="project-page__repo sys-mono mt-10 text-[10px] tracking-[0.22em]">
+		<p class="mt-10 sys-mono text-[10px] tracking-[0.22em] project-page__repo">
 			<a
 				href={project.href}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="text-(--cyan) transition-opacity hover:opacity-90"
+				class="text-(--accent) transition-opacity hover:opacity-90"
 				title={copy.tileTitleGithub(project.title)}
 			>
 				<span class="text-(--fg-dim)">GitHub · </span>{repoPath}
@@ -92,14 +92,14 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 		</p>
 
 		<div
-			class="project-page__hero mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_min(100%,17.5rem)] lg:items-start lg:gap-14 xl:grid-cols-[minmax(0,1fr)_19.5rem]"
+			class="mt-6 grid gap-10 project-page__hero lg:grid-cols-[minmax(0,1fr)_min(100%,17.5rem)] lg:items-start lg:gap-14 xl:grid-cols-[minmax(0,1fr)_19.5rem]"
 		>
 			<div class="min-w-0">
-				<h1 class="article-title text-3xl md:text-4xl lg:text-[2.35rem]" aria-label={project.title}>
+				<h1 class="text-3xl article-title md:text-4xl lg:text-[2.35rem]" aria-label={project.title}>
 					<span data-scramble data-scramble-final={project.title} class="inline-block min-h-[1.2em]"></span>
 				</h1>
 				<p
-					class="project-page__lead tw-paragraph mt-6 min-h-16 text-base leading-relaxed text-(--fg-dim) md:text-lg"
+					class="mt-6 min-h-16 text-base leading-relaxed text-(--fg-dim) project-page__lead tw-paragraph md:text-lg"
 					data-typewriter
 					data-tw-final={project.description}
 					data-tw-speed="18"
@@ -107,8 +107,8 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 				</p>
 			</div>
 
-			<aside class="project-page__aside flex min-w-0 flex-col gap-5 lg:sticky lg:top-24 lg:self-start">
-				<div class="glass glass--panel rounded-xl p-6 md:p-7">
+			<aside class="flex min-w-0 flex-col gap-5 project-page__aside lg:sticky lg:top-24 lg:self-start">
+				<div class="rounded-xl p-6 glass glass--panel md:p-7">
 					<p class="about-block__label mb-0">{copy.projectDetailLinks}</p>
 					<div class="mt-5 flex flex-col gap-2.5">
 						<a
@@ -140,7 +140,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 
 				{
 					project.stack?.length ? (
-						<div class="glass glass--panel rounded-xl p-6 md:p-7">
+						<div class="rounded-xl p-6 glass glass--panel md:p-7">
 							<p class="about-block__label mb-0">{copy.projectDetailTech}</p>
 							<ul class="mt-5 flex flex-wrap gap-2" aria-label={copy.projectDetailTech}>
 								{project.stack.map((t) => (
@@ -157,7 +157,9 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 
 		{
 			project.coverImage ? (
-				<div class="project-page__cover mt-12 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--cyan)_14%,transparent)]">
+				<div
+					class="mt-12 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--accent)_14%,transparent)] project-page__cover"
+				>
 					<img
 						src={project.coverImage}
 						alt=""
@@ -171,14 +173,14 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 
 		{
 			contentBlocks.length ? (
-				<section class="project-page__journal mt-16 md:mt-20" aria-labelledby="project-journal-h">
+				<section class="mt-16 project-page__journal md:mt-20" aria-labelledby="project-journal-h">
 					<h2 id="project-journal-h" class="display-heading display-heading--lg">
 						{copy.projectJournalHeading}
 					</h2>
-					<p class="project-page__journal-intro sys-mono mt-4 text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim)">
+					<p class="mt-4 sys-mono text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim) project-page__journal-intro">
 						{copy.projectReadmeIntro}
 					</p>
-					<div class="project-page__readme mt-10">
+					<div class="mt-10 project-page__readme">
 						<ReadmeBlocks blocks={contentBlocks} />
 					</div>
 				</section>

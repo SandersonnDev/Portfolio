@@ -14,16 +14,26 @@ const year = new Date().getFullYear();
 <Layout>
 	<main>
 		<!-- 1 Hero -->
-		<section id="hero" data-section class="snap-section is-active border-b border-[color-mix(in_srgb,var(--cyan)_8%,transparent)]" aria-label="Accueil">
-			<div class="section-inner flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
-				<div class="mx-auto w-full max-w-5xl">
-					<div class="mb-10 flex flex-col gap-8 md:mb-12 md:flex-row md:items-end md:justify-between md:gap-10">
-						<div class="flex flex-wrap items-end gap-5 md:gap-8">
+		<section
+			id="hero"
+			data-section
+			class="relative min-h-dvh overflow-hidden border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)] snap-section is-active"
+			aria-label="Accueil"
+		>
+			<div id="hero-logo-panel" class="hero-logo-panel" aria-hidden="true" />
+			<div
+				class="relative z-10 flex min-h-dvh flex-col justify-center px-5 py-24 pointer-events-none section-inner md:px-12 md:py-20"
+			>
+				<div id="hero-content" class="mx-auto w-full max-w-5xl pointer-events-none">
+					<div
+						class="mb-10 flex flex-col gap-8 pointer-events-none md:mb-12 md:flex-row md:items-end md:justify-between md:gap-10"
+					>
+						<div class="flex flex-wrap items-end gap-5 pointer-events-auto md:gap-8">
 							<div class="logo-slot shrink-0" title={copy.logoAstroTitle}>
 								<img src={brand.placeholderLogo} width="44" height="44" alt="" decoding="async" />
 							</div>
 							<div class="min-w-0 pb-0.5">
-								<p class="sys-mono text-[10px] tracking-[0.22em] text-(--cyan)">
+								<p class="sys-mono text-[10px] tracking-[0.22em] text-(--accent)">
 									◆ {site.codename.toUpperCase()} · {copy.heroStatusSuffix}
 								</p>
 								<p class="mt-2 font-display text-sm font-light tracking-wide text-(--fg-dim) md:text-base">
@@ -31,39 +41,49 @@ const year = new Date().getFullYear();
 								</p>
 							</div>
 						</div>
-						<div class="sys-mono text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim) md:max-w-56 md:text-right">
+						<div
+							class="sys-mono text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim) pointer-events-auto md:max-w-56 md:text-right"
+						>
 							<span class="block text-(--fg-dim) opacity-80">{copy.heroClockLabel}</span>
-							<span id="sys-clock" class="mt-1.5 block text-(--cyan)">…</span>
+							<span id="sys-clock" class="mt-1.5 block text-(--amber)">…</span>
 						</div>
 					</div>
 
-						<h1 class="hero-title text-4xl md:text-6xl lg:text-7xl" aria-label={site.displayName}>
+						<h1
+							class="w-fit max-w-full font-sans text-4xl hero-title pointer-events-auto md:text-6xl lg:text-7xl"
+							aria-label={site.displayName}
+						>
 							<span data-scramble data-scramble-final={site.displayName} class="inline-block min-h-[1.05em]"></span>
 						</h1>
 
 					<p
-						class="tw-paragraph mt-8 max-w-2xl min-h-14 font-light text-lg leading-relaxed text-(--fg-dim) md:text-xl"
+						class="mt-8 max-w-2xl min-h-16 font-light text-lg leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-18 md:text-xl"
 						data-typewriter
 						data-tw-final={site.role}
 						data-tw-speed="28"
 					>
 					</p>
 					<p
-						class="tw-paragraph mt-6 max-w-xl min-h-18 text-sm leading-relaxed text-(--fg-dim) md:min-h-20 md:text-base"
+						class="mt-6 max-w-xl min-h-28 text-sm leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-32 md:text-base"
 						data-typewriter
 						data-tw-final={site.pitch}
 						data-tw-speed="22"
 					>
 					</p>
 
-					<div class="mt-12 flex flex-wrap gap-4">
-						<a href={withBase("#projects")} class="btn-sys" title={copy.ctaProjectsTitle} aria-label={copy.ctaProjectsTitle}>
+					<div class="mt-12 flex flex-wrap gap-4 pointer-events-none">
+						<a
+							href={withBase("#projects")}
+							class="pointer-events-auto btn-sys"
+							title={copy.ctaProjectsTitle}
+							aria-label={copy.ctaProjectsTitle}
+						>
 							<i class="fa-solid fa-layer-group mr-2 text-[10px]" aria-hidden="true"></i>
 							{copy.ctaProjects}
 						</a>
 						<a
 							href={withBase("#about")}
-							class="btn-sys btn-sys--muted"
+							class="pointer-events-auto btn-sys btn-sys--muted"
 							title={copy.ctaHeroAboutTitle}
 							aria-label={copy.ctaHeroAboutTitle}
 						>
@@ -72,10 +92,10 @@ const year = new Date().getFullYear();
 						</a>
 					</div>
 
-					<div class="mt-20 flex justify-center md:mt-24">
+					<div class="mt-20 flex justify-center pointer-events-none md:mt-24">
 						<a
 							href={withBase("#about")}
-							class="scroll-hint text-(--fg-dim) transition-colors hover:text-(--cyan)"
+							class="scroll-hint text-(--fg-dim) transition-colors hover:text-(--amber) pointer-events-auto"
 							title={copy.ctaScrollAboutTitle}
 							aria-label={copy.ctaScrollAbout}
 						>
@@ -87,19 +107,26 @@ const year = new Date().getFullYear();
 		</section>
 
 		<!-- 2 À propos -->
-		<section id="about" data-section class="snap-section border-b border-[color-mix(in_srgb,var(--cyan)_8%,transparent)]" aria-labelledby="ab">
-			<div class="section-inner flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
+		<section
+			id="about"
+			data-section
+			class="snap-section border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+			aria-labelledby="ab"
+		>
+			<div class="flex min-h-dvh flex-col justify-center px-5 py-24 section-inner md:px-12 md:py-20">
 				<div class="mx-auto w-full max-w-5xl">
 					<h2 id="ab" class="display-heading display-heading--lg" data-rise>
 						<span data-scramble data-scramble-final="Section · À propos" class="inline-block min-h-[1.35em]"></span>
 					</h2>
 
-					<div class="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
+					<div class="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-12 lg:items-start">
 						<!-- Présentation : colonne principale -->
 						<div class="about-block about-block--present lg:col-span-7" data-rise>
-							<div class="about-panel rounded-xl border border-[color-mix(in_srgb,var(--cyan)_14%,transparent)] bg-[color-mix(in_srgb,var(--haze)_40%,transparent)] p-8 md:p-10">
+							<div
+								class="rounded-xl border border-[color-mix(in_srgb,var(--accent)_14%,transparent)] bg-[color-mix(in_srgb,var(--haze)_40%,transparent)] p-8 about-panel md:p-10"
+							>
 								<p class="about-block__label">{copy.aboutBlockPresent}</p>
-								<div class="mt-8 space-y-8 text-base leading-relaxed text-(--fg-dim)">
+								<div class="mt-4 space-y-4 text-base leading-relaxed text-(--fg-dim)">
 									{
 										site.bio.map((text) => (
 											<p
@@ -116,8 +143,8 @@ const year = new Date().getFullYear();
 						</div>
 
 						<!-- Stack + contact : colonne latérale -->
-						<div class="flex flex-col gap-10 lg:col-span-5">
-							<div class="glass glass--panel rounded-xl p-8 md:p-9" data-rise>
+						<div class="flex flex-col gap-10 lg:col-span-5 lg:justify-start">
+							<div class="rounded-xl p-8 glass glass--panel md:p-9" data-rise>
 								<p class="about-block__label mb-0">{copy.aboutBlockStack}</p>
 								<ul class="mt-6 flex flex-wrap gap-2" aria-label="Technologies maîtrisées">
 									{
@@ -133,7 +160,7 @@ const year = new Date().getFullYear();
 								</ul>
 							</div>
 
-							<div class="glass glass--panel rounded-xl p-8 md:p-9" data-rise>
+							<div class="rounded-xl p-8 glass glass--panel md:p-9" data-rise>
 								<p class="about-block__label mb-0">{copy.aboutBlockContact}</p>
 								<div class="mt-6 flex flex-col gap-3">
 									<a
@@ -166,9 +193,9 @@ const year = new Date().getFullYear();
 
 		<!-- 3 Projets -->
 		<section id="projects" data-section class="snap-section" aria-labelledby="pj">
-			<div class="section-inner flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
+			<div class="flex min-h-dvh flex-col justify-center px-5 py-24 section-inner md:px-12 md:py-20">
 				<div class="mx-auto w-full max-w-5xl">
-					<h2 id="pj" class="display-heading display-heading--lg" data-rise>
+					<h2 id="pj" class="mb-8 display-heading display-heading--lg" data-rise>
 						<span data-scramble data-scramble-final="Section · Projets" class="inline-block min-h-[1.35em]"></span>
 					</h2>
 					<div class="grid gap-8 sm:grid-cols-2">
@@ -179,7 +206,7 @@ const year = new Date().getFullYear();
 		</section>
 	</main>
 
-	<footer class="site-footer border-t border-[color-mix(in_srgb,var(--cyan)_8%,transparent)] px-4 py-10 md:px-12">
+	<footer class="border-t border-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-4 py-10 site-footer md:px-12">
 		<div class="mx-auto flex max-w-5xl flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
 			<div class="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
 				<div class="flex flex-wrap items-center justify-center gap-4 md:justify-start" aria-label="Logo">
@@ -195,16 +222,19 @@ const year = new Date().getFullYear();
 					<p class="mt-1 font-data text-[10px] text-(--fg-dim)">{copy.builtWith}</p>
 				</div>
 			</div>
-			<nav class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sys-mono text-[10px] tracking-[0.15em] md:justify-end" aria-label="Pied de page">
-				<a href={withBase("#hero")} class="text-(--fg-dim) transition-colors hover:text-(--cyan)" title={copy.railHome}>
+			<nav
+				class="sys-mono flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] tracking-[0.15em] md:justify-end"
+				aria-label="Pied de page"
+			>
+				<a href={withBase("#hero")} class="text-(--fg-dim) transition-colors hover:text-(--accent)" title={copy.railHome}>
 					Accueil
 				</a>
 				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<a href={withBase("#about")} class="text-(--fg-dim) transition-colors hover:text-(--cyan)" title={copy.railAbout}>
+				<a href={withBase("#about")} class="text-(--fg-dim) transition-colors hover:text-(--accent)" title={copy.railAbout}>
 					À propos
 				</a>
 				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<a href={withBase("#projects")} class="text-(--fg-dim) transition-colors hover:text-(--cyan)" title={copy.railProjects}>
+				<a href={withBase("#projects")} class="text-(--fg-dim) transition-colors hover:text-(--accent)" title={copy.railProjects}>
 					Projets
 				</a>
 				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
@@ -212,7 +242,7 @@ const year = new Date().getFullYear();
 					href={ghProfile}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="text-(--fg-dim) transition-colors hover:text-(--cyan)"
+					class="text-(--fg-dim) transition-colors hover:text-(--accent)"
 					title={copy.aboutGithubTitle}
 				>
 					GitHub
@@ -221,7 +251,7 @@ const year = new Date().getFullYear();
 				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
 				<a
 					href={`mailto:${site.email}`}
-					class="text-(--fg-dim) transition-colors hover:text-(--cyan)"
+					class="text-(--fg-dim) transition-colors hover:text-(--accent)"
 					title={copy.ctaEmailTitle}
 				>
 					Contact

@@ -1,0 +1,5 @@
+/* Font Awesome : base + styles utilisés (solid, regular, brands) — évite all.min (~100 Ko de glyphes inutiles). */
+@import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+@import "@fortawesome/fontawesome-free/css/solid.min.css";
+@import "@fortawesome/fontawesome-free/css/regular.min.css";
+@import "@fortawesome/fontawesome-free/css/brands.min.css";

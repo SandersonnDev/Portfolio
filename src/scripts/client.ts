@@ -1,3 +1,9 @@
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
 const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = () => matchMedia("(pointer: fine)").matches;
 
@@ -10,10 +16,13 @@ let mouseX = 0;
 let mouseY = 0;
 
 let cleanupBoot: (() => void) | null = null;
-let cleanupField: (() => void) | null = null;
 let sysClockTimer: ReturnType<typeof setInterval> | null = null;
-let riseObserver: IntersectionObserver | null = null;
+const riseScrollTriggers: ScrollTrigger[] = [];
 let textFxObserver: IntersectionObserver | null = null;
+let heroSeqObserver: IntersectionObserver | null = null;
+let aboutSeqObserver: IntersectionObserver | null = null;
+let heroSequentialStarted = false;
+let aboutSequentialStarted = false;
 
 const textFxState = new WeakMap<HTMLElement, { cancel?: () => void }>();
 
@@ -21,7 +30,7 @@ function pickGlyph() {
 	return GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? "·";
 }
 
-function runScramble(el: HTMLElement, final: string) {
+function runScramble(el: HTMLElement, final: string, onComplete?: () => void, durationOverrideMs?: number) {
 	const state = textFxState.get(el) ?? {};
 	state.cancel?.();
 	let cancelled = false;
@@ -34,7 +43,8 @@ function runScramble(el: HTMLElement, final: string) {
 	textFxState.set(el, state);
 
 	const len = final.length;
-	const duration = Math.min(2400, 380 + len * 42);
+	const duration =
+		durationOverrideMs ?? Math.min(2400, 380 + len * 42);
 	const start = performance.now();
 
 	function frame(now: number) {
@@ -55,12 +65,19 @@ function runScramble(el: HTMLElement, final: string) {
 		}
 		el.textContent = out;
 		if (t < 1) rafId = requestAnimationFrame(frame);
-		else el.textContent = final;
+		else {
+			el.textContent = final;
+			onComplete?.();
+		}
 	}
 	rafId = requestAnimationFrame(frame);
 }
 
-function runTypewriter(el: HTMLElement, final: string, speedMs: number) {
+const typewriterCompleted = new WeakSet<HTMLElement>();
+/** Évite de marquer le typewriter comme « fini » au premier callback hors viewport (éléments jamais vus, ex. section About). */
+const typewriterEverSeen = new WeakSet<HTMLElement>();
+
+function runTypewriter(el: HTMLElement, final: string, speedMs: number, onComplete?: () => void) {
 	const state = textFxState.get(el) ?? {};
 	state.cancel?.();
 	let cancelled = false;
@@ -87,9 +104,98 @@ function runTypewriter(el: HTMLElement, final: string, speedMs: number) {
 			el.appendChild(caret);
 			i++;
 			timeoutId = window.setTimeout(tick, speedMs);
+		} else {
+			onComplete?.();
 		}
 	};
 	tick();
+}
+
+/** Machine à écrire sur durée fixe (GSAP) — rythme régulier, lecture rapide. */
+function runTypewriterGsap(el: HTMLElement, final: string, durationSec: number, onComplete?: () => void): Promise<void> {
+	const state = textFxState.get(el) ?? {};
+	state.cancel?.();
+	let tween: gsap.core.Tween | null = null;
+	const cancel = () => {
+		tween?.kill();
+		tween = null;
+	};
+	state.cancel = cancel;
+	textFxState.set(el, state);
+
+	el.replaceChildren();
+	const caret = document.createElement("span");
+	caret.className = "tw-caret";
+	caret.setAttribute("aria-hidden", "true");
+
+	if (final.length === 0) {
+		onComplete?.();
+		return Promise.resolve();
+	}
+
+	const obj = { n: 0 };
+	return new Promise((resolve) => {
+		tween = gsap.to(obj, {
+			n: final.length,
+			duration: Math.max(0.12, durationSec),
+			ease: "none",
+			onUpdate: () => {
+				const i = Math.min(final.length, Math.floor(obj.n));
+				el.replaceChildren();
+				const slice = final.slice(0, i);
+				if (slice) el.appendChild(document.createTextNode(slice));
+				if (i < final.length) el.appendChild(caret);
+			},
+			onComplete: () => {
+				el.textContent = final;
+				onComplete?.();
+				resolve();
+			},
+		});
+	});
+}
+
+function typewriterDurationForText(text: string, minSec: number, maxSec: number): number {
+	const n = text.length;
+	return Math.min(maxSec, Math.max(minSec, 0.28 + n * 0.0075));
+}
+
+function skipSequentialTextObserve(el: HTMLElement): boolean {
+	if (el.closest("#hero-content") && (el.hasAttribute("data-typewriter") || el.hasAttribute("data-scramble"))) {
+		return true;
+	}
+	if (el.closest(".about-block--present") && el.hasAttribute("data-typewriter")) return true;
+	return false;
+}
+
+async function runHeroTextSequence() {
+	const scrambleEl = document.querySelector<HTMLElement>("#hero-content [data-scramble]");
+	const twEls = [...document.querySelectorAll<HTMLElement>("#hero-content [data-typewriter]")];
+
+	if (scrambleEl) {
+		const sc = scrambleEl.dataset.scrambleFinal ?? "";
+		const dur = Math.min(950, 260 + sc.length * 34);
+		await new Promise<void>((resolve) => {
+			runScramble(scrambleEl, sc, resolve, dur);
+		});
+	}
+
+	for (const el of twEls) {
+		const tw = el.dataset.twFinal ?? "";
+		typewriterEverSeen.add(el);
+		const sec = typewriterDurationForText(tw, 0.85, 1.55);
+		await runTypewriterGsap(el, tw, sec, () => typewriterCompleted.add(el));
+	}
+}
+
+async function runAboutBioSequence() {
+	const twEls = [...document.querySelectorAll<HTMLElement>(".about-block--present [data-typewriter]")];
+	for (const el of twEls) {
+		const tw = el.dataset.twFinal ?? "";
+		typewriterEverSeen.add(el);
+		const sec = typewriterDurationForText(tw, 0.55, 1.15);
+		await runTypewriterGsap(el, tw, sec, () => typewriterCompleted.add(el));
+	}
 }
 
 function resetTextEl(el: HTMLElement) {
@@ -100,6 +206,12 @@ function resetTextEl(el: HTMLElement) {
 function initTextFX(ac: AbortController) {
 	textFxObserver?.disconnect();
 	textFxObserver = null;
+	heroSeqObserver?.disconnect();
+	heroSeqObserver = null;
+	aboutSeqObserver?.disconnect();
+	aboutSeqObserver = null;
+	heroSequentialStarted = false;
+	aboutSequentialStarted = false;
 
 	const nodes = [...document.querySelectorAll<HTMLElement>("[data-scramble], [data-typewriter]")];
 
@@ -107,8 +219,11 @@ function initTextFX(ac: AbortController) {
 		for (const el of nodes) {
 			const tw = el.dataset.twFinal ?? "";
 			const sc = el.dataset.scrambleFinal ?? "";
-			if (el.hasAttribute("data-typewriter") && tw) el.textContent = tw;
-			else if (el.hasAttribute("data-scramble") && sc) el.textContent = sc;
+			if (el.hasAttribute("data-typewriter") && tw) {
+				el.textContent = tw;
+				typewriterCompleted.add(el);
+				typewriterEverSeen.add(el);
+			} else if (el.hasAttribute("data-scramble") && sc) el.textContent = sc;
 		}
 		return;
 	}
@@ -131,25 +246,88 @@ function initTextFX(ac: AbortController) {
 				const scFinal = el.dataset.scrambleFinal ?? "";
 				if (e.isIntersecting) {
 					if (el.hasAttribute("data-typewriter") && twFinal) {
-						const speed = Math.max(12, Number(el.dataset.twSpeed ?? "34") || 34);
-						runTypewriter(el, twFinal, speed);
+						typewriterEverSeen.add(el);
+						if (typewriterCompleted.has(el)) {
+							el.textContent = twFinal;
+						} else {
+							const speed = Math.max(12, Number(el.dataset.twSpeed ?? "34") || 34);
+							runTypewriter(el, twFinal, speed, () => typewriterCompleted.add(el));
+						}
 					} else if (el.hasAttribute("data-scramble") && scFinal) {
 						runScramble(el, scFinal);
 					}
 				} else {
-					resetTextEl(el);
+					if (el.hasAttribute("data-typewriter")) {
+						const twF = el.dataset.twFinal ?? "";
+						textFxState.get(el)?.cancel?.();
+						if (typewriterCompleted.has(el)) {
+							el.textContent = twF;
+						} else if (typewriterEverSeen.has(el) && twF) {
+							el.textContent = twF;
+							typewriterCompleted.add(el);
+						} else {
+							resetTextEl(el);
+						}
+					} else {
+						resetTextEl(el);
+					}
 				}
 			}
 		},
 		{ threshold: 0.2, rootMargin: "0px 0px -5% 0px" },
 	);
 
-	for (const el of nodes) io.observe(el);
+	for (const el of nodes) {
+		if (!skipSequentialTextObserve(el)) io.observe(el);
+	}
 	textFxObserver = io;
+
+	const heroRoot = document.getElementById("hero");
+	if (heroRoot && document.querySelector("#hero-content [data-scramble], #hero-content [data-typewriter]")) {
+		const tryHeroNow = () => {
+			if (heroSequentialStarted || reduce()) return;
+			const r = heroRoot.getBoundingClientRect();
+			if (r.top < innerHeight * 0.92 && r.bottom > innerHeight * 0.02) {
+				heroSequentialStarted = true;
+				void runHeroTextSequence();
+			}
+		};
+		heroSeqObserver = new IntersectionObserver(
+			(entries) => {
+				const e = entries[0];
+				if (e?.isIntersecting && !heroSequentialStarted) {
+					heroSequentialStarted = true;
+					void runHeroTextSequence();
+				}
+			},
+			{ threshold: 0.06, rootMargin: "0px 0px 12% 0px" },
+		);
+		heroSeqObserver.observe(heroRoot);
+		queueMicrotask(tryHeroNow);
+	}
+
+	const aboutRoot = document.querySelector<HTMLElement>(".about-block--present");
+	if (aboutRoot?.querySelector("[data-typewriter]")) {
+		aboutSeqObserver = new IntersectionObserver(
+			(entries) => {
+				const e = entries[0];
+				if (e?.isIntersecting && !aboutSequentialStarted) {
+					aboutSequentialStarted = true;
+					void runAboutBioSequence();
+				}
+			},
+			{ threshold: 0.1, rootMargin: "0px 0px -10% 0px" },
+		);
+		aboutSeqObserver.observe(aboutRoot);
+	}
 
 	ac.signal.addEventListener("abort", () => {
 		textFxObserver?.disconnect();
 		textFxObserver = null;
+		heroSeqObserver?.disconnect();
+		heroSeqObserver = null;
+		aboutSeqObserver?.disconnect();
+		aboutSeqObserver = null;
 	});
 }
 
@@ -162,126 +340,6 @@ function initGlobalPointer(ac: AbortController) {
 		},
 		{ passive: true, signal: ac.signal },
 	);
-}
-
-function initField(ac: AbortController) {
-	cleanupField?.();
-	cleanupField = null;
-
-	const canvas = document.getElementById("field-canvas") as HTMLCanvasElement | null;
-	if (!canvas || reduce()) return;
-
-	const ctx = canvas.getContext("2d");
-	if (!ctx) return;
-
-	const VOID = "#020308";
-	const N = () => (innerWidth < 640 ? 50 : 88);
-	let particles: { x: number; y: number; vx: number; vy: number }[] = [];
-	let raf = 0;
-
-	function spawn() {
-		const n = N();
-		particles = [];
-		for (let i = 0; i < n; i++) {
-			particles.push({
-				x: Math.random() * innerWidth,
-				y: Math.random() * innerHeight,
-				vx: (Math.random() - 0.5) * 0.22,
-				vy: (Math.random() - 0.5) * 0.22,
-			});
-		}
-	}
-
-	function resize() {
-		const dpr = Math.min(window.devicePixelRatio || 1, 2);
-		canvas.width = Math.floor(innerWidth * dpr);
-		canvas.height = Math.floor(innerHeight * dpr);
-		canvas.style.width = `${innerWidth}px`;
-		canvas.style.height = `${innerHeight}px`;
-		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-		spawn();
-	}
-
-	resize();
-	window.addEventListener("resize", resize, { passive: true, signal: ac.signal });
-
-	const linkDist = innerWidth < 640 ? 95 : 128;
-	const cursorPull = 0.018;
-	const cursorGlowR = 160;
-
-	function tick() {
-		ctx.fillStyle = VOID;
-		ctx.fillRect(0, 0, innerWidth, innerHeight);
-
-		if (finePointer()) {
-			for (const p of particles) {
-				const dx = mouseX - p.x;
-				const dy = mouseY - p.y;
-				const d = Math.hypot(dx, dy) + 8;
-				if (d < cursorGlowR) {
-					const f = (cursorPull * (cursorGlowR - d)) / cursorGlowR;
-					p.vx += (dx / d) * f;
-					p.vy += (dy / d) * f;
-				}
-				p.vx *= 0.992;
-				p.vy *= 0.992;
-			}
-		}
-
-		for (const p of particles) {
-			p.x += p.vx;
-			p.y += p.vy;
-			if (p.x < 0) p.x = innerWidth;
-			if (p.x > innerWidth) p.x = 0;
-			if (p.y < 0) p.y = innerHeight;
-			if (p.y > innerHeight) p.y = 0;
-		}
-
-		for (let i = 0; i < particles.length; i++) {
-			for (let j = i + 1; j < particles.length; j++) {
-				const a = particles[i]!;
-				const b = particles[j]!;
-				const dx = a.x - b.x;
-				const dy = a.y - b.y;
-				const d = Math.hypot(dx, dy);
-				if (d < linkDist) {
-					let alpha = (1 - d / linkDist) * 0.16;
-					if (finePointer()) {
-						const mx = (a.x + b.x) / 2;
-						const my = (a.y + b.y) / 2;
-						const dc = Math.hypot(mouseX - mx, mouseY - my);
-						if (dc < cursorGlowR) alpha += ((cursorGlowR - dc) / cursorGlowR) * 0.12;
-					}
-					ctx.strokeStyle = `rgba(61, 219, 255, ${Math.min(0.45, alpha)})`;
-					ctx.lineWidth = 0.55;
-					ctx.beginPath();
-					ctx.moveTo(a.x, a.y);
-					ctx.lineTo(b.x, b.y);
-					ctx.stroke();
-				}
-			}
-		}
-
-		for (const p of particles) {
-			ctx.beginPath();
-			ctx.arc(p.x, p.y, 1.15, 0, Math.PI * 2);
-			let a = 0.5;
-			if (finePointer()) {
-				const dc = Math.hypot(mouseX - p.x, mouseY - p.y);
-				if (dc < cursorGlowR) a += ((cursorGlowR - dc) / cursorGlowR) * 0.45;
-			}
-			ctx.fillStyle = `rgba(120, 235, 255, ${Math.min(1, a)})`;
-			ctx.fill();
-		}
-
-		raf = requestAnimationFrame(tick);
-	}
-
-	raf = requestAnimationFrame(tick);
-
-	cleanupField = () => {
-		cancelAnimationFrame(raf);
-	};
 }
 
 function initParallax(ac: AbortController) {
@@ -326,26 +384,111 @@ function initSysClock() {
 	if (!reduce()) sysClockTimer = setInterval(tick, 1000);
 }
 
-/** Révélation : rejoue à chaque entrée dans le viewport (pas en boucle CSS). */
+function killRiseScrollTriggers() {
+	for (const st of riseScrollTriggers) st.kill();
+	riseScrollTriggers.length = 0;
+}
+
+function parseRiseDelaySec(el: HTMLElement): number {
+	const raw = getComputedStyle(el).getPropertyValue("--rise-delay").trim();
+	const m = /^([\d.]+)ms$/.exec(raw);
+	return m ? parseFloat(m[1]) / 1000 : 0;
+}
+
+/** Retire l’ancien mode « layered scroll » (pins + snap) si présent après HMR / navigation. */
+function clearLayeredScrollArtifacts() {
+	document.documentElement.classList.remove("gsap-layered-scroll");
+	document.querySelectorAll<HTMLElement>("main > section[data-section].snap-section").forEach((el) => {
+		el.style.removeProperty("z-index");
+	});
+}
+
+/** Révélation au scroll (GSAP + ScrollTrigger), cascade `--rise-delay` sur les cartes. */
 function initRise() {
-	riseObserver?.disconnect();
-	riseObserver = null;
+	killRiseScrollTriggers();
 
 	if (reduce()) {
+		const riseN = document.querySelectorAll("[data-rise]").length;
 		document.querySelectorAll("[data-rise]").forEach((n) => n.classList.add("is-visible"));
+		ScrollTrigger.refresh();
+		// #region agent log
+		fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
+			body: JSON.stringify({
+				sessionId: "245b5a",
+				location: "client.ts:initRise:reduce-branch",
+				message: "init_rise_state",
+				data: { riseCount: riseN, triggerCount: 0, reduceMotion: true, scrollY: window.scrollY },
+				timestamp: Date.now(),
+				runId: "pre-fix",
+				hypothesisId: "H5",
+			}),
+		}).catch(() => {});
+		// #endregion
 		return;
 	}
 
-	const io = new IntersectionObserver(
-		(entries) => {
-			for (const e of entries) {
-				e.target.classList.toggle("is-visible", e.isIntersecting);
-			}
-		},
-		{ threshold: 0.14, rootMargin: "0px 0px -6% 0px" },
-	);
-	document.querySelectorAll("[data-rise]").forEach((n) => io.observe(n));
-	riseObserver = io;
+	const els = [...document.querySelectorAll<HTMLElement>("[data-rise]")];
+	for (const el of els) {
+		const isCard = el.classList.contains("project-card");
+		const delay = parseRiseDelaySec(el);
+
+		gsap.set(el, {
+			autoAlpha: 0,
+			y: isCard ? 52 : 36,
+			scale: isCard ? 0.96 : 0.98,
+			filter: isCard ? "saturate(0.78) brightness(0.92)" : "saturate(0.88)",
+			...(isCard ? { boxShadow: "0 0 0 0 rgba(0,0,0,0)" } : {}),
+		});
+
+		const st = ScrollTrigger.create({
+			trigger: el,
+			start: "top 88%",
+			once: true,
+			onEnter: () => {
+				el.classList.add("is-visible");
+				const vars: gsap.TweenVars = {
+					autoAlpha: 1,
+					y: 0,
+					scale: 1,
+					filter: "saturate(1) brightness(1)",
+					duration: isCard ? 1.08 : 0.95,
+					delay,
+					ease: "power3.out",
+					overwrite: "auto",
+				};
+				if (isCard) {
+					vars.boxShadow =
+						"0 18px 48px -28px color-mix(in srgb, var(--accent) 22%, transparent)";
+				}
+				gsap.to(el, vars);
+			},
+		});
+		riseScrollTriggers.push(st);
+	}
+
+	ScrollTrigger.refresh();
+	// #region agent log
+	fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
+		method: "POST",
+		headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
+		body: JSON.stringify({
+			sessionId: "245b5a",
+			location: "client.ts:initRise:afterRefresh",
+			message: "init_rise_state",
+			data: {
+				riseCount: els.length,
+				triggerCount: riseScrollTriggers.length,
+				reduceMotion: reduce(),
+				scrollY: window.scrollY,
+			},
+			timestamp: Date.now(),
+			runId: "pre-fix",
+			hypothesisId: "H5",
+		}),
+	}).catch(() => {});
+	// #endregion
 }
 
 let sectionRaf = 0;
@@ -401,7 +544,6 @@ function hashForSamePageNav(href: string): string | null {
 }
 
 function initSmoothNav(ac: AbortController) {
-	if (reduce()) return;
 	document.addEventListener(
 		"click",
 		(e) => {
@@ -411,18 +553,79 @@ function initSmoothNav(ac: AbortController) {
 			if (!href) return;
 
 			const hash = hashForSamePageNav(href);
+// #region agent log
+			if (href.includes("#")) {
+				let uPath = "";
+				try {
+					uPath = new URL(href, location.href).pathname;
+				} catch {
+					uPath = "(parse-error)";
+				}
+				fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
+					method: "POST",
+					headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
+					body: JSON.stringify({
+						sessionId: "245b5a",
+						location: "client.ts:initSmoothNav:anchor-click",
+						message: "smooth_nav_anchor_probe",
+						data: {
+							href,
+							hash,
+							locPath: location.pathname,
+							locPathNorm: normalizePathname(location.pathname),
+							linkPathNorm: normalizePathname(uPath),
+							reduceMotion: reduce(),
+							hasTarget: !!(hash && document.querySelector(hash)),
+							defaultPrevented: e.defaultPrevented,
+						},
+						timestamp: Date.now(),
+						runId: "pre-fix",
+						hypothesisId: "H1-H4",
+					}),
+				}).catch(() => {});
+			}
+			// #endregion
 			if (!hash) return;
 
 			const target = document.querySelector(hash);
 			if (!target) return;
 			e.preventDefault();
-			target.scrollIntoView({ behavior: "smooth", block: "start" });
 			const u = new URL(location.href);
 			u.hash = hash;
 			history.pushState(null, "", u.pathname + u.search + hash);
-			setTimeout(() => {
-				window.dispatchEvent(new Event("scroll"));
-			}, 480);
+
+			if (reduce()) {
+				target.scrollIntoView({ block: "start" });
+				queueMicrotask(() => {
+					window.dispatchEvent(new Event("scroll"));
+				});
+				return;
+			}
+
+			// #region agent log
+			fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
+				method: "POST",
+				headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
+				body: JSON.stringify({
+					sessionId: "245b5a",
+					location: "client.ts:initSmoothNav:gsap-scrollTo",
+					message: "smooth_nav_gsap_start",
+					data: { hash, scrollY: window.scrollY },
+					timestamp: Date.now(),
+					runId: "pre-fix",
+					hypothesisId: "H4",
+				}),
+			}).catch(() => {});
+			// #endregion
+			gsap.to(window, {
+				duration: 1,
+				ease: "power2.inOut",
+				scrollTo: { y: target, offsetY: 6, autoKill: true },
+				overwrite: "auto",
+				onComplete: () => {
+					window.dispatchEvent(new Event("scroll"));
+				},
+			});
 		},
 		{ capture: true, signal: ac.signal },
 	);
@@ -491,24 +694,21 @@ export function boot() {
 		clearInterval(sysClockTimer);
 		sysClockTimer = null;
 	}
-	riseObserver?.disconnect();
-	riseObserver = null;
+	gsap.killTweensOf(window);
+	clearLayeredScrollArtifacts();
+	killRiseScrollTriggers();
 	textFxObserver?.disconnect();
 	textFxObserver = null;
-	cleanupField?.();
-	cleanupField = null;
-
 	const ac = new AbortController();
 	cleanupBoot = () => {
+		gsap.killTweensOf(window);
 		ac.abort();
-		cleanupField?.();
-		cleanupField = null;
 		if (sysClockTimer) {
 			clearInterval(sysClockTimer);
 			sysClockTimer = null;
 		}
-		riseObserver?.disconnect();
-		riseObserver = null;
+		clearLayeredScrollArtifacts();
+		killRiseScrollTriggers();
 		textFxObserver?.disconnect();
 		textFxObserver = null;
 		document.body.classList.remove("has-custom-cursor", "cursor-hover");
@@ -517,10 +717,33 @@ export function boot() {
 	initGlobalPointer(ac);
 	initSmoothNav(ac);
 	initSections(ac);
-	initField(ac);
 	initParallax(ac);
 	initSysClock();
 	initRise();
 	initTextFX(ac);
 	initCursor(ac);
+
+	requestAnimationFrame(() => {
+		ScrollTrigger.refresh();
+		// #region agent log
+		fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
+			method: "POST",
+			headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
+			body: JSON.stringify({
+				sessionId: "245b5a",
+				location: "client.ts:boot:afterRefresh",
+				message: "verify_post_fix_no_layered_pins",
+				data: {
+					scrollY: window.scrollY,
+					maxScroll: ScrollTrigger.maxScroll(window),
+					docScrollH: document.documentElement.scrollHeight,
+					hasLayeredClass: document.documentElement.classList.contains("gsap-layered-scroll"),
+				},
+				timestamp: Date.now(),
+				runId: "post-fix",
+				hypothesisId: "FIX",
+			}),
+		}).catch(() => {});
+		// #endregion
+	});
 }
