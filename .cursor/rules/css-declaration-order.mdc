@@ -33,10 +33,3 @@ Les propriétés hors liste (ex. `cursor`, `pointer-events`, `opacity`, `filter`
 Enchaîner les **groupes** dans le même ordre que ci-dessus : position → layout (`flex`/`grid` + flow + align + justify + gap) → tailles → espacements → bordures → typo → couleurs texte → fonds → transforms → motion (`animate-*`, `transition-*`) → overflow → z-index. Terminer par les **variants** (`md:`, `hover:`, etc.) en conservant le même ordre **à l’intérieur** de chaque préfixe quand c’est lisible.
 
 Sur ce dépôt, appliquer cet ordre à **chaque** attribut `class` contenant du Tailwind dans les fichiers `*.astro` (et le CSS brut dans `*.css`) dès qu’un fichier est touché, et viser une **cohérence site-wide** sur les composants partagés (layouts, pages, `components/`).
-
-Note : 
-https://codepen.io/GreenSock
-https://codepen.io/GreenSock/pen/JojaebV
-https://codepen.io/GreenSock/pen/LEYqezo
-https://codepen.io/GreenSock/pen/LZOMKY
-https://codepen.io/GreenSock/pen/VwbywPd

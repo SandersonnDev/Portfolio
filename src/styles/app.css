@@ -680,8 +680,8 @@ html:has(#dev-bar-hitbox-above) {
 	font-kerning: none;
 }
 
-/* Texte du README en colonne lisible ; Mermaid utilise toute la largeur du panneau */
-.readme-content > *:not(.readme-mermaid-wrap) {
+/* Texte du README en colonne lisible ; Mermaid et grilles de badges utilisent toute la largeur du panneau */
+.readme-content > *:not(.readme-mermaid-wrap):not(.readme-tag-table-wrap):not(.readme-badge-strip-wrap) {
 	max-width: 65ch;
 }
 
@@ -882,6 +882,107 @@ html:has(#dev-bar-hitbox-above) {
 .readme-pre code {
 	font-family: inherit;
 	white-space: pre;
+}
+
+.readme-badge-strip-wrap {
+	width: 100%;
+	max-width: 100%;
+	margin: 0 0 1.1rem;
+}
+
+.readme-badge-strip {
+	display: flex;
+	width: 100%;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem 0.65rem;
+}
+
+.readme-badge-strip__link {
+	display: inline-flex;
+	line-height: 0;
+	border-radius: 0.35rem;
+	transition: opacity 0.2s ease;
+}
+
+.readme-badge-strip__link:hover {
+	opacity: 0.92;
+}
+
+.readme-badge-strip__img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	vertical-align: middle;
+}
+
+.readme-badge-strip__img--logo {
+	max-width: min(30%, 12rem);
+}
+
+.readme-tag-table-wrap {
+	width: 100%;
+	max-width: 100%;
+	margin: 0 0 1.35rem;
+}
+
+.readme-tag-table {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.65rem 0.75rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.readme-tag-table__item {
+	margin: 0;
+	padding: 0;
+}
+
+.readme-tag-card {
+	display: flex;
+	min-height: 3.25rem;
+	min-width: 6.5rem;
+	max-width: 14rem;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 0.2rem;
+	padding: 0.65rem 0.85rem;
+	border-radius: 0.5rem;
+	text-decoration: none;
+	color: var(--fg-dim);
+	background: color-mix(in srgb, var(--void) 78%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+	box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 3%, transparent);
+	transition:
+		border-color 0.2s ease,
+		color 0.2s ease,
+		background 0.2s ease;
+}
+
+.readme-tag-card:hover {
+	color: var(--fg);
+	border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+	background: color-mix(in srgb, var(--accent) 8%, var(--void) 92%);
+}
+
+.readme-tag-card__primary {
+	font-family: var(--font-mono);
+	font-size: 0.58rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--fg-dim) 92%, var(--accent));
+	line-height: 1.35;
+}
+
+.readme-tag-card__secondary {
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: color-mix(in srgb, var(--fg) 88%, var(--accent));
+	line-height: 1.25;
 }
 
 .readme-hr {

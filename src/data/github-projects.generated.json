@@ -1,5 +1,5 @@
 {
-	"syncedAt": "2026-04-13T10:03:29.619Z",
+	"syncedAt": "2026-04-13T14:02:18.809Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
 		{
@@ -13,7 +13,7 @@
 				"TypeScript"
 			],
 			"href": "https://github.com/SandersonnDev/Portfolio",
-			"liveHref": null,
+			"liveHref": "https://sandersonndev.github.io/Portfolio/",
 			"coverImage": null,
 			"sections": [
 				{
@@ -438,11 +438,125 @@
 			"coverImage": null,
 			"sections": [
 				{
+					"type": "heading",
+					"level": 1,
+					"text": "ConvertAllLocal - FR"
+				},
+				{
+					"type": "tagTable",
+					"rows": [
+						{
+							"label": "",
+							"hint": "EN_Readme.md",
+							"href": "https://github.com/SandersonnDev/ConvertAllLocal/blob/b9ca7b7e0815930338f5391ad77236c5f6d4a2dc/EN_Readme.md"
+						}
+					]
+				},
+				{
 					"type": "paragraph",
 					"parts": [
 						{
 							"k": "text",
 							"v": "ConvertAllLocal est une application locale qui permet de convertir tous les formats vidéo, image et icônes les plus utilisés dans le web et le développement d'applications, sans téléchargement ni envoi de fichiers vers des services externes."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Fonctionnalités"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Conversion 100% locale"
+							},
+							{
+								"k": "text",
+								"v": " : Tout se passe sur votre machine (via FFmpeg pour vidéo/audio, ImageMagick/Sharp pour images)."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Formats supportés"
+							},
+							{
+								"k": "text",
+								"v": " : Couvre 95% des besoins web/apps modernes."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Interface simple"
+							},
+							{
+								"k": "text",
+								"v": " : Drag & drop ou sélection fichier, choix format de sortie, conversion en 1 clic."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Batch processing"
+							},
+							{
+								"k": "text",
+								"v": " : Convertir plusieurs fichiers d'un coup."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Optimisé web"
+							},
+							{
+								"k": "text",
+								"v": " : Présets pour tailles/résolutions (ex: WebP 80% qualité, MP4 H.264)."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Aucun internet requis"
+							},
+							{
+								"k": "text",
+								"v": " : Fonctionne offline après installation."
+							}
+						]
+					]
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "Formats Supportés"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Vidéo"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Images & Icônes (Web + Multi-OS)"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Présets suggérés"
+						},
+						{
+							"k": "text",
+							"v": " : ICO (Windows), ICNS (macOS), PNG 256x256 (Linux), WebP/SVG (web moderne)."
 						}
 					]
 				}
@@ -458,11 +572,799 @@
 			"coverImage": null,
 			"sections": [
 				{
+					"type": "badgeStrip",
+					"items": [
+						{
+							"href": null,
+							"imgSrc": "https://raw.githubusercontent.com/SandersonnDev/workspace/main/apps/client/build/icon.png",
+							"alt": "Workspace_logo"
+						}
+					]
+				},
+				{
+					"type": "badgeStrip",
+					"items": [
+						{
+							"href": "https://github.com/SandersonnDev/workspace/tree/main/docs",
+							"imgSrc": "https://img.shields.io/badge/docs-GitHub-181717?style=for-the-badge&logo=github&logoColor=white",
+							"alt": "Documentation"
+						},
+						{
+							"href": "https://github.com/SandersonnDev/workspace/actions/workflows/build-client.yml",
+							"imgSrc": "https://img.shields.io/github/actions/workflow/status/SandersonnDev/workspace/build-client.yml?branch=main&style=for-the-badge&label=CI",
+							"alt": "CI"
+						},
+						{
+							"href": "https://opensource.org/licenses/MIT",
+							"imgSrc": "https://img.shields.io/badge/License-MIT-green?style=for-the-badge",
+							"alt": "License: MIT"
+						},
+						{
+							"href": "https://github.com/SandersonnDev",
+							"imgSrc": "https://img.shields.io/badge/Built%20by-SandersonnDev-blueviolet?style=for-the-badge",
+							"alt": "Built by SandersonnDev"
+						}
+					]
+				},
+				{
+					"type": "badgeStrip",
+					"items": [
+						{
+							"href": "https://github.com/SandersonnDev/workspace/blob/main/package.json",
+							"imgSrc": "https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FSandersonnDev%2Fworkspace%2Fmain%2Fpackage.json&query=%24.version&label=version&logo=npm&logoColor=white&style=for-the-badge",
+							"alt": "Version npm"
+						},
+						{
+							"href": "https://github.com/SandersonnDev/workspace/blob/main/package.json",
+							"imgSrc": "https://img.shields.io/badge/node.js-%3E%3D18-339933?style=for-the-badge&logo=node.js&logoColor=white",
+							"alt": "Node.js"
+						},
+						{
+							"href": "https://github.com/SandersonnDev/workspace/blob/main/apps/client/package.json",
+							"imgSrc": "https://img.shields.io/badge/Electron-39.x-47848F?style=for-the-badge&logo=electron&logoColor=white",
+							"alt": "Electron"
+						}
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "1. Besoins du client"
+				},
+				{
 					"type": "paragraph",
 					"parts": [
 						{
 							"k": "text",
-							"v": "Application desktop Electron, monorepo npm (workspaces) : REST, WebSocket, JWT. Backend Fastify, TypeScript, PostgreSQL;"
+							"v": "Dans un contexte de "
+						},
+						{
+							"k": "bold",
+							"v": "structure"
+						},
+						{
+							"k": "text",
+							"v": " (ESN, atelier numérique ou équivalent), les outils métiers, les liens intranet, les partages fichiers et les processus de "
+						},
+						{
+							"k": "bold",
+							"v": "réception matériel"
+						},
+						{
+							"k": "text",
+							"v": " sont souvent "
+						},
+						{
+							"k": "bold",
+							"v": "éclatés"
+						},
+						{
+							"k": "text",
+							"v": " entre plusieurs applications et raccourcis. Cela entraîne perte de temps, oublis et multiplication des fenêtres ou favoris à maintenir."
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Objectifs du projet :"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Centraliser"
+							},
+							{
+								"k": "text",
+								"v": " l’accès aux applications internes, aux raccourcis et aux informations utiles dans une "
+							},
+							{
+								"k": "bold",
+								"v": "interface unique"
+							},
+							{
+								"k": "text",
+								"v": "."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Structurer la réception"
+							},
+							{
+								"k": "text",
+								"v": " du matériel professionnel (saisie, stocks, historique, traçabilité) avec une "
+							},
+							{
+								"k": "bold",
+								"v": "piste d’audit"
+							},
+							{
+								"k": "text",
+								"v": " exploitable."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Faciliter l’accès"
+							},
+							{
+								"k": "text",
+								"v": " aux documents et dossiers du serveur interne via une navigation "
+							},
+							{
+								"k": "bold",
+								"v": "cohérente"
+							},
+							{
+								"k": "text",
+								"v": " (par entité), alignée sur la configuration serveur."
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "2. Architecture du projet"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "2.1 Vue d’ensemble"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Les URL et endpoints sont définis dans "
+						},
+						{
+							"k": "code",
+							"v": "connection.json"
+						},
+						{
+							"k": "text",
+							"v": " ("
+						},
+						{
+							"k": "code",
+							"v": "apps/client/config/"
+						},
+						{
+							"k": "text",
+							"v": " et miroir "
+						},
+						{
+							"k": "code",
+							"v": "apps/client/public/config/"
+						},
+						{
+							"k": "text",
+							"v": ") pour basculer entre environnements (développement, Proxmox, production) sans recompiler le client."
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Authentification :"
+						},
+						{
+							"k": "text",
+							"v": " le "
+						},
+						{
+							"k": "bold",
+							"v": "JWT"
+						},
+						{
+							"k": "text",
+							"v": " est ajouté aux requêtes par le module API ; le renderer gère les sessions expirées (ex. HTTP 401)."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "2.2 Schéma logique (Mermaid)"
+				},
+				{
+					"type": "code",
+					"lang": "mermaid",
+					"code": "flowchart LR\n    subgraph CLIENT[\"Client Electron (poste local)\"]\n        direction TB\n        R[\"Renderer (HTML / JS)\"]\n        A[\"api.js\"]\n        M[\"main.js · preload.js\"]\n        R --> A\n    end\n\n    subgraph SERVER[\"Serveur backend (ex. Proxmox :4000)\"]\n        direction TB\n        REST[\"API REST + JWT\"]\n        WS[\"WebSocket\"]\n        DB[(\"Persistance (PostgreSQL)\")]\n        REST --> DB\n    end\n\n    A <-->|\"HTTP (JSON)\"| REST\n    A <-->|\"WebSocket\"| WS"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "2.3 Arborescence indicative (client + racine)"
+				},
+				{
+					"type": "code",
+					"lang": null,
+					"code": "workspace/\n├── apps/client/                    # Application Electron\n│   ├── main.js, preload.js, package.json\n│   ├── config/connection.json      # URL serveur et endpoints (miroir : public/config/)\n│   ├── lib/                        # electron-updater, découverte client\n│   ├── build/, assets/             # Icônes et ressources pour les installeurs\n│   └── public/                     # Interface (renderer)\n│       ├── index.html, app.js\n│       ├── pages/, reception-pages/\n│       ├── components/             # header, footer, modales, chat…\n│       ├── assets/css/, assets/js/\n│       │   ├── config/             # api.js, AppConfig, logs, erreurs…\n│       │   └── modules/            # agenda, auth, chat, dossier, réception…\n│       ├── pdf-templates/, lib/    # Font Awesome local\n│       └── src/                    # Icônes, PDF statiques embarqués\n├── docs/                           # JWT, Electron, API raccourcis…\n├── proxmox/app/                    # Backend (branche proxmox) + README dédié\n├── scripts/                        # env, auto-update, install npm\n├── .github/workflows/              # CI → build client, Releases\n└── package.json                    # Monorepo npm workspaces"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Les répertoires "
+						},
+						{
+							"k": "code",
+							"v": "node_modules/"
+						},
+						{
+							"k": "text",
+							"v": ", "
+						},
+						{
+							"k": "code",
+							"v": "apps/client/dist/"
+						},
+						{
+							"k": "text",
+							"v": ", "
+						},
+						{
+							"k": "code",
+							"v": "apps/client/out/"
+						},
+						{
+							"k": "text",
+							"v": ", "
+						},
+						{
+							"k": "code",
+							"v": "coverage/"
+						},
+						{
+							"k": "text",
+							"v": ", "
+						},
+						{
+							"k": "code",
+							"v": "data/"
+						},
+						{
+							"k": "text",
+							"v": " sont en général "
+						},
+						{
+							"k": "bold",
+							"v": "hors Git"
+						},
+						{
+							"k": "text",
+							"v": " (voir "
+						},
+						{
+							"k": "code",
+							"v": ".gitignore"
+						},
+						{
+							"k": "text",
+							"v": "). "
+						},
+						{
+							"k": "bold",
+							"v": "Stack client :"
+						},
+						{
+							"k": "text",
+							"v": " Node.js ≥ 18, Electron, JavaScript renderer, "
+						},
+						{
+							"k": "code",
+							"v": "electron-builder"
+						},
+						{
+							"k": "text",
+							"v": "."
+						}
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "3. Cybersécurité"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "3.1 Mesures en place (client)"
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "CSP"
+							},
+							{
+								"k": "text",
+								"v": " (Content Security Policy) dans "
+							},
+							{
+								"k": "code",
+								"v": "public/index.html"
+							},
+							{
+								"k": "text",
+								"v": " : limitation des origines scripts, styles et connexions (y compris "
+							},
+							{
+								"k": "code",
+								"v": "ws:"
+							},
+							{
+								"k": "text",
+								"v": " / "
+							},
+							{
+								"k": "code",
+								"v": "wss:"
+							},
+							{
+								"k": "text",
+								"v": " pour le temps réel)."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "JWT"
+							},
+							{
+								"k": "text",
+								"v": " : requêtes signées par le module API ; gestion de session côté renderer."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Electron"
+							},
+							{
+								"k": "text",
+								"v": " : "
+							},
+							{
+								"k": "code",
+								"v": "nodeIntegration: false"
+							},
+							{
+								"k": "text",
+								"v": ", "
+							},
+							{
+								"k": "code",
+								"v": "contextIsolation: true"
+							},
+							{
+								"k": "text",
+								"v": ", exposition contrôlée via "
+							},
+							{
+								"k": "code",
+								"v": "preload.js"
+							},
+							{
+								"k": "text",
+								"v": " / "
+							},
+							{
+								"k": "code",
+								"v": "contextBridge"
+							},
+							{
+								"k": "text",
+								"v": "."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Chat"
+							},
+							{
+								"k": "text",
+								"v": " : modules de sécurité dédiés (configuration + gestionnaire) en complément du WebSocket authentifié."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "CI"
+							},
+							{
+								"k": "text",
+								"v": " : publication des binaires avec secrets ("
+							},
+							{
+								"k": "code",
+								"v": "GH_TOKEN"
+							},
+							{
+								"k": "text",
+								"v": " / "
+							},
+							{
+								"k": "code",
+								"v": "GITHUB_TOKEN"
+							},
+							{
+								"k": "text",
+								"v": "), jamais de token en clair dans le dépôt."
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "4. Méthode de déploiement"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "4.1 Client (postes utilisateurs)"
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "4.2 Backend et environnement"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "Déploiement documenté sur la branche "
+						},
+						{
+							"k": "code",
+							"v": "**proxmox"
+						},
+						{
+							"k": "text",
+							"v": "** : `proxmox/docker/` (Docker Compose), `proxmox/docs/DEPLOYMENT.md`, [proxmox/app/README.md](proxmox/app/README.md). L’URL et le port (ex. `http://192.168.1.62:4000`) sont paramétrés dans `connection.json` côté client."
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Développement :"
+						},
+						{
+							"k": "text",
+							"v": " "
+						},
+						{
+							"k": "code",
+							"v": "npm ci"
+						},
+						{
+							"k": "text",
+							"v": " à la racine (Node ≥ 18) ; variables via "
+						},
+						{
+							"k": "code",
+							"v": ".env"
+						},
+						{
+							"k": "text",
+							"v": " / "
+						},
+						{
+							"k": "code",
+							"v": "scripts/run-with-env.js"
+						},
+						{
+							"k": "text",
+							"v": " et "
+						},
+						{
+							"k": "code",
+							"v": ".env.example"
+						},
+						{
+							"k": "text",
+							"v": " pour les builds publiant vers GitHub."
+						}
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "heading",
+					"level": 2,
+					"text": "5. Ce que fait l’application"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Workspace"
+						},
+						{
+							"k": "text",
+							"v": " est le "
+						},
+						{
+							"k": "bold",
+							"v": "point d’entrée unique"
+						},
+						{
+							"k": "text",
+							"v": " sur le poste : une application Electron regroupe les fonctions ci-dessous. La plupart des données métier transitent par le "
+						},
+						{
+							"k": "bold",
+							"v": "backend"
+						},
+						{
+							"k": "text",
+							"v": " (agenda, réception, catalogue d’applications, raccourcis personnels, etc.). L’exploration de fichiers et certains exports peuvent s’appuyer sur des "
+						},
+						{
+							"k": "bold",
+							"v": "chemins réseau"
+						},
+						{
+							"k": "text",
+							"v": " ou des fichiers locaux selon la configuration serveur."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"level": 3,
+					"text": "Réception (sections de l’interface)"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Lots et documents"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Lots"
+							},
+							{
+								"k": "text",
+								"v": " : saisie et gestion des "
+							},
+							{
+								"k": "bold",
+								"v": "nouveaux lots"
+							},
+							{
+								"k": "text",
+								"v": " de machines (PC), numéros de série, marques, modèles."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Disques"
+							},
+							{
+								"k": "text",
+								"v": " : flux "
+							},
+							{
+								"k": "bold",
+								"v": "disques shreddés"
+							},
+							{
+								"k": "text",
+								"v": " (sessions, liste des disques, PDF de certificat / traçabilité selon l’API)."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Commande"
+							},
+							{
+								"k": "text",
+								"v": " : suivi des "
+							},
+							{
+								"k": "bold",
+								"v": "commandes"
+							},
+							{
+								"k": "text",
+								"v": " matériel associées au flux réception."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Dons"
+							},
+							{
+								"k": "text",
+								"v": " : enregistrement et suivi des "
+							},
+							{
+								"k": "bold",
+								"v": "dons"
+							},
+							{
+								"k": "text",
+								"v": " de matériel."
+							}
+						]
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "bold",
+							"v": "Suivi et traçabilité"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"ordered": false,
+					"items": [
+						[
+							{
+								"k": "bold",
+								"v": "Inventaire"
+							},
+							{
+								"k": "text",
+								"v": " : "
+							},
+							{
+								"k": "bold",
+								"v": "lots en cours"
+							},
+							{
+								"k": "text",
+								"v": ", filtres par état, "
+							},
+							{
+								"k": "bold",
+								"v": "assignation"
+							},
+							{
+								"k": "text",
+								"v": " aux techniciens."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Historique"
+							},
+							{
+								"k": "text",
+								"v": " : "
+							},
+							{
+								"k": "bold",
+								"v": "lots terminés"
+							},
+							{
+								"k": "text",
+								"v": " et archives des mouvements."
+							}
+						],
+						[
+							{
+								"k": "bold",
+								"v": "Traçabilité"
+							},
+							{
+								"k": "text",
+								"v": " : "
+							},
+							{
+								"k": "bold",
+								"v": "vue consolidée"
+							},
+							{
+								"k": "text",
+								"v": " reliant lots, disques, commandes et dons (selon données serveur), accès aux "
+							},
+							{
+								"k": "bold",
+								"v": "PDF"
+							},
+							{
+								"k": "text",
+								"v": ", actions type envoi ou régénération selon configuration."
+							}
+						]
+					]
+				},
+				{
+					"type": "rule"
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "<details> <summary><strong>Captures d’écran de l’interface</strong></summary>"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"parts": [
+						{
+							"k": "text",
+							"v": "</details>"
 						}
 					]
 				}
@@ -474,7 +1376,7 @@
 			"description": "Application web statique : simulateur d’interface « hacking » pour un escape game autour de la cybersécurité, destiné à un public jeune en contexte d’animation (ex. événement, atelier sensibilisation).",
 			"stack": [],
 			"href": "https://github.com/SandersonnDev/Safenet",
-			"liveHref": null,
+			"liveHref": "https://sandersonndev.github.io/Safenet/",
 			"coverImage": null,
 			"sections": [
 				{
