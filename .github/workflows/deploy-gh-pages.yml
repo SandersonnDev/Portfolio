@@ -10,7 +10,7 @@ name: Build and push gh-pages
 
 on:
   push:
-    branches: [main, master, V2]
+    branches: [V3]
   workflow_dispatch:
 
 permissions:
