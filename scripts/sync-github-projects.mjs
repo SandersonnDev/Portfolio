@@ -161,6 +161,18 @@ function slugifyRepoName(name) {
 		.replace(/^-+|-+$/g, "");
 }
 
+/** Retire les blocs HTML `<details>…</details>` (accordéons GitHub), y compris imbriqués. */
+function stripHtmlDetailsBlocks(raw) {
+	if (!raw || typeof raw !== "string") return raw;
+	let s = raw;
+	let prev;
+	do {
+		prev = s;
+		s = s.replace(/<details\b[^>]*>[\s\S]*?<\/details>/gi, "\n\n");
+	} while (s !== prev);
+	return s.replace(/\n{3,}/g, "\n\n");
+}
+
 function markdownToPlain(md) {
 	if (!md) return "";
 	let s = md.replace(/```[\s\S]*?```/g, " ");
@@ -370,6 +382,42 @@ function tryParseBadgeTable(tableLines) {
 	return { type: "tagTable", rows: tagRows };
 }
 
+const MAX_MARKDOWN_TABLE_ROWS = 120;
+
+/** Tableau GFM « données » (colonnes multiples, pas uniquement des liens badges). */
+function tryParseGenericMarkdownTable(tableLines) {
+	const rawRows = tableLines.map(splitTableRow).filter((r) => r.some((c) => c.trim().length > 0));
+	if (rawRows.length < 2) return null;
+
+	let headerCells = null;
+	let bodyStart = 0;
+	if (rawRows.length >= 2 && isSeparatorRow(rawRows[1])) {
+		headerCells = rawRows[0];
+		bodyStart = 2;
+	} else if (isSeparatorRow(rawRows[0])) {
+		bodyStart = 1;
+	}
+
+	const bodyRaw = rawRows.slice(bodyStart);
+	if (!bodyRaw.length) return null;
+
+	const colCount = Math.max(headerCells?.length ?? 0, ...bodyRaw.map((r) => r.length));
+	if (colCount < 1) return null;
+
+	const rowToCells = (cellArr) => {
+		const cells = [];
+		for (let c = 0; c < colCount; c++) {
+			cells.push(parseInlineParts((cellArr[c] ?? "").trim()));
+		}
+		return cells;
+	};
+
+	const header = headerCells ? rowToCells(headerCells) : null;
+	const rows = bodyRaw.slice(0, MAX_MARKDOWN_TABLE_ROWS).map((r) => rowToCells(r));
+
+	return { type: "table", header, rows };
+}
+
 /**
  * Paragraphe constitué uniquement de liens markdown (badges ou [Version npm](url) …),
  * souvent en une ligne sous le titre du README.
@@ -434,18 +482,33 @@ function resolveReadmeImgSrc(src, { owner, name, defaultBranch }) {
 	return `https://raw.githubusercontent.com/${owner}/${name}/${defaultBranch}/${path}`;
 }
 
+/** Fin de balise `<img>` en respectant les guillemets (évite un `>` dans une URL ou un attribut). */
 function nextImgTagChunk(html, fromIdx) {
-	const lower = html.toLowerCase();
-	const idx = lower.indexOf("<img", fromIdx);
+	const idx = html.toLowerCase().indexOf("<img", fromIdx);
 	if (idx === -1) return null;
-	let end = html.indexOf("/>", idx);
-	if (end !== -1) end += 2;
-	else {
-		end = html.indexOf(">", idx);
-		if (end === -1) return null;
-		end += 1;
+	let i = idx + 4;
+	let q = null;
+	while (i < html.length) {
+		const c = html[i];
+		if (q) {
+			if (c === q) q = null;
+			i++;
+			continue;
+		}
+		if (c === '"' || c === "'") {
+			q = c;
+			i++;
+			continue;
+		}
+		if (c === "/" && html[i + 1] === ">") {
+			return { start: idx, end: i + 2, tag: html.slice(idx, i + 2) };
+		}
+		if (c === ">") {
+			return { start: idx, end: i + 1, tag: html.slice(idx, i + 1) };
+		}
+		i++;
 	}
-	return { start: idx, end, tag: html.slice(idx, end) };
+	return null;
 }
 
 /**
@@ -498,32 +561,90 @@ function parseHtmlCenterPBlock(full, ctx) {
 	return parseCenteredHtmlParagraph(m[1].trim(), ctx);
 }
 
+/** `<p …>` contenant uniquement une balise `<img>` (sans `align="center"`). */
+function parsePWrappedOnlyImgBlock(full, ctx) {
+	const m = full.match(/^<p\b[^>]*>([\s\S]*)<\/p>\s*$/i);
+	if (!m) return null;
+	const inner = m[1].trim();
+	return tryParseLoneImgParagraph(inner, ctx);
+}
+
+function htmlRangeOverlaps(aStart, aEnd, bStart, bEnd) {
+	return !(aEnd <= bStart || aStart >= bEnd);
+}
+
+/** `<p>…<img …>…</p>` dont le contenu commence par `<img` (hors blocs déjà captés par align=center). */
+const RE_P_LEADING_IMG = /<p\b[^>]*>\s*<img\b[\s\S]*?<\/p>/gi;
+
+function collectInterleavedHtmlSegments(raw) {
+	const segments = [];
+	RE_HTML_CENTER_P.lastIndex = 0;
+	let match;
+	while ((match = RE_HTML_CENTER_P.exec(raw)) !== null) {
+		segments.push({
+			start: match.index,
+			end: match.index + match[0].length,
+			html: match[0],
+			parse: parseHtmlCenterPBlock,
+		});
+	}
+	RE_P_LEADING_IMG.lastIndex = 0;
+	while ((match = RE_P_LEADING_IMG.exec(raw)) !== null) {
+		const start = match.index;
+		const end = start + match[0].length;
+		if (segments.some((s) => htmlRangeOverlaps(start, end, s.start, s.end))) continue;
+		segments.push({
+			start,
+			end,
+			html: match[0],
+			parse: parsePWrappedOnlyImgBlock,
+		});
+	}
+	segments.sort((a, b) => a.start - b.start);
+	return segments;
+}
+
+/** Paragraphe réduit à une seule balise `<img …>` (éventuellement multiligne). */
+function tryParseLoneImgParagraph(text, ctx) {
+	const t = text.trim();
+	if (!/^<img\b/i.test(t)) return null;
+	const img = nextImgTagChunk(t, 0);
+	if (!img || img.start !== t.toLowerCase().indexOf("<img")) return null;
+	if (t.slice(img.end).trim() !== "") return null;
+	const src = parseHtmlQuotedAttr(img.tag, "src");
+	if (!src) return null;
+	const alt = parseHtmlQuotedAttr(img.tag, "alt");
+	return {
+		type: "badgeStrip",
+		items: [{ href: null, imgSrc: resolveReadmeImgSrc(src, ctx), alt }],
+	};
+}
+
 /**
  * README markdown + blocs HTML centrés (badges shields), dans l’ordre du fichier.
  */
 function readmeToBlocksInterleaved(raw, ctx, { maxBlocks = 100, maxCode = 12000 } = {}) {
 	if (!raw?.trim()) return [];
 	const blocks = [];
+	const segments = collectInterleavedHtmlSegments(raw);
 	let lastIdx = 0;
-	RE_HTML_CENTER_P.lastIndex = 0;
-	let match;
-	while ((match = RE_HTML_CENTER_P.exec(raw)) !== null) {
-		const before = raw.slice(lastIdx, match.index);
+	for (const seg of segments) {
+		const before = raw.slice(lastIdx, seg.start);
 		const room = Math.max(0, maxBlocks - blocks.length);
 		if (before.trim() && room > 0) {
-			for (const b of readmeToBlocks(before, { maxBlocks: room, maxCode })) {
+			for (const b of readmeToBlocks(before, { maxBlocks: room, maxCode, readmCtx: ctx })) {
 				blocks.push(b);
 				if (blocks.length >= maxBlocks) return blocks;
 			}
 		}
-		const strip = parseHtmlCenterPBlock(match[0], ctx);
+		const strip = seg.parse(seg.html, ctx);
 		if (strip && blocks.length < maxBlocks) blocks.push(strip);
-		lastIdx = match.index + match[0].length;
+		lastIdx = seg.end;
 	}
 	const tail = raw.slice(lastIdx);
 	const roomTail = Math.max(0, maxBlocks - blocks.length);
 	if (tail.trim() && roomTail > 0) {
-		for (const b of readmeToBlocks(tail, { maxBlocks: roomTail, maxCode })) {
+		for (const b of readmeToBlocks(tail, { maxBlocks: roomTail, maxCode, readmCtx: ctx })) {
 			blocks.push(b);
 			if (blocks.length >= maxBlocks) return blocks;
 		}
@@ -532,7 +653,7 @@ function readmeToBlocksInterleaved(raw, ctx, { maxBlocks = 100, maxCode = 12000 
 }
 
 /** README brut → blocs structurés pour la page détail (titres, listes, code, citations). */
-function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000 } = {}) {
+function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000, readmCtx = null } = {}) {
 	if (!raw?.trim()) return [];
 	const lines = raw.replace(/\r\n/g, "\n").split("\n");
 	const blocks = [];
@@ -560,7 +681,12 @@ function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000 } = {}) {
 				break;
 			}
 			const tagBlock = tryParseBadgeTable(tableLines);
-			if (tagBlock && blocks.length < maxBlocks) blocks.push(tagBlock);
+			if (tagBlock && blocks.length < maxBlocks) {
+				blocks.push(tagBlock);
+			} else {
+				const mdTable = tryParseGenericMarkdownTable(tableLines);
+				if (mdTable && blocks.length < maxBlocks) blocks.push(mdTable);
+			}
 			continue;
 		}
 
@@ -653,6 +779,13 @@ function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000 } = {}) {
 		}
 		const text = para.join(" ").replace(/\s+/g, " ").trim();
 		if (text) {
+			if (readmCtx) {
+				const loneImg = tryParseLoneImgParagraph(text, readmCtx);
+				if (loneImg) {
+					blocks.push(loneImg);
+					continue;
+				}
+			}
 			const linkOnly = tryParseLinkOnlyParagraph(text);
 			if (linkOnly) blocks.push(linkOnly);
 			else blocks.push({ type: "paragraph", parts: parseInlineParts(text) });
@@ -687,11 +820,12 @@ async function mapRepo(r) {
 	/* Slug court pour tes repos ; owner-name pour les dépôts où tu es collaborateur (évite collisions) */
 	const slug = ownRepo ? slugifyRepoName(name) : slugifyRepoName(`${owner}-${name}`);
 	const title = ownRepo ? name : `${owner}/${name}`;
-	const [topics, langs, readmeRaw] = await Promise.all([
+	const [topics, langs, readmeFetched] = await Promise.all([
 		fetchTopics(owner, name),
 		fetchLanguages(owner, name),
 		fetchReadmeRaw(owner, name),
 	]);
+	const readmeRaw = stripHtmlDetailsBlocks(readmeFetched);
 	const stack = topics.length > 0 ? topics : langs;
 	const description = (r.description || "").trim() || readmeSummary(readmeRaw, 280) || name;
 	const defaultBranch = (r.default_branch || "main").trim() || "main";

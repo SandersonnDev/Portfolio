@@ -681,7 +681,7 @@ html:has(#dev-bar-hitbox-above) {
 }
 
 /* Texte du README en colonne lisible ; Mermaid et grilles de badges utilisent toute la largeur du panneau */
-.readme-content > *:not(.readme-mermaid-wrap):not(.readme-tag-table-wrap):not(.readme-badge-strip-wrap) {
+.readme-content > *:not(.readme-mermaid-wrap):not(.readme-tag-table-wrap):not(.readme-badge-strip-wrap):not(.readme-table-wrap) {
 	max-width: 65ch;
 }
 
@@ -919,6 +919,50 @@ html:has(#dev-bar-hitbox-above) {
 
 .readme-badge-strip__img--logo {
 	max-width: min(30%, 12rem);
+}
+
+.readme-table-wrap {
+	width: 100%;
+	max-width: 100%;
+	margin: 0 0 1.35rem;
+}
+
+.readme-table-scroll {
+	overflow-x: auto;
+	border-radius: 0.5rem;
+	border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+	background: color-mix(in srgb, var(--void) 88%, transparent);
+	-webkit-overflow-scrolling: touch;
+}
+
+.readme-table {
+	width: 100%;
+	min-width: min(100%, 32rem);
+	border-collapse: collapse;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: var(--fg-dim);
+}
+
+.readme-table__th,
+.readme-table__td {
+	padding: 0.55rem 0.75rem;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.readme-table__th {
+	font-family: var(--font-mono);
+	font-size: 0.58rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--fg-dim) 90%, var(--accent));
+	background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.readme-table tbody tr:last-child .readme-table__td {
+	border-bottom: none;
 }
 
 .readme-tag-table-wrap {

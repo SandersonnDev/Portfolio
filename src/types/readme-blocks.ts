@@ -18,6 +18,13 @@ export type ReadmeBadgeStripItem = {
 	alt: string;
 };
 
+/** Tableau Markdown classique (GFM), hors tableaux-badges. */
+export type ReadmeMarkdownTableBlock = {
+	type: "table";
+	header: ReadmeInlinePart[][] | null;
+	rows: ReadmeInlinePart[][][];
+};
+
 export type ReadmeBlock =
 	| { type: "heading"; level: number; text: string }
 	| { type: "paragraph"; parts?: ReadmeInlinePart[]; text?: string }
@@ -26,4 +33,5 @@ export type ReadmeBlock =
 	| { type: "rule" }
 	| { type: "quote"; parts: ReadmeInlinePart[] }
 	| { type: "tagTable"; rows: ReadmeTagTableRow[] }
-	| { type: "badgeStrip"; items: ReadmeBadgeStripItem[] };
+	| { type: "badgeStrip"; items: ReadmeBadgeStripItem[] }
+	| ReadmeMarkdownTableBlock;

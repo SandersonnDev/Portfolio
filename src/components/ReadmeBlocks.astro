@@ -132,6 +132,54 @@ function tagCardLines(row: ReadmeTagTableRow): { top: string; bottom: string | n
 					</div>
 				);
 			}
+			if (block.type === "table") {
+				return (
+					<div class="readme-table-wrap">
+						<div class="readme-table-scroll">
+							<table class="readme-table">
+								{block.header?.length ? (
+									<thead>
+										<tr>
+											{block.header.map((parts) => (
+												<th scope="col" class="readme-table__th">
+													{parts.map((p) =>
+														p.k === "bold" ? (
+															<strong class="readme-strong">{p.v}</strong>
+														) : p.k === "code" ? (
+															<code class="readme-code readme-code--inline">{p.v}</code>
+														) : (
+															<span>{p.v}</span>
+														),
+													)}
+												</th>
+											))}
+										</tr>
+									</thead>
+								) : null}
+								<tbody>
+									{block.rows.map((row) => (
+										<tr>
+											{row.map((parts) => (
+												<td class="readme-table__td">
+													{parts.map((p) =>
+														p.k === "bold" ? (
+															<strong class="readme-strong">{p.v}</strong>
+														) : p.k === "code" ? (
+															<code class="readme-code readme-code--inline">{p.v}</code>
+														) : (
+															<span>{p.v}</span>
+														),
+													)}
+												</td>
+											))}
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				);
+			}
 			if (block.type === "tagTable") {
 				return (
 					<div class="readme-tag-table-wrap">
