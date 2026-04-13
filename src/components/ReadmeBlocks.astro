@@ -60,6 +60,14 @@ function partsForParagraph(b: Extract<ReadmeBlock, { type: "paragraph" }>): Read
 				);
 			}
 			if (block.type === "code") {
+				const isMermaid = block.lang?.toLowerCase() === "mermaid";
+				if (isMermaid) {
+					return (
+						<div class="readme-mermaid-wrap">
+							<div class="readme-mermaid mermaid">{block.code}</div>
+						</div>
+					);
+				}
 				return (
 					<div class="readme-pre-wrap">
 						{block.lang ? (

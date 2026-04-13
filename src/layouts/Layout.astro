@@ -1,7 +1,7 @@
 ---
 import "../styles/icons.css";
 import "../styles/app.css";
-import { ClientRouter, slide } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import { site } from "../site.config";
 import Rail from "../components/Rail.astro";
 import { withBase } from "../lib/paths";
@@ -13,7 +13,6 @@ interface Props {
 
 const { title = `${site.displayName} · Portfolio`, description = site.pitch } = Astro.props;
 
-const pageSlide = slide({ duration: "400ms" });
 ---
 
 <!doctype html>
@@ -34,7 +33,7 @@ const pageSlide = slide({ duration: "400ms" });
 	</head>
 	<body>
 		<Rail />
-		<div class="relative z-10 main-shift" transition:animate={pageSlide}>
+		<div class="relative z-10 main-shift">
 			<slot />
 		</div>
 		<script>

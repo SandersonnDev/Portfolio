@@ -15,6 +15,61 @@
 	);
 }
 
+/*
+ * Fiches projet — glissement horizontal pur (pas de scale / blur = pas d’effet « diagonale »).
+ * Forwards : ancien → translateX(-100%), nouveau depuis translateX(100%).
+ * Backwards : ancien → translateX(100%), nouveau depuis translateX(-100%).
+ */
+@keyframes projectVtParallaxOld {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-100%);
+	}
+}
+
+@keyframes projectVtParallaxNew {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes projectVtParallaxOldBack {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes projectVtParallaxNewBack {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+/* Coupe le débordement horizontal pendant la transition ; évite scrollbar / saut. */
+::view-transition-group(project-fiche) {
+	overflow: clip;
+	width: 100%;
+	max-width: 100%;
+	animation: none !important;
+}
+
+::view-transition-old(project-fiche),
+::view-transition-new(project-fiche) {
+	transform-origin: center center;
+	backface-visibility: hidden;
+}
+
 @theme {
 	--void: #070712;
 	--haze: #0e1022;
@@ -36,20 +91,15 @@
 		font-family: var(--font-display);
 		background: var(--void);
 		color: var(--fg);
-		scroll-behavior: smooth;
+		scroll-behavior: auto;
+		overflow-x: clip;
 		@apply antialiased;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		html {
-			scroll-behavior: auto;
-			scroll-snap-type: none;
-		}
 	}
 
 	body {
 		@apply min-h-dvh;
 		margin: 0;
+		overflow-x: clip;
 	}
 
 	/* Scrollbar masquée (défilement inchangé) */
@@ -311,6 +361,8 @@
 
 .main-shift {
 	padding-left: 4.15rem;
+	overflow-x: clip;
+	max-width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -573,6 +625,15 @@
 /* Page détail projet GitHub */
 .project-page__lead {
 	max-width: 42rem;
+	/* split-type : évite le léger saut au split */
+	font-kerning: none;
+}
+
+/* Lignes masquées (ScrollTrigger + split-type, esprit GreenSock LEYqezo) */
+.project-page .readme-split-line {
+	display: block;
+	overflow: hidden;
+	width: 100%;
 }
 
 /* README structuré (titres, listes, code) */
@@ -584,6 +645,13 @@
 }
 
 .readme-content {
+	width: 100%;
+	max-width: 100%;
+	font-kerning: none;
+}
+
+/* Texte du README en colonne lisible ; Mermaid utilise toute la largeur du panneau */
+.readme-content > *:not(.readme-mermaid-wrap) {
 	max-width: 65ch;
 }
 
@@ -710,6 +778,48 @@
 	box-shadow: none;
 	color: var(--amber);
 	opacity: 1;
+}
+
+/* Mermaid : largeur du panneau README uniquement (pas de 100vw → évite de dépasser l’article) */
+.readme-mermaid-wrap {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	margin: 0 0 1.35rem;
+	box-sizing: border-box;
+}
+
+.readme-mermaid {
+	margin: 0;
+	padding: 1rem 1rem 1.15rem;
+	border-radius: 0.5rem;
+	overflow-x: auto;
+	overflow-y: hidden;
+	text-align: center;
+	min-width: 0;
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	line-height: 1.55;
+	color: color-mix(in srgb, var(--fg-dim) 95%, white);
+	background: color-mix(in srgb, var(--void) 92%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+	box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 4%, transparent);
+}
+
+.readme-mermaid:not([data-processed]) {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.readme-mermaid[data-processed] {
+	padding: 1.15rem 1rem;
+}
+
+.readme-mermaid svg {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin-inline: auto;
 }
 
 .readme-pre-wrap {
@@ -973,41 +1083,73 @@
 	}
 }
 
-/* Sections plein écran + snap (proximity : sections « aimantées » sans bloquer le footer) */
-.snap-section {
-	min-height: 100dvh;
-	scroll-snap-align: start;
-	scroll-snap-stop: normal;
+/* Section projets — piste horizontale (ScrollTrigger + flex) */
+/*
+ * 100dvh varie quand la barre d’adresse / l’UI bouge au scroll → reflow du flex pendant le scrub.
+ * svh reste stable et supprime le « saut » vertical pendant le défilement horizontal.
+ */
+#projects.section-viewport {
+	min-height: 100svh;
 }
 
-.site-footer {
-	scroll-snap-align: none;
+/* Alignement 1re carte = bord gauche du h2 (même logique que max-w-5xl + px-5 / md:px-12) */
+[data-projects-track] {
+	--projects-pad-x: 1.25rem;
+	--projects-inner: calc(100% - 2 * var(--projects-pad-x));
+	padding-left: calc(
+		var(--projects-pad-x) + (var(--projects-inner) - min(var(--projects-inner), 64rem)) / 2
+	);
 }
 
-.section-inner {
-	opacity: 0.5;
-	transform: translateY(1rem);
-	filter: saturate(0.88);
-	transition:
-		opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-		transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-		filter 0.65s ease;
+@media (min-width: 768px) {
+	[data-projects-track] {
+		--projects-pad-x: 3rem;
+	}
 }
 
-.snap-section.is-active .section-inner {
-	opacity: 1;
-	transform: translateY(0);
-	filter: saturate(1);
+[data-projects-viewport] {
+	overflow: hidden;
+	width: 100%;
+	min-height: 52svh;
+}
+
+@media (min-width: 768px) {
+	[data-projects-viewport] {
+		min-height: 56svh;
+	}
+}
+
+.project-card--strip {
+	flex: 0 0 auto;
+	width: min(100vw - 2.75rem, 21rem);
+	min-height: 19rem;
+	max-width: 100%;
+}
+
+@media (min-width: 640px) {
+	.project-card--strip {
+		width: min(100vw - 4rem, 23rem);
+		min-height: 21rem;
+	}
+}
+
+.projects-strip__end-spacer {
+	flex: 0 0 auto;
+	width: clamp(1.5rem, 6vw, 4.5rem);
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.section-inner,
-	.snap-section.is-active .section-inner {
-		opacity: 1;
-		transform: none;
-		filter: none;
-		transition: none;
+	[data-projects-viewport] {
+		overflow-x: auto;
+		overflow-y: hidden;
+		overscroll-behavior-x: contain;
+		-webkit-overflow-scrolling: touch;
 	}
+}
+
+/* Sections plein écran (hauteur viewport, sans snap ni animation au scroll) */
+.section-viewport {
+	min-height: 100dvh;
 }
 
 /* Curseur custom (pointer fine + .has-custom-cursor sur body) */
@@ -1080,6 +1222,17 @@ body.cursor-hover #cursor-ring {
 	font-size: 0.68rem;
 	letter-spacing: 0.12em;
 	color: var(--fg-dim);
+}
+
+/* Stack « À propos » : masques type CodePen GreenSock JojaebV (tags qui tombent) */
+.about-stack-tags > li {
+	overflow: hidden;
+	padding-bottom: 0.15rem;
+}
+
+.about-stack-tags .chip {
+	border-width: 1.5px;
+	border-style: dashed;
 }
 
 .chip {

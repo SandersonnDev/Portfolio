@@ -1,4 +1,5 @@
 ---
+import { projectArticleParallax } from "../../lib/projectArticleParallax";
 import Layout from "../../layouts/Layout.astro";
 import { site, copy } from "../../site.config";
 import { withBase } from "../../lib/paths";
@@ -41,6 +42,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 	<article
 		class="mx-auto max-w-5xl px-5 pb-28 pt-20 project-page md:px-12 md:pt-24"
 		transition:name="project-fiche"
+		transition:animate={projectArticleParallax()}
 	>
 		<a
 			href={withBase("#projects")}
@@ -59,6 +61,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 						<a
 							href={withBase(`projets/${prev.slug}`)}
 							class="max-w-[min(100%,16rem)] truncate text-(--fg-dim) transition-colors hover:text-(--accent) md:max-w-[20rem]"
+							data-project-nav="prev"
 						>
 							← {prev.title}
 						</a>
@@ -69,6 +72,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 						<a
 							href={withBase(`projets/${next.slug}`)}
 							class="max-w-[min(100%,16rem)] truncate text-right text-(--fg-dim) transition-colors hover:text-(--accent) md:max-w-[20rem]"
+							data-project-nav="next"
 						>
 							{next.title} →
 						</a>
@@ -98,12 +102,8 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 				<h1 class="text-3xl article-title md:text-4xl lg:text-[2.35rem]" aria-label={project.title}>
 					<span data-scramble data-scramble-final={project.title} class="inline-block min-h-[1.2em]"></span>
 				</h1>
-				<p
-					class="mt-6 min-h-16 text-base leading-relaxed text-(--fg-dim) project-page__lead tw-paragraph md:text-lg"
-					data-typewriter
-					data-tw-final={project.description}
-					data-tw-speed="18"
-				>
+				<p class="mt-6 min-h-16 text-base leading-relaxed text-(--fg-dim) project-page__lead tw-paragraph md:text-lg">
+					{project.description}
 				</p>
 			</div>
 
@@ -142,7 +142,11 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 					project.stack?.length ? (
 						<div class="rounded-xl p-6 glass glass--panel md:p-7">
 							<p class="about-block__label mb-0">{copy.projectDetailTech}</p>
-							<ul class="mt-5 flex flex-wrap gap-2" aria-label={copy.projectDetailTech}>
+							<ul
+								id="project-stack-tags"
+								class="about-stack-tags mt-5 flex flex-wrap gap-2"
+								aria-label={copy.projectDetailTech}
+							>
 								{project.stack.map((t) => (
 									<li>
 										<span class="chip">{t}</span>
@@ -177,9 +181,6 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 					<h2 id="project-journal-h" class="display-heading display-heading--lg">
 						{copy.projectJournalHeading}
 					</h2>
-					<p class="mt-4 sys-mono text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim) project-page__journal-intro">
-						{copy.projectReadmeIntro}
-					</p>
 					<div class="mt-10 project-page__readme">
 						<ReadmeBlocks blocks={contentBlocks} />
 					</div>

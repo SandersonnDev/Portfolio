@@ -22,7 +22,11 @@ const show = prev || next;
 			<div class="project-article-nav__inner">
 				<div class="project-article-nav__cell">
 					{prev ? (
-						<a href={withBase(`projets/${prev.slug}`)} class="project-article-nav__link project-article-nav__link--prev">
+						<a
+							href={withBase(`projets/${prev.slug}`)}
+							class="project-article-nav__link project-article-nav__link--prev"
+							data-project-nav="prev"
+						>
 							<span class="project-article-nav__dir sys-mono">
 								<i class="fa-solid fa-arrow-left-long" aria-hidden="true" />
 								{copy.projectNavPrev}
@@ -35,7 +39,11 @@ const show = prev || next;
 				</div>
 				<div class="project-article-nav__cell project-article-nav__cell--end">
 					{next ? (
-						<a href={withBase(`projets/${next.slug}`)} class="project-article-nav__link project-article-nav__link--next">
+						<a
+							href={withBase(`projets/${next.slug}`)}
+							class="project-article-nav__link project-article-nav__link--next"
+							data-project-nav="next"
+						>
 							<span class="project-article-nav__dir sys-mono">
 								{copy.projectNavNext}
 								<i class="fa-solid fa-arrow-right-long" aria-hidden="true" />

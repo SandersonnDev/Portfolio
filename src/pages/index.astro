@@ -1,4 +1,5 @@
 ---
+import { fade } from "astro:transitions";
 import Layout from "../layouts/Layout.astro";
 import { site, copy, brand } from "../site.config";
 import { withBase } from "../lib/paths";
@@ -12,17 +13,16 @@ const year = new Date().getFullYear();
 ---
 
 <Layout>
-	<main>
+	<main transition:animate={fade({ duration: 380 })}>
 		<!-- 1 Hero -->
 		<section
 			id="hero"
-			data-section
-			class="relative min-h-dvh overflow-hidden border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)] snap-section is-active"
+			class="section-viewport relative min-h-dvh overflow-hidden border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
 			aria-label="Accueil"
 		>
 			<div id="hero-logo-panel" class="hero-logo-panel" aria-hidden="true" />
 			<div
-				class="relative z-10 flex min-h-dvh flex-col justify-center px-5 py-24 pointer-events-none section-inner md:px-12 md:py-20"
+				class="relative z-10 flex min-h-dvh flex-col justify-center px-5 py-24 pointer-events-none md:px-12 md:py-20"
 			>
 				<div id="hero-content" class="mx-auto w-full max-w-5xl pointer-events-none">
 					<div
@@ -109,11 +109,10 @@ const year = new Date().getFullYear();
 		<!-- 2 À propos -->
 		<section
 			id="about"
-			data-section
-			class="snap-section border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+			class="section-viewport relative border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
 			aria-labelledby="ab"
 		>
-			<div class="flex min-h-dvh flex-col justify-center px-5 py-24 section-inner md:px-12 md:py-20">
+			<div class="flex min-h-dvh flex-col justify-center px-5 py-24 md:px-12 md:py-20">
 				<div class="mx-auto w-full max-w-5xl">
 					<h2 id="ab" class="display-heading display-heading--lg" data-rise>
 						<span data-scramble data-scramble-final="Section · À propos" class="inline-block min-h-[1.35em]"></span>
@@ -146,7 +145,11 @@ const year = new Date().getFullYear();
 						<div class="flex flex-col gap-10 lg:col-span-5 lg:justify-start">
 							<div class="rounded-xl p-8 glass glass--panel md:p-9" data-rise>
 								<p class="about-block__label mb-0">{copy.aboutBlockStack}</p>
-								<ul class="mt-6 flex flex-wrap gap-2" aria-label="Technologies maîtrisées">
+								<ul
+									id="about-stack-tags"
+									class="about-stack-tags mt-6 flex flex-wrap gap-2"
+									aria-label="Technologies maîtrisées"
+								>
 									{
 										site.stack.map((s) => (
 											<li>
@@ -191,72 +194,23 @@ const year = new Date().getFullYear();
 			</div>
 		</section>
 
-		<!-- 3 Projets -->
-		<section id="projects" data-section class="snap-section" aria-labelledby="pj">
-			<div class="flex min-h-dvh flex-col justify-center px-5 py-24 section-inner md:px-12 md:py-20">
-				<div class="mx-auto w-full max-w-5xl">
-					<h2 id="pj" class="mb-8 display-heading display-heading--lg" data-rise>
-						<span data-scramble data-scramble-final="Section · Projets" class="inline-block min-h-[1.35em]"></span>
-					</h2>
-					<div class="grid gap-8 sm:grid-cols-2">
-						{projects.map((p, i) => <ProjectGlass {...p} index={i} />)}
+		<!-- 3 Projets — défilement horizontal piloté au scroll (ScrollTrigger) -->
+		<section id="projects" class="section-viewport relative overflow-x-clip" aria-labelledby="pj">
+			<div class="flex min-h-[100svh] flex-col" data-projects-pin>
+				<div class="shrink-0 px-5 pt-24 pb-10 md:px-12 md:pb-12 md:pt-28">
+					<div class="mx-auto w-full max-w-5xl">
+						<h2 id="pj" class="display-heading display-heading--lg" data-rise>
+							<span data-scramble data-scramble-final="Section · Projets" class="inline-block min-h-[1.35em]"></span>
+						</h2>
+					</div>
+				</div>
+				<div class="flex flex-1 min-h-0 items-stretch" data-projects-viewport>
+					<div class="flex w-max items-stretch gap-6 pr-5 will-change-transform md:gap-8 md:pr-12" data-projects-track>
+						{projects.map((p, i) => <ProjectGlass {...p} index={i} layout="strip" />)}
+						<div class="projects-strip__end-spacer shrink-0" aria-hidden="true" />
 					</div>
 				</div>
 			</div>
 		</section>
 	</main>
-
-	<footer class="border-t border-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-4 py-10 site-footer md:px-12">
-		<div class="mx-auto flex max-w-5xl flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
-			<div class="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-				<div class="flex flex-wrap items-center justify-center gap-4 md:justify-start" aria-label="Logo">
-					<div class="logo-slot" title={copy.logoAstroTitle}>
-						<img src={brand.placeholderLogo} width="40" height="40" alt="" decoding="async" />
-					</div>
-				</div>
-				<div>
-					<p class="sys-mono text-[10px] tracking-[0.25em] text-(--fg)">
-						© {year} · {site.codename} · {site.displayName}
-					</p>
-					<p class="mt-2 max-w-md text-xs leading-relaxed text-(--fg-dim)">{copy.footerTagline}</p>
-					<p class="mt-1 font-data text-[10px] text-(--fg-dim)">{copy.builtWith}</p>
-				</div>
-			</div>
-			<nav
-				class="sys-mono flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] tracking-[0.15em] md:justify-end"
-				aria-label="Pied de page"
-			>
-				<a href={withBase("#hero")} class="text-(--fg-dim) transition-colors hover:text-(--accent)" title={copy.railHome}>
-					Accueil
-				</a>
-				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<a href={withBase("#about")} class="text-(--fg-dim) transition-colors hover:text-(--accent)" title={copy.railAbout}>
-					À propos
-				</a>
-				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<a href={withBase("#projects")} class="text-(--fg-dim) transition-colors hover:text-(--accent)" title={copy.railProjects}>
-					Projets
-				</a>
-				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<a
-					href={ghProfile}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="text-(--fg-dim) transition-colors hover:text-(--accent)"
-					title={copy.aboutGithubTitle}
-				>
-					GitHub
-				</a>
-				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<span class="text-(--fg-dim) opacity-40" aria-hidden="true">/</span>
-				<a
-					href={`mailto:${site.email}`}
-					class="text-(--fg-dim) transition-colors hover:text-(--accent)"
-					title={copy.ctaEmailTitle}
-				>
-					Contact
-				</a>
-			</nav>
-		</div>
-	</footer>
 </Layout>

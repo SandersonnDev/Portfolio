@@ -1,6 +1,8 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import SplitType from "split-type";
+import { isTransitionBeforePreparationEvent } from "astro:transitions/client";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -15,9 +17,16 @@ const GLYPHS =
 let mouseX = 0;
 let mouseY = 0;
 
+let mermaidInitialized = false;
+
 let cleanupBoot: (() => void) | null = null;
 let sysClockTimer: ReturnType<typeof setInterval> | null = null;
 const riseScrollTriggers: ScrollTrigger[] = [];
+let projectsHorizontalST: ScrollTrigger | null = null;
+const stackTagChipTweens: gsap.core.Tween[] = [];
+const projectLineSplitInstances: SplitType[] = [];
+const projectLineAnimations: gsap.core.Animation[] = [];
+let lineRevealResizeTimer = 0;
 let textFxObserver: IntersectionObserver | null = null;
 let heroSeqObserver: IntersectionObserver | null = null;
 let aboutSeqObserver: IntersectionObserver | null = null;
@@ -389,18 +398,241 @@ function killRiseScrollTriggers() {
 	riseScrollTriggers.length = 0;
 }
 
+function killStackTagChipsFx() {
+	for (const tw of stackTagChipTweens) {
+		tw.scrollTrigger?.kill(false);
+		tw.kill();
+	}
+	stackTagChipTweens.length = 0;
+}
+
+function scheduleProjectLineRevealResize() {
+	clearTimeout(lineRevealResizeTimer);
+	lineRevealResizeTimer = window.setTimeout(() => {
+		if (!projectLineSplitInstances.length) return;
+		for (const s of projectLineSplitInstances) {
+			try {
+				s.split();
+			} catch {
+				/* ignore */
+			}
+		}
+		ScrollTrigger.refresh();
+	}, 160);
+}
+
+function killProjectLineReveal() {
+	clearTimeout(lineRevealResizeTimer);
+	lineRevealResizeTimer = 0;
+	for (const anim of projectLineAnimations) {
+		anim.scrollTrigger?.kill(false);
+		anim.kill();
+	}
+	projectLineAnimations.length = 0;
+	for (const s of projectLineSplitInstances) {
+		try {
+			s.revert();
+		} catch {
+			/* ignore */
+		}
+	}
+	projectLineSplitInstances.length = 0;
+}
+
+/**
+ * Pastilles techno : même tween que la stack « À propos » (pen GreenSock JojaebV).
+ */
+function initStackTagChips() {
+	killStackTagChipsFx();
+
+	const roots = [
+		document.getElementById("about-stack-tags"),
+		document.getElementById("project-stack-tags"),
+	].filter((n): n is HTMLElement => !!n);
+
+	if (!roots.length || reduce()) return;
+
+	const run = () => {
+		for (const root of roots) {
+			const chips = [...root.querySelectorAll<HTMLElement>(".chip")];
+			if (!chips.length) continue;
+			const tw = gsap.from(chips, {
+				y: -100,
+				opacity: 0,
+				rotation: "random(-80, 80)",
+				stagger: 0.1,
+				duration: 1,
+				ease: "back",
+				scrollTrigger: {
+					trigger: root,
+					start: "top 88%",
+					once: true,
+				},
+			});
+			stackTagChipTweens.push(tw);
+		}
+		ScrollTrigger.refresh();
+	};
+
+	void document.fonts.ready.then(run);
+}
+
+/**
+ * Fiche projet : lignes masquées + ScrollTrigger (esprit GreenSock LEYqezo / SplitText — via split-type).
+ * Hors titres (.readme-heading, h1 article, etc.).
+ */
+function initProjectReadmeLineReveal(ac: AbortController) {
+	killProjectLineReveal();
+
+	if (!document.querySelector(".project-page") || reduce()) return;
+
+	const textSelectors = [
+		".project-page__lead",
+		".readme-content .readme-p",
+		".readme-content .readme-li",
+		".readme-content .readme-quote",
+	].join(", ");
+
+	const textEls = [...document.querySelectorAll<HTMLElement>(`.project-page ${textSelectors}`)].filter(
+		(el) => (el.textContent?.trim().length ?? 0) > 0,
+	);
+
+	const run = () => {
+		for (const el of textEls) {
+			const split = new SplitType(el, {
+				types: "lines,words",
+				lineClass: "readme-split-line",
+				wordClass: "readme-split-word",
+			});
+			projectLineSplitInstances.push(split);
+
+			const lines = split.lines;
+			if (!lines?.length) continue;
+
+			/* Ordre visuel haut → bas (split-type suit en général le flux ; on verrouille au cas où). */
+			const sortedLines = [...lines].sort(
+				(a, b) => a.offsetTop - b.offsetTop || a.offsetLeft - b.offsetLeft,
+			);
+
+			const lineWordGroups = sortedLines
+				.map((line) => [...line.querySelectorAll<HTMLElement>(".readme-split-word")])
+				.filter((words) => words.length > 0);
+			if (!lineWordGroups.length) continue;
+
+			const isLead = el.classList.contains("project-page__lead");
+			/* Chapo : plus vif ; toutes les lignes : enchaînement strict (ligne suivante après la précédente). */
+			const duration = isLead ? 0.34 : 0.48;
+			const wordStagger = isLead ? 0.01 : 0.018;
+			const lineGap = isLead ? ">+=0.02" : ">+=0.04";
+
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: el,
+					start: "top 88%",
+					once: true,
+				},
+			});
+
+			let first = true;
+			for (const words of lineWordGroups) {
+				tl.from(
+					words,
+					{
+						yPercent: 110,
+						opacity: 0,
+						duration,
+						stagger: wordStagger,
+						ease: "power3.out",
+					},
+					first ? 0 : lineGap,
+				);
+				first = false;
+			}
+
+			projectLineAnimations.push(tl);
+		}
+
+		const preWraps = [...document.querySelectorAll<HTMLElement>(".project-page .readme-pre-wrap")].filter(
+			(el) => (el.textContent?.trim().length ?? 0) > 0,
+		);
+		for (const el of preWraps) {
+			const tw = gsap.from(el, {
+				y: 28,
+				opacity: 0,
+				duration: 0.55,
+				ease: "power2.out",
+				scrollTrigger: {
+					trigger: el,
+					start: "top 90%",
+					once: true,
+				},
+			});
+			projectLineAnimations.push(tw);
+		}
+
+		if (projectLineSplitInstances.length) {
+			window.addEventListener("resize", scheduleProjectLineRevealResize, { passive: true, signal: ac.signal });
+		}
+
+		ScrollTrigger.refresh();
+	};
+
+	void document.fonts.ready.then(run);
+}
+
 function parseRiseDelaySec(el: HTMLElement): number {
 	const raw = getComputedStyle(el).getPropertyValue("--rise-delay").trim();
 	const m = /^([\d.]+)ms$/.exec(raw);
 	return m ? parseFloat(m[1]) / 1000 : 0;
 }
 
-/** Retire l’ancien mode « layered scroll » (pins + snap) si présent après HMR / navigation. */
+/** Retire résidus éventuels (HMR / anciens effets scroll) sur les sections plein écran. */
 function clearLayeredScrollArtifacts() {
 	document.documentElement.classList.remove("gsap-layered-scroll");
-	document.querySelectorAll<HTMLElement>("main > section[data-section].snap-section").forEach((el) => {
+	document.querySelectorAll<HTMLElement>("main > section.section-viewport").forEach((el) => {
 		el.style.removeProperty("z-index");
 	});
+}
+
+function killProjectsHorizontalScroll() {
+	if (projectsHorizontalST) {
+		projectsHorizontalST.kill();
+		projectsHorizontalST = null;
+	}
+	const track = document.querySelector<HTMLElement>("[data-projects-track]");
+	if (track) gsap.set(track, { clearProps: "x" });
+}
+
+/** Section #projects : défilement horizontal lié au scroll vertical (pin + scrub). */
+function initProjectsHorizontalScroll() {
+	killProjectsHorizontalScroll();
+
+	const section = document.getElementById("projects");
+	if (!section || reduce()) return;
+
+	const pinEl = section.querySelector<HTMLElement>("[data-projects-pin]");
+	const viewport = section.querySelector<HTMLElement>("[data-projects-viewport]");
+	const track = section.querySelector<HTMLElement>("[data-projects-track]");
+	if (!pinEl || !viewport || !track) return;
+
+	const overflowPx = () => track.scrollWidth - viewport.clientWidth;
+	if (overflowPx() <= 2) return;
+
+	const tween = gsap.to(track, {
+		x: () => Math.min(0, viewport.clientWidth - track.scrollWidth),
+		ease: "none",
+		scrollTrigger: {
+			trigger: pinEl,
+			start: "top top",
+			end: () => `+=${Math.ceil(overflowPx())}`,
+			pin: true,
+			scrub: true,
+			invalidateOnRefresh: true,
+			/* Évite le « flash » au début du pin ; compense souvent un léger saut vertical */
+			anticipatePin: 1,
+		},
+	});
+	projectsHorizontalST = tween.scrollTrigger ?? null;
 }
 
 /** Révélation au scroll (GSAP + ScrollTrigger), cascade `--rise-delay` sur les cartes. */
@@ -408,24 +640,8 @@ function initRise() {
 	killRiseScrollTriggers();
 
 	if (reduce()) {
-		const riseN = document.querySelectorAll("[data-rise]").length;
 		document.querySelectorAll("[data-rise]").forEach((n) => n.classList.add("is-visible"));
 		ScrollTrigger.refresh();
-		// #region agent log
-		fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
-			method: "POST",
-			headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
-			body: JSON.stringify({
-				sessionId: "245b5a",
-				location: "client.ts:initRise:reduce-branch",
-				message: "init_rise_state",
-				data: { riseCount: riseN, triggerCount: 0, reduceMotion: true, scrollY: window.scrollY },
-				timestamp: Date.now(),
-				runId: "pre-fix",
-				hypothesisId: "H5",
-			}),
-		}).catch(() => {});
-		// #endregion
 		return;
 	}
 
@@ -469,65 +685,76 @@ function initRise() {
 	}
 
 	ScrollTrigger.refresh();
-	// #region agent log
-	fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
-		method: "POST",
-		headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
-		body: JSON.stringify({
-			sessionId: "245b5a",
-			location: "client.ts:initRise:afterRefresh",
-			message: "init_rise_state",
-			data: {
-				riseCount: els.length,
-				triggerCount: riseScrollTriggers.length,
-				reduceMotion: reduce(),
-				scrollY: window.scrollY,
-			},
-			timestamp: Date.now(),
-			runId: "pre-fix",
-			hypothesisId: "H5",
-		}),
-	}).catch(() => {});
-	// #endregion
-}
-
-let sectionRaf = 0;
-function initSections(ac: AbortController) {
-	const sections = [...document.querySelectorAll<HTMLElement>("[data-section]")];
-	if (!sections.length) return;
-
-	const update = () => {
-		sectionRaf = 0;
-		const vh = innerHeight;
-		let best: HTMLElement | null = null;
-		let bestScore = 0;
-		for (const s of sections) {
-			const r = s.getBoundingClientRect();
-			const visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-			if (visible > bestScore) {
-				bestScore = visible;
-				best = s;
-			}
-		}
-		const threshold = vh * 0.12;
-		for (const s of sections) {
-			s.classList.toggle("is-active", s === best && bestScore > threshold);
-		}
-	};
-
-	const onScroll = () => {
-		if (sectionRaf) return;
-		sectionRaf = requestAnimationFrame(update);
-	};
-
-	window.addEventListener("scroll", onScroll, { passive: true, signal: ac.signal });
-	window.addEventListener("resize", onScroll, { passive: true, signal: ac.signal });
-	update();
 }
 
 function normalizePathname(p: string): string {
 	const x = p.replace(/\/$/, "");
 	return x === "" ? "/" : x;
+}
+
+/** Fiche projet : `/projets/<slug>` (avec ou sans préfixe `BASE_URL`, ex. GitHub Pages). */
+const PROJECT_DETAIL_PATH_RE = /\/projets\/[^/]+$/;
+
+function isProjectDetailPathname(pathname: string): boolean {
+	return PROJECT_DETAIL_PATH_RE.test(normalizePathname(pathname));
+}
+
+/**
+ * Les clics sur liens internes passent toujours `direction: "forward"` dans le routeur Astro ;
+ * on aligne « précédent » sur `back` pour inverser les animations View Transitions.
+ */
+async function initReadmeMermaid() {
+	if (!document.querySelector(".readme-mermaid.mermaid")) return;
+
+	const { default: mermaid } = await import("mermaid");
+	if (!mermaidInitialized) {
+		mermaid.initialize({
+			startOnLoad: false,
+			theme: "dark",
+			securityLevel: "loose",
+			themeVariables: {
+				background: "#070712",
+				mainBkg: "#0e1022",
+				textColor: "#e8eaf8",
+				primaryColor: "#1e1b4b",
+				primaryTextColor: "#e8eaf8",
+				primaryBorderColor: "#818cf8",
+				lineColor: "#8b92b0",
+				secondaryColor: "#0e1022",
+				tertiaryColor: "#070712",
+				fontFamily: '"Share Tech Mono", ui-monospace, monospace',
+			},
+		});
+		mermaidInitialized = true;
+	}
+
+	try {
+		await mermaid.run({
+			querySelector: ".readme-mermaid.mermaid",
+			suppressErrors: true,
+		});
+		requestAnimationFrame(() => ScrollTrigger.refresh());
+	} catch {
+		/* schéma invalide : Mermaid affiche déjà une erreur dans le DOM si besoin */
+	}
+}
+
+function initProjectDetailNavTransitionDirection(ac: AbortController) {
+	document.addEventListener(
+		"astro:before-preparation",
+		(e) => {
+			if (!isTransitionBeforePreparationEvent(e)) return;
+			if (!isProjectDetailPathname(e.from.pathname) || !isProjectDetailPathname(e.to.pathname)) return;
+			const src = e.sourceElement;
+			if (!(src instanceof Element)) return;
+			const nav = src.closest("[data-project-nav]");
+			if (!nav) return;
+			const which = nav.getAttribute("data-project-nav");
+			if (which === "prev") e.direction = "back";
+			else if (which === "next") e.direction = "forward";
+		},
+		{ signal: ac.signal },
+	);
 }
 
 /** Ancre même page (ex. `/Portfolio/#about`) — compatible GitHub Pages sous-chemin. */
@@ -543,6 +770,7 @@ function hashForSamePageNav(href: string): string | null {
 	}
 }
 
+/** Même approche que le démo GreenSock ScrollToPlugin (CodePen LZOMKY). */
 function initSmoothNav(ac: AbortController) {
 	document.addEventListener(
 		"click",
@@ -553,38 +781,6 @@ function initSmoothNav(ac: AbortController) {
 			if (!href) return;
 
 			const hash = hashForSamePageNav(href);
-// #region agent log
-			if (href.includes("#")) {
-				let uPath = "";
-				try {
-					uPath = new URL(href, location.href).pathname;
-				} catch {
-					uPath = "(parse-error)";
-				}
-				fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
-					method: "POST",
-					headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
-					body: JSON.stringify({
-						sessionId: "245b5a",
-						location: "client.ts:initSmoothNav:anchor-click",
-						message: "smooth_nav_anchor_probe",
-						data: {
-							href,
-							hash,
-							locPath: location.pathname,
-							locPathNorm: normalizePathname(location.pathname),
-							linkPathNorm: normalizePathname(uPath),
-							reduceMotion: reduce(),
-							hasTarget: !!(hash && document.querySelector(hash)),
-							defaultPrevented: e.defaultPrevented,
-						},
-						timestamp: Date.now(),
-						runId: "pre-fix",
-						hypothesisId: "H1-H4",
-					}),
-				}).catch(() => {});
-			}
-			// #endregion
 			if (!hash) return;
 
 			const target = document.querySelector(hash);
@@ -602,26 +798,9 @@ function initSmoothNav(ac: AbortController) {
 				return;
 			}
 
-			// #region agent log
-			fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
-				method: "POST",
-				headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
-				body: JSON.stringify({
-					sessionId: "245b5a",
-					location: "client.ts:initSmoothNav:gsap-scrollTo",
-					message: "smooth_nav_gsap_start",
-					data: { hash, scrollY: window.scrollY },
-					timestamp: Date.now(),
-					runId: "pre-fix",
-					hypothesisId: "H4",
-				}),
-			}).catch(() => {});
-			// #endregion
 			gsap.to(window, {
 				duration: 1,
-				ease: "power2.inOut",
-				scrollTo: { y: target, offsetY: 6, autoKill: true },
-				overwrite: "auto",
+				scrollTo: { y: hash, offsetY: 120 },
 				onComplete: () => {
 					window.dispatchEvent(new Event("scroll"));
 				},
@@ -697,6 +876,9 @@ export function boot() {
 	gsap.killTweensOf(window);
 	clearLayeredScrollArtifacts();
 	killRiseScrollTriggers();
+	killProjectsHorizontalScroll();
+	killStackTagChipsFx();
+	killProjectLineReveal();
 	textFxObserver?.disconnect();
 	textFxObserver = null;
 	const ac = new AbortController();
@@ -709,41 +891,30 @@ export function boot() {
 		}
 		clearLayeredScrollArtifacts();
 		killRiseScrollTriggers();
+		killProjectsHorizontalScroll();
+		killStackTagChipsFx();
+		killProjectLineReveal();
 		textFxObserver?.disconnect();
 		textFxObserver = null;
 		document.body.classList.remove("has-custom-cursor", "cursor-hover");
 	};
 
 	initGlobalPointer(ac);
+	initProjectDetailNavTransitionDirection(ac);
 	initSmoothNav(ac);
-	initSections(ac);
 	initParallax(ac);
 	initSysClock();
 	initRise();
+	initProjectsHorizontalScroll();
+	initStackTagChips();
+	initProjectReadmeLineReveal(ac);
 	initTextFX(ac);
 	initCursor(ac);
 
 	requestAnimationFrame(() => {
 		ScrollTrigger.refresh();
-		// #region agent log
-		fetch("http://127.0.0.1:7498/ingest/6524b809-103a-4f86-a8f9-ce482dd8f8ab", {
-			method: "POST",
-			headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "245b5a" },
-			body: JSON.stringify({
-				sessionId: "245b5a",
-				location: "client.ts:boot:afterRefresh",
-				message: "verify_post_fix_no_layered_pins",
-				data: {
-					scrollY: window.scrollY,
-					maxScroll: ScrollTrigger.maxScroll(window),
-					docScrollH: document.documentElement.scrollHeight,
-					hasLayeredClass: document.documentElement.classList.contains("gsap-layered-scroll"),
-				},
-				timestamp: Date.now(),
-				runId: "post-fix",
-				hypothesisId: "FIX",
-			}),
-		}).catch(() => {});
-		// #endregion
+		void document.fonts.ready.then(() => {
+			void initReadmeMermaid();
+		});
 	});
 }

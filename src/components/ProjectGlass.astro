@@ -8,17 +8,23 @@ interface Props {
 	description: string;
 	href: string;
 	index: number;
+	/** Bandeau horizontal (ScrollTrigger) : pas de `data-rise`. */
+	layout?: "grid" | "strip";
 }
 
-const { slug, title, description, href, index } = Astro.props;
+const { slug, title, description, href, index, layout = "grid" } = Astro.props;
 const id = String(index + 1).padStart(2, "0");
 const ficheUrl = withBase(`projets/${slug}`);
+const strip = layout === "strip";
 ---
 
 <article
-	class="flex h-full flex-col rounded-lg p-6 md:p-7 project-card glass glass--panel"
-	data-rise
-	style={`--rise-delay: ${index * 110}ms`}
+	class:list={[
+		"flex h-full flex-col rounded-lg p-6 md:p-7 project-card glass glass--panel",
+		strip && "project-card--strip",
+	]}
+	{...(strip ? {} : { "data-rise": true })}
+	style={strip ? undefined : `--rise-delay: ${index * 110}ms`}
 >
 	<header>
 		<span class="sys-mono text-[10px] tracking-[0.35em] text-(--amber)">OBJ.{id}</span>
