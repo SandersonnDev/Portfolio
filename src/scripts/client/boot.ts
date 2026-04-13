@@ -17,6 +17,7 @@ import { killStackTagChipsFx, initStackTagChips } from "./stack-chips";
 import { killProjectLineReveal, initProjectReadmeLineReveal } from "./project-readme";
 import { disconnectTextFX, initTextFX } from "./text-fx";
 import { initViewportRhythm } from "./viewport-rhythm";
+import { initLenisScroll, killLenisScroll } from "./lenis-scroll";
 
 let cleanupBoot: (() => void) | null = null;
 
@@ -38,6 +39,7 @@ export function boot() {
 		ac.abort();
 		killSysClock();
 		clearLayeredScrollArtifacts();
+		killLenisScroll();
 		killRiseScrollTriggers();
 		killProjectsHorizontalScroll();
 		killStackTagChipsFx();
@@ -47,6 +49,7 @@ export function boot() {
 	};
 
 	initGlobalPointer(ac);
+	initLenisScroll();
 	initProjectDetailNavTransitionDirection(ac);
 	initRouteEnterMarkers(ac);
 	initSmoothNav(ac);

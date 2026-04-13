@@ -99,10 +99,14 @@ export function initRouteEnterMarkers(ac: AbortController) {
 			if (fromDetail && toDetail) return;
 			if (fromDetail && !toDetail) {
 				sessionStorage.setItem(ROUTE_ENTER_STORAGE_KEY, "from-project");
+				sessionStorage.removeItem(PROJECT_INTER_NAV_STORAGE_KEY);
+				sessionStorage.removeItem(PROJECT_INTER_NAV_DIR_KEY);
 				return;
 			}
 			if (!fromDetail && toDetail) {
 				sessionStorage.setItem(ROUTE_ENTER_STORAGE_KEY, "from-home");
+				sessionStorage.removeItem(PROJECT_INTER_NAV_STORAGE_KEY);
+				sessionStorage.removeItem(PROJECT_INTER_NAV_DIR_KEY);
 			}
 		},
 		{ capture: true, signal: ac.signal },

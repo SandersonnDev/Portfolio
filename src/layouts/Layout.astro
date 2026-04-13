@@ -35,8 +35,12 @@ const isProjectDetailRoute = /\/projets\/[^/]+$/.test(normalizePathname(routePat
 			} catch (e) {}
 			try {
 				if (isProjectDetailRoute) {
+					/* Slide journal : uniquement si clic prev/next entre fiches (voir transition-nav). Sans le
+					 * drapeau `projArticleInterNav`, une `projArticleDir` orpheline déclenchait le slide alors que
+					 * `data-route-enter` masquait tout le `.main-shift` → contenu invisible / nav « sans style ». */
+					const inter = sessionStorage.getItem("projArticleInterNav") === "1";
 					const d = sessionStorage.getItem("projArticleDir");
-					if (d === "prev" || d === "next") {
+					if (inter && (d === "prev" || d === "next")) {
 						document.documentElement.setAttribute("data-page-slide", d);
 					}
 				}

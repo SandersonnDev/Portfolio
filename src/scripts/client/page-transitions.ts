@@ -29,8 +29,11 @@ export function runPageEnterTransitions() {
 		return;
 	}
 
-	const journalSlide = Boolean(journal && (slideDir === "prev" || slideDir === "next"));
 	const fadeMain = routeEnter === "from-home" || routeEnter === "from-project";
+	/* Ne pas combiner slide journal + fondu accueil : le journal est dans `.main-shift` (masqué pendant le fondu). */
+	const journalSlide = Boolean(
+		!fadeMain && journal && (slideDir === "prev" || slideDir === "next"),
+	);
 
 	const done = () => {
 		ScrollTrigger.refresh();

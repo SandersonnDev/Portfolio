@@ -1,5 +1,6 @@
 import { gsap } from "./register-gsap";
 import { reduce, finePointer } from "./env";
+import { getLenis } from "./lenis-scroll";
 const INTERACT_SEL = "a, button, [role='button'], input, textarea, select, .tile-action";
 export let mouseX = 0;
 export let mouseY = 0;
@@ -92,6 +93,16 @@ export function initSmoothNav(ac: AbortController) {
             target.scrollIntoView({ block: "start" });
             queueMicrotask(() => {
                 window.dispatchEvent(new Event("scroll"));
+            });
+            return;
+        }
+        const lenis = getLenis();
+        if (lenis) {
+            lenis.scrollTo(hash, {
+                offset: -120,
+                onComplete: () => {
+                    window.dispatchEvent(new Event("scroll"));
+                },
             });
             return;
         }

@@ -83,7 +83,7 @@ function tagCardLines(row: ReadmeTagTableRow): {
 					);
 				}
 				return (
-					<div class="readme-pre-wrap">
+					<div class="readme-pre-wrap" data-lenis-prevent>
 						{block.lang ? (
 							<p class="readme-pre-label sys-mono">{block.lang}</p>
 						) : null}
@@ -140,7 +140,7 @@ function tagCardLines(row: ReadmeTagTableRow): {
 			if (block.type === "table") {
 				return (
 					<div class="readme-table-wrap">
-						<div class="readme-table-scroll">
+						<div class="readme-table-scroll" data-lenis-prevent>
 							<table class="readme-table">
 								{block.header?.length ? (
 									<thead>
