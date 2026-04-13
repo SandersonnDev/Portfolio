@@ -36,7 +36,8 @@ export const site = {
 			category: "Frameworks & build front",
 			items: [
 				{ label: "Astro", icon: "fa-solid fa-bolt" },
-				{ label: "Vite", icon: "fa-brands fa-vite" },
+				/* Pas de marque « vite » dans Font Awesome Free ; éclair = build rapide, distinct d’Astro (fa-bolt). */
+				{ label: "Vite", icon: "fa-solid fa-bolt-lightning" },
 				{ label: "React", icon: "fa-brands fa-react" },
 				{ label: "Electron", icon: "fa-solid fa-atom" },
 			],
@@ -85,13 +86,17 @@ export const copy = {
 	ctaHeroAboutTitle: "Aller à la section À propos : présentation, technologies et contact",
 	heroStatusSuffix: "en ligne",
 	heroClockLabel: "Heure locale",
-	ctaViewFiche: "Voir la fiche",
-	ctaViewSource: "Code source",
-	ctaViewSourceFull: "Code source (GitHub)",
+	/** Cartes projet accueil : fiche locale (infobulle = détail). */
+	ctaViewFiche: "Fiche ici",
+	ctaViewSource: "GitHub",
+	/** Cartes projet accueil : dépôt public (nouvel onglet). */
+	ctaViewSourceFull: "Sur GitHub",
 	tileTitleFiche: (projectTitle: string) =>
-		`Ouvre la page détaillée du projet « ${projectTitle} » sur ce portfolio`,
+		`Fiche du projet « ${projectTitle} » sur ce portfolio (description, README, stack)`,
 	tileTitleGithub: (projectTitle: string) =>
-		`Ouvre le dépôt GitHub du projet « ${projectTitle} » dans un nouvel onglet`,
+		`Dépôt GitHub « ${projectTitle} » — ouverture dans un nouvel onglet`,
+	/** Cartes accueil : rangée de badges Shields (topics / langages). */
+	projectStackBadgesLabel: "Technologies du dépôt (topics ou langages GitHub)",
 	footerTagline: "Portfolio statique · synchronisation GitHub",
 	builtWith: "Propulsé par Astro",
 	railHome: "Retour en haut de page (section d’accueil)",

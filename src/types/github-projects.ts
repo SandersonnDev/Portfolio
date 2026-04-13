@@ -4,4 +4,6 @@ export type GithubProjectCard = {
 	title: string;
 	description: string;
 	href: string;
+	/** Topics GitHub, sinon langages (voir sync-github-projects). */
+	stack?: string[];
 };

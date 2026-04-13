@@ -31,7 +31,6 @@ export function initRise() {
 		gsap.set(el, {
 			autoAlpha: 0,
 			y: isCard ? 52 : 36,
-			scale: isCard ? 0.96 : 0.98,
 			filter: isCard ? "saturate(0.78) brightness(0.92)" : "saturate(0.88)",
 			...(isCard ? { boxShadow: "0 0 0 0 rgba(0,0,0,0)" } : {}),
 		});
@@ -45,7 +44,6 @@ export function initRise() {
 				const vars: gsap.TweenVars = {
 					autoAlpha: 1,
 					y: 0,
-					scale: 1,
 					filter: "saturate(1) brightness(1)",
 					duration: isCard ? 1.08 : 0.95,
 					delay,

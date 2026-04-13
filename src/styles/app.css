@@ -9,6 +9,29 @@ html:has(#dev-bar-hitbox-above) {
 	--preview-chrome-top: 42px;
 }
 
+/* Rythme commun : titre de section → contenu (hero / projets / à propos). */
+:root {
+	--section-heading-gap: clamp(1.25rem, 0.35rem + 2.2vw, 2rem);
+	/* Largeur max du bloc texte / grille (au-dessus de l’ancien 64rem / max-w-5xl). */
+	--section-shell-max-rem: 76rem;
+}
+
+.section-shell {
+	width: 100%;
+	max-width: min(var(--section-shell-max-rem), 100%);
+	margin-inline: auto;
+}
+
+.section-after-h2 {
+	margin-top: var(--section-heading-gap);
+}
+
+/* En-tête section projets : même logique verticale que le haut d’« À propos » (pas de pb fixe + gap sur .projects-pin). */
+.section-head-projects {
+	padding-top: clamp(4.25rem, calc(env(safe-area-inset-top, 0px) + 5.5svh + 1.25rem), 8rem);
+	padding-bottom: 0;
+}
+
 #hero.hero-section {
 	--hero-top-inset: max(env(safe-area-inset-top, 0px), var(--preview-chrome-top, 0px));
 	box-sizing: border-box;
@@ -26,6 +49,18 @@ html:has(#dev-bar-hitbox-above) {
 	-webkit-overflow-scrolling: touch;
 }
 
+.hero-content {
+	overflow-wrap: anywhere;
+}
+
+.hero-lead {
+	font-size: clamp(1rem, 0.35rem + 1.6vw, 1.25rem);
+}
+
+.hero-sublead {
+	font-size: clamp(0.8125rem, 0.2rem + 1.35vw, 1rem);
+}
+
 /* Fond décoratif plein hero (z-0) ; le contenu reste au-dessus (#hero-content z-10). */
 .hero-logo-panel {
 	position: absolute;
@@ -39,61 +74,6 @@ html:has(#dev-bar-hitbox-above) {
 		color-mix(in srgb, var(--accent) 9%, var(--void)) 0%,
 		var(--void) 58%
 	);
-}
-
-/*
- * Fiches projet — glissement horizontal pur (pas de scale / blur = pas d’effet « diagonale »).
- * Forwards : ancien → translateX(-100%), nouveau depuis translateX(100%).
- * Backwards : ancien → translateX(100%), nouveau depuis translateX(-100%).
- */
-@keyframes projectVtParallaxOld {
-	from {
-		transform: translateX(0);
-	}
-	to {
-		transform: translateX(-100%);
-	}
-}
-
-@keyframes projectVtParallaxNew {
-	from {
-		transform: translateX(100%);
-	}
-	to {
-		transform: translateX(0);
-	}
-}
-
-@keyframes projectVtParallaxOldBack {
-	from {
-		transform: translateX(0);
-	}
-	to {
-		transform: translateX(100%);
-	}
-}
-
-@keyframes projectVtParallaxNewBack {
-	from {
-		transform: translateX(-100%);
-	}
-	to {
-		transform: translateX(0);
-	}
-}
-
-/* Coupe le débordement horizontal pendant la transition ; évite scrollbar / saut. */
-::view-transition-group(project-fiche) {
-	overflow: clip;
-	width: 100%;
-	max-width: 100%;
-	animation: none !important;
-}
-
-::view-transition-old(project-fiche),
-::view-transition-new(project-fiche) {
-	transform-origin: center center;
-	backface-visibility: hidden;
 }
 
 @theme {
@@ -114,6 +94,9 @@ html:has(#dev-bar-hitbox-above) {
 
 @layer base {
 	html {
+		/* Piloté par GSAP (viewport-rhythm) : léger zoom typo rem sur grands / petits écrans. */
+		--fluid-type: 1;
+		font-size: calc(100% * var(--fluid-type));
 		font-family: var(--font-display);
 		background: var(--void);
 		color: var(--fg);
@@ -427,6 +410,10 @@ html:has(#dev-bar-hitbox-above) {
 	.glass:hover {
 		transform: none;
 	}
+
+	.project-card--strip.glass--panel:hover {
+		transform: none;
+	}
 }
 
 /* Panneau projet : pas de lift global, hover sur les actions */
@@ -438,8 +425,65 @@ html:has(#dev-bar-hitbox-above) {
 	transform: translateY(-2px);
 }
 
+/* Strip : ombre un peu resserrée + lift réduit pour éviter le rognage sous overflow du viewport. */
+.project-card--strip.glass--panel:hover {
+	transform: translateY(-1px);
+	box-shadow:
+		inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
+		0 22px 56px color-mix(in srgb, #000 52%, transparent),
+		0 0 32px var(--accent-dim);
+}
+
+/* Cartes projet : même padding / typo strip ou grille. */
+.project-card--pad {
+	padding: 1.75rem;
+}
+
+.project-card__meta {
+	display: block;
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: 0.625rem;
+	letter-spacing: 0.32em;
+	color: var(--amber);
+}
+
+.project-card__title {
+	margin: 0.75rem 0 0;
+	font-family: var(--font-display);
+	font-size: 1.125rem;
+	font-weight: 300;
+	letter-spacing: 0.02em;
+	line-height: 1.3;
+	color: var(--fg);
+}
+
+.project-card__lead {
+	margin: 0.75rem 0 0;
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.65;
+	color: var(--fg-dim);
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 5;
+	overflow: hidden;
+}
+
 .tile-actions {
 	flex-shrink: 0;
+	margin-top: auto;
+	padding-top: 1.5rem;
+	border-top: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.tile-action__icon {
+	font-size: 0.65rem;
+	line-height: 1;
+}
+
+.tile-action__icon--git {
+	font-size: 0.78rem;
 }
 
 .tile-action {
@@ -483,10 +527,27 @@ html:has(#dev-bar-hitbox-above) {
 	color: var(--fg);
 }
 
+/* Cartes projet (accueil) : CTA un peu plus lisibles qu’avant, sans surdimensionner */
+.project-card .tile-action {
+	font-size: 0.59rem;
+	letter-spacing: 0.11em;
+	padding: 0.7rem 0.82rem;
+	gap: 0.47rem;
+}
+
+.project-card .tile-action__icon {
+	font-size: 0.71rem;
+}
+
+.project-card .tile-action__icon--git {
+	font-size: 0.85rem;
+}
+
 /* Titre héro */
 .hero-title {
 	font-family: var(--font-display);
 	font-weight: 200;
+	font-size: clamp(1.45rem, 0.55rem + 4.2vmin, 4.25rem);
 	letter-spacing: 0.04em;
 	line-height: 1.02;
 	text-transform: uppercase;
@@ -619,6 +680,13 @@ html:has(#dev-bar-hitbox-above) {
 	padding: 0.55rem 1rem 0.55rem 1rem;
 }
 
+@media (max-width: 24rem) {
+	.display-heading--lg {
+		letter-spacing: 0.18em;
+		padding-inline: 0.75rem;
+	}
+}
+
 @media (min-width: 768px) {
 	.display-heading--lg {
 		font-size: 1.05rem;
@@ -653,6 +721,10 @@ html:has(#dev-bar-hitbox-above) {
 }
 
 /* Page détail projet GitHub */
+.project-page__journal-clip {
+	overflow-x: clip;
+}
+
 .project-page__lead {
 	max-width: 42rem;
 	/* split-type : évite le léger saut au split */
@@ -1052,20 +1124,117 @@ html:has(#dev-bar-hitbox-above) {
 	font-style: italic;
 }
 
+/* Retour section + liens haut de fiche */
+.project-page__back {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	padding: 0.55rem 1.1rem;
+	border-radius: 0.55rem;
+	border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+	background: color-mix(in srgb, var(--void) 70%, transparent);
+	box-shadow:
+		0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+		0 0 22px color-mix(in srgb, var(--accent) 12%, transparent);
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	font-weight: 400;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: var(--fg);
+	transition:
+		background 0.25s ease,
+		border-color 0.25s ease,
+		color 0.25s ease,
+		box-shadow 0.3s ease;
+}
+
+.project-page__back:hover {
+	border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+	color: var(--accent);
+	box-shadow:
+		0 0 0 1px color-mix(in srgb, var(--accent) 14%, transparent),
+		0 0 28px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.project-page__back i {
+	font-size: 0.85em;
+	opacity: 0.9;
+}
+
+.project-page__jump-link {
+	display: inline-flex;
+	max-width: min(100%, 22rem);
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.55rem 1rem;
+	border-radius: 0.55rem;
+	border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+	background: color-mix(in srgb, var(--void) 62%, transparent);
+	font-family: var(--font-mono);
+	font-size: 0.78rem;
+	font-weight: 400;
+	letter-spacing: 0.12em;
+	text-decoration: none;
+	color: var(--fg-dim);
+	transition:
+		background 0.25s ease,
+		border-color 0.25s ease,
+		color 0.25s ease;
+}
+
+.project-page__jump-link:hover {
+	border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	color: var(--accent);
+	background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.project-page__jump-link--next {
+	margin-left: auto;
+	text-align: right;
+	flex-direction: row-reverse;
+}
+
+.project-page__jump-title {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-family: var(--font-display);
+	font-size: 0.92rem;
+	font-weight: 300;
+	letter-spacing: 0.04em;
+	color: var(--fg);
+}
+
+.project-page__jump-link:hover .project-page__jump-title {
+	color: var(--accent);
+}
+
+.project-page__jump-arrow {
+	flex-shrink: 0;
+	font-size: 1rem;
+	color: var(--accent);
+	opacity: 0.95;
+}
+
 /* Navigation fiche projet (précédent / suivant) */
 .project-article-nav {
 	margin-top: clamp(2.5rem, 5vw, 3.5rem);
 	border-radius: 0.75rem;
 	overflow: hidden;
-	border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
 	background: color-mix(in srgb, var(--void) 55%, transparent);
-	box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 5%, transparent);
+	box-shadow:
+		0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+		0 0 26px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .project-article-nav__inner {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	min-height: 5.25rem;
+	min-height: 6rem;
 }
 
 @media (max-width: 639px) {
@@ -1102,8 +1271,8 @@ html:has(#dev-bar-hitbox-above) {
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: center;
-	gap: 0.35rem;
-	padding: 1rem 1.15rem;
+	gap: 0.45rem;
+	padding: 1.15rem 1.25rem;
 	text-decoration: none;
 	color: var(--fg-dim);
 	transition:
@@ -1124,16 +1293,16 @@ html:has(#dev-bar-hitbox-above) {
 .project-article-nav__dir {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.45rem;
-	font-size: 0.58rem;
-	letter-spacing: 0.22em;
+	gap: 0.5rem;
+	font-size: 0.68rem;
+	letter-spacing: 0.2em;
 	text-transform: uppercase;
 	color: var(--accent);
 }
 
 .project-article-nav__title {
 	font-family: var(--font-display);
-	font-size: 0.95rem;
+	font-size: 1.08rem;
 	font-weight: 300;
 	letter-spacing: 0.04em;
 	color: var(--fg);
@@ -1221,19 +1390,19 @@ html:has(#dev-bar-hitbox-above) {
 /* Révélation au scroll (GSAP ScrollTrigger ; état initial / repli) */
 [data-rise] {
 	opacity: 0;
-	transform: translateY(2.5rem) scale(0.98);
+	transform: translateY(2.5rem);
 	filter: saturate(0.85);
 }
 
 [data-rise].is-visible {
 	opacity: 1;
-	transform: translateY(0) scale(1);
+	transform: translateY(0);
 	filter: saturate(1);
 }
 
 /* Cartes projet : cascade `--rise-delay` via GSAP ; ombre finale en CSS. */
 .project-card[data-rise] {
-	transform: translateY(3rem) scale(0.96);
+	transform: translateY(3rem);
 	filter: saturate(0.75) brightness(0.9);
 	box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
 }
@@ -1271,24 +1440,30 @@ html:has(#dev-bar-hitbox-above) {
 	container-name: projects;
 }
 
-/* Isolation : pas de `transform` ici (ScrollTrigger pinType transform pilote le transform). */
+/* Isolation ; le pin projets utilise pinType « fixed » (évite jitter Y lié au translate du pin). */
 .projects-pin {
 	isolation: isolate;
 	backface-visibility: hidden;
+	/* Même espace titre → contenu que « À propos » (mt après h2), au lieu d’un vide centré. */
+	gap: var(--section-heading-gap);
 }
 
-/* Alignement 1re carte = bord gauche du h2 (même logique que max-w-5xl + px-5 / md:px-12) */
+/* Alignement 1re carte = bord gauche du h2 (même logique que .section-shell + gouttières) */
 [data-projects-track] {
-	--projects-pad-x: 1.25rem;
+	--projects-pad-x: max(1.25rem, env(safe-area-inset-left, 0px));
 	--projects-inner: calc(100% - 2 * var(--projects-pad-x));
 	padding-left: calc(
-		var(--projects-pad-x) + (var(--projects-inner) - min(var(--projects-inner), 64rem)) / 2
+		var(--projects-pad-x) +
+			(var(--projects-inner) - min(var(--projects-inner), var(--section-shell-max-rem))) /
+				2
 	);
+	gap: 1.125rem;
+	align-items: stretch;
 }
 
 @media (min-width: 768px) {
 	[data-projects-track] {
-		--projects-pad-x: 3rem;
+		--projects-pad-x: max(3rem, env(safe-area-inset-left, 0px));
 	}
 }
 
@@ -1296,44 +1471,80 @@ html:has(#dev-bar-hitbox-above) {
 	overflow: hidden;
 	overflow-x: clip;
 	width: 100%;
-	min-height: 52svh;
+	/* Marge intérieure : laisse respirer l’ombre / le lift des cartes (overflow clip au bord padding). */
+	padding-block: 2rem;
+	box-sizing: border-box;
+	/* Bandeau sous le titre : ancré en haut (items-start côté markup). */
+	min-height: 22rem;
 }
 
 @media (min-width: 768px) {
 	[data-projects-viewport] {
-		min-height: 56svh;
+		min-height: 26rem;
 	}
 }
 
+/* Cartes strip : taille « générale » en rem (pas de grossissement auto via vw/svh sur petit écran). */
 .project-card--strip {
 	flex: 0 0 auto;
-	width: min(21rem, calc(100vw - 3rem));
-	min-height: 19rem;
 	max-width: 100%;
+	width: 27.5rem;
+	min-height: 27.5rem;
+	margin-block: 0.15rem;
 }
 
-@media (min-width: 640px) {
+/* Très étroit seulement : éviter le débordement horizontal (sans agrandir le reste du viewport). */
+@media (max-width: 30rem) {
 	.project-card--strip {
-		width: min(23rem, calc(100vw - 4.5rem));
-		min-height: 21rem;
-	}
-}
-
-@supports (width: 1cqw) {
-	.project-card--strip {
-		width: min(21rem, 85cqw);
-	}
-
-	@media (min-width: 640px) {
-		.project-card--strip {
-			width: min(23rem, 82cqw);
-		}
+		width: min(
+			27.5rem,
+			calc(100svi - max(2.25rem, env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px)))
+		);
+		min-height: 23.5rem;
 	}
 }
 
 .projects-strip__end-spacer {
 	flex: 0 0 auto;
 	width: clamp(1.5rem, 6vw, 4.5rem);
+}
+
+/* Badges Shields.io (stack GitHub) : en bas de carte, au-dessus des CTA (flex + :has). */
+.project-card__stack {
+	overflow: visible;
+	padding-top: 0.2rem;
+	row-gap: 0.5rem;
+	column-gap: 0.55rem;
+	align-content: flex-start;
+}
+
+.project-card:has(.project-card__stack) .project-card__stack {
+	margin-top: auto;
+	margin-bottom: 0.45rem;
+}
+
+.project-card:has(.project-card__stack) .tile-actions {
+	margin-top: 0;
+}
+
+.project-card__stack-item {
+	padding-block: 0.08rem;
+}
+
+.project-card__stack-badge {
+	height: 1.38rem;
+	width: auto;
+	max-width: min(16rem, 100%);
+	object-fit: contain;
+	object-position: left center;
+	vertical-align: middle;
+	border-radius: 0.2rem;
+	opacity: 0.94;
+	transition: opacity 0.25s ease;
+}
+
+.project-card__stack-badge:hover {
+	opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1347,7 +1558,24 @@ html:has(#dev-bar-hitbox-above) {
 
 /* Sections plein écran (hauteur viewport, sans snap ni animation au scroll) */
 .section-viewport {
-	min-height: 100dvh;
+	/* svh évite les sauts quand la barre d’adresse mobile se replie (comme #projects). */
+	min-height: 100svh;
+}
+
+.about-bio {
+	font-size: clamp(0.9rem, 0.25rem + 1.4vw, 1.05rem);
+}
+
+.about-contact-link {
+	min-width: 0;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
+/* Panneau Contact (À propos) : titre plus lisible (boutons : voir après .btn-sys--sm) */
+.about-contact-panel .about-block__label {
+	font-size: 0.88rem;
+	letter-spacing: 0.22em;
 }
 
 /* Curseur custom (pointer fine + .has-custom-cursor sur body) */
@@ -1507,33 +1735,120 @@ body.cursor-hover #cursor-ring {
 	padding: 0.55rem 0.95rem;
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-	animation-duration: 0.45s;
-	animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+/* Après .btn-sys--sm : surcharge la taille « sm » du panneau Contact À propos */
+.about-contact-panel .btn-sys {
+	font-size: 0.68rem;
+	letter-spacing: 0.14em;
+	padding: 0.78rem 1.15rem;
 }
 
-::view-transition-old(root) {
-	animation-name: vx-out;
-}
-::view-transition-new(root) {
-	animation-name: vx-in;
+.about-contact-panel .btn-sys i {
+	font-size: 1.08em;
 }
 
-@keyframes vx-out {
-	to {
-		opacity: 0;
-	}
+/* Fiche projet : panneau Liens (aside) — boutons plus grands que le défaut .btn-sys */
+.project-page__aside .btn-sys {
+	font-size: 0.72rem;
+	letter-spacing: 0.14em;
+	padding: 0.95rem 1.55rem;
+	min-height: 3.1rem;
 }
-@keyframes vx-in {
-	from {
-		opacity: 0;
+
+.project-page__aside .btn-sys i {
+	font-size: 1.15em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Responsive ciblé : 1080p large (cartes) vs vertical type 1440×2560 (lisibilité) */
+/* -------------------------------------------------------------------------- */
+
+.site-header .header-brand {
+	font-size: 0.625rem;
+}
+
+.site-header .btn-tactical {
+	font-size: 0.5625rem;
+	letter-spacing: 0.16em;
+}
+
+/* Affichage très haut (QHD vertical, etc.) : hero, about, header — pas de typo différente sur les cartes projet. */
+@media (max-width: 1680px) and (min-height: 1900px) {
+	.btn-sys {
+		font-size: 0.63rem;
+		padding: 0.72rem 1.35rem;
+	}
+
+	.btn-sys--sm {
+		font-size: 0.56rem;
+		padding: 0.62rem 1.1rem;
+	}
+
+	.project-page__aside .btn-sys {
+		font-size: 0.78rem;
+		padding: 1.05rem 1.65rem;
+		min-height: 3.35rem;
+	}
+
+	.hero-lead {
+		font-size: 1.18rem;
+	}
+
+	.hero-sublead {
+		font-size: 1.05rem;
+	}
+
+	#hero .sys-mono {
+		font-size: 0.76rem;
+	}
+
+	.hero-title {
+		font-size: clamp(1.7rem, 0.55rem + 3.8vmin, 4.4rem);
+	}
+
+	.chip {
+		font-size: 0.64rem;
+		padding: 0.42rem 0.78rem;
+		gap: 0.45rem;
+	}
+
+	.stack-category__label {
+		font-size: 0.6rem;
+		letter-spacing: 0.16em;
+	}
+
+	.about-bio {
+		font-size: 1.05rem;
+	}
+
+	.about-contact-panel .about-block__label {
+		font-size: 0.95rem;
+	}
+
+	.about-contact-panel .btn-sys {
+		font-size: 0.74rem;
+		padding: 0.85rem 1.25rem;
+	}
+
+	.site-header .header-brand {
+		font-size: 0.72rem;
+	}
+
+	.site-header .btn-tactical {
+		font-size: 0.64rem;
+	}
+
+	.project-card .tile-action {
+		font-size: 0.65rem;
+		padding: 0.78rem 0.92rem;
+	}
+
+	.project-card .tile-action__icon {
+		font-size: 0.8rem;
+	}
+
+	.project-card .tile-action__icon--git {
+		font-size: 0.93rem;
 	}
 }
 
-@media (prefers-reduced-motion: reduce) {
-	::view-transition-old(root),
-	::view-transition-new(root) {
-		animation: none;
-	}
-}
+/* MPA : transitions pilotées par `page-transitions.ts` + attributs sur `<html>` (Layout inline). */

@@ -1,5 +1,4 @@
 ---
-import { fade } from "astro:transitions";
 import Layout from "../layouts/Layout.astro";
 import HomePage from "../components/home/HomePage.astro";
 import gh from "../data/github-projects.generated.json";
@@ -11,7 +10,7 @@ const githubProfileUrl = `https://github.com/${githubUser}`;
 ---
 
 <Layout>
-	<main transition:animate={fade({ duration: 380 })}>
+	<main>
 		<HomePage projects={projects} githubUser={githubUser} githubProfileUrl={githubProfileUrl} />
 	</main>
 </Layout>

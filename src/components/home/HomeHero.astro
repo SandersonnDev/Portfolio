@@ -5,14 +5,14 @@ import { withBase } from "../../lib/paths";
 
 <section
 	id="hero"
-	class="section-viewport hero-section relative min-h-svh overflow-hidden border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+	class="section-viewport hero-section relative min-h-svh overflow-hidden"
 	aria-label="Accueil"
 >
 	<div id="hero-logo-panel" class="hero-logo-panel" aria-hidden="true" />
 	<div
-		class="hero-section__inner relative z-10 flex flex-col justify-center px-5 py-16 pointer-events-none md:px-12 md:py-20"
+		class="hero-section__inner relative z-10 flex flex-col justify-center py-[max(3.5rem,env(safe-area-inset-bottom,0px)+1.25rem)] ps-[max(1.25rem,env(safe-area-inset-left,0px))] pe-[max(1.25rem,env(safe-area-inset-right,0px))] pointer-events-none md:px-12 md:py-20"
 	>
-		<div id="hero-content" class="mx-auto w-full max-w-5xl pointer-events-none">
+		<div id="hero-content" class="hero-content section-shell pointer-events-none">
 			<div
 				class="mb-10 flex flex-col gap-8 pointer-events-none md:mb-12 md:flex-row md:items-end md:justify-between md:gap-10"
 			>
@@ -38,21 +38,21 @@ import { withBase } from "../../lib/paths";
 			</div>
 
 			<h1
-				class="w-fit max-w-full font-sans text-4xl hero-title pointer-events-auto md:text-6xl lg:text-7xl"
+				class="hero-title w-full min-w-0 max-w-full font-sans pointer-events-auto"
 				aria-label={site.displayName}
 			>
 				<span data-scramble data-scramble-final={site.displayName} class="inline-block min-h-[1.05em]"></span>
 			</h1>
 
 			<p
-				class="mt-8 max-w-2xl min-h-16 font-light text-lg leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-18 md:text-xl"
+				class="hero-lead mt-8 max-w-2xl min-h-16 font-light leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-18"
 				data-typewriter
 				data-tw-final={site.role}
 				data-tw-speed="28"
 			>
 			</p>
 			<p
-				class="mt-6 max-w-xl min-h-28 text-sm leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-32 md:text-base"
+				class="hero-sublead mt-6 max-w-xl min-h-28 leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-32"
 				data-typewriter
 				data-tw-final={site.pitch}
 				data-tw-speed="22"

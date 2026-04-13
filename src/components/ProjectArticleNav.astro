@@ -1,21 +1,17 @@
 ---
 import { copy } from "../site.config";
 import { withBase } from "../lib/paths";
-
 interface Neighbor {
-	slug: string;
-	title: string;
+    slug: string;
+    title: string;
 }
-
 interface Props {
-	prev: Neighbor | null;
-	next: Neighbor | null;
+    prev: Neighbor | null;
+    next: Neighbor | null;
 }
-
 const { prev, next } = Astro.props;
 const show = prev || next;
 ---
-
 {
 	show ? (
 		<nav class="project-article-nav" aria-label={copy.projectNavAria}>

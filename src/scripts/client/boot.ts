@@ -1,7 +1,8 @@
 import "./register-gsap";
 import { gsap, ScrollTrigger } from "./register-gsap";
 import { clearLayeredScrollArtifacts } from "./layered-scroll";
-import { initProjectDetailNavTransitionDirection } from "./transition-nav";
+import { initProjectDetailNavTransitionDirection, initRouteEnterMarkers } from "./transition-nav";
+import { runPageEnterTransitions } from "./page-transitions";
 import {
 	initGlobalPointer,
 	initParallax,
@@ -15,6 +16,7 @@ import { killProjectsHorizontalScroll, initProjectsHorizontalScroll } from "./pr
 import { killStackTagChipsFx, initStackTagChips } from "./stack-chips";
 import { killProjectLineReveal, initProjectReadmeLineReveal } from "./project-readme";
 import { disconnectTextFX, initTextFX } from "./text-fx";
+import { initViewportRhythm } from "./viewport-rhythm";
 
 let cleanupBoot: (() => void) | null = null;
 
@@ -46,6 +48,7 @@ export function boot() {
 
 	initGlobalPointer(ac);
 	initProjectDetailNavTransitionDirection(ac);
+	initRouteEnterMarkers(ac);
 	initSmoothNav(ac);
 	initParallax(ac);
 	initSysClock();
@@ -59,6 +62,7 @@ export function boot() {
 
 	initTextFX(ac);
 	initCursor(ac);
+	initViewportRhythm(ac.signal);
 
 	requestAnimationFrame(() => {
 		ScrollTrigger.refresh();
@@ -68,4 +72,7 @@ export function boot() {
 			await initReadmeMermaid();
 		});
 	});
+
+	/* Slide journal (prev/next) + fondu accueil ↔ fiche (voir transition-nav + Layout inline). */
+	runPageEnterTransitions();
 }

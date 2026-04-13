@@ -1,28 +1,33 @@
 ---
 import type { ReadmeBlock, ReadmeInlinePart, ReadmeTagTableRow } from "../types/readme-blocks";
-
 interface Props {
-	blocks: ReadmeBlock[];
+    blocks: ReadmeBlock[];
 }
-
 const { blocks } = Astro.props;
-
-function partsForParagraph(b: Extract<ReadmeBlock, { type: "paragraph" }>): ReadmeInlinePart[] {
-	if (b.parts?.length) return b.parts;
-	if (b.text != null && b.text !== "") return [{ k: "text", v: b.text }];
-	return [];
+function partsForParagraph(b: Extract<ReadmeBlock, {
+    type: "paragraph";
+}>): ReadmeInlinePart[] {
+    if (b.parts?.length)
+        return b.parts;
+    if (b.text != null && b.text !== "")
+        return [{ k: "text", v: b.text }];
+    return [];
 }
-
-function tagCardLines(row: ReadmeTagTableRow): { top: string; bottom: string | null } {
-	const label = row.label.trim();
-	const hint = row.hint.trim();
-	if (label && hint && label !== hint) return { top: label, bottom: hint };
-	if (label) return { top: label, bottom: null };
-	if (hint) return { top: hint, bottom: null };
-	return { top: row.href.replace(/^https?:\/\//, "").split("/")[0] || "Lien", bottom: null };
+function tagCardLines(row: ReadmeTagTableRow): {
+    top: string;
+    bottom: string | null;
+} {
+    const label = row.label.trim();
+    const hint = row.hint.trim();
+    if (label && hint && label !== hint)
+        return { top: label, bottom: hint };
+    if (label)
+        return { top: label, bottom: null };
+    if (hint)
+        return { top: hint, bottom: null };
+    return { top: row.href.replace(/^https?:\/\//, "").split("/")[0] || "Lien", bottom: null };
 }
 ---
-
 <div class="readme-content">
 	{
 		blocks.map((block) => {

@@ -1,6 +1,7 @@
 ---
 import { copy } from "../site.config";
 import { withBase } from "../lib/paths";
+import { shieldsStackBadgeUrl } from "../lib/shields-badges";
 
 interface Props {
 	slug: string;
@@ -8,39 +9,64 @@ interface Props {
 	description: string;
 	href: string;
 	index: number;
+	/** Topics GitHub ou langages (sync). */
+	stack?: string[];
 	/** Bandeau horizontal (ScrollTrigger) : pas de `data-rise`. */
 	layout?: "grid" | "strip";
 }
 
-const { slug, title, description, href, index, layout = "grid" } = Astro.props;
+const { slug, title, description, href, index, stack = [], layout = "grid" } = Astro.props;
+const stackBadges = stack.slice(0, 12);
 const id = String(index + 1).padStart(2, "0");
 const ficheUrl = withBase(`projets/${slug}`);
 const strip = layout === "strip";
 ---
 
 <article
-	class:list={[
-		"flex h-full flex-col rounded-lg p-6 md:p-7 project-card glass glass--panel",
+		class:list={[
+		"project-card project-card--pad flex h-full flex-col rounded-lg glass glass--panel",
 		strip && "project-card--strip",
 	]}
-	{...(strip ? {} : { "data-rise": true })}
-	style={strip ? undefined : `--rise-delay: ${index * 110}ms`}
+	data-rise
+	style={`--rise-delay: ${index * 110}ms`}
 >
 	<header>
-		<span class="sys-mono text-[10px] tracking-[0.35em] text-(--amber)">OBJ.{id}</span>
-		<h3 class="font-display mt-3 text-lg font-light tracking-wide text-(--fg) md:text-xl">{title}</h3>
-		<p class="mt-3 text-sm leading-relaxed text-(--fg-dim) line-clamp-3">{description}</p>
+		<span class="project-card__meta">OBJ.{id}</span>
+		<h3 class="project-card__title">{title}</h3>
+		<p class="project-card__lead">{description}</p>
 	</header>
-	<div
-		class="mt-auto grid grid-cols-1 gap-2 border-t border-[color-mix(in_srgb,var(--accent)_12%,transparent)] pt-5 tile-actions sm:grid-cols-2"
-	>
+	{
+		stackBadges.length > 0 && (
+			<div
+				class="project-card__stack flex flex-wrap"
+				role="list"
+				aria-label={copy.projectStackBadgesLabel}
+			>
+				{stackBadges.map((topic) => (
+					<span role="listitem" class="project-card__stack-item inline-flex max-w-full">
+						<img
+							class="project-card__stack-badge max-w-full"
+							src={shieldsStackBadgeUrl(topic)}
+							alt=""
+							height="22"
+							loading="lazy"
+							decoding="async"
+							referrerpolicy="no-referrer-when-downgrade"
+						/>
+						<span class="sr-only">{topic}</span>
+					</span>
+				))}
+			</div>
+		)
+	}
+	<div class="tile-actions grid grid-cols-1 gap-2 sm:grid-cols-2">
 		<a
 			href={ficheUrl}
 			class="tile-action tile-action--primary"
 			title={copy.tileTitleFiche(title)}
 			aria-label={copy.tileTitleFiche(title)}
 		>
-			<i class="fa-solid fa-file-lines text-xs opacity-80" aria-hidden="true"></i>
+			<i class="tile-action__icon fa-solid fa-file-lines opacity-80" aria-hidden="true"></i>
 			{copy.ctaViewFiche}
 		</a>
 		<a
@@ -51,7 +77,7 @@ const strip = layout === "strip";
 			title={copy.tileTitleGithub(title)}
 			aria-label={copy.tileTitleGithub(title)}
 		>
-			<i class="fa-brands fa-github text-sm opacity-90" aria-hidden="true"></i>
+			<i class="tile-action__icon tile-action__icon--git fa-brands fa-github opacity-90" aria-hidden="true"></i>
 			{copy.ctaViewSourceFull}
 		</a>
 	</div>

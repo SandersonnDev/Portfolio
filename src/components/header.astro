@@ -13,13 +13,12 @@ const nav = [
 ---
 
 <header
-	transition:persist="site-header"
-	class="fixed inset-x-0 top-0 z-50 border-b border-[color-mix(in_srgb,var(--color-hud)_22%,transparent)] bg-[color-mix(in_srgb,var(--color-void)_93%,transparent)] shadow-[0_1px_0_color-mix(in_srgb,var(--color-hud)_8%,transparent)] backdrop-blur-lg"
+	class="site-header fixed inset-x-0 top-0 z-50 border-b border-[color-mix(in_srgb,var(--color-hud)_22%,transparent)] bg-[color-mix(in_srgb,var(--color-void)_93%,transparent)] shadow-[0_1px_0_color-mix(in_srgb,var(--color-hud)_8%,transparent)] backdrop-blur-lg"
 >
 	<div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 md:px-8">
 		<a
 			href={withBase("#hero")}
-			class="group flex min-w-0 items-center gap-2 font-mono text-[10px] uppercase tracking-[0.32em] text-(--color-muted) transition-colors hover:text-(--color-hud-bright) hover:drop-shadow-[0_0_10px_var(--color-hud-dim)]"
+			class="header-brand group flex min-w-0 items-center gap-2 font-mono uppercase tracking-[0.32em] text-(--color-muted) transition-colors hover:text-(--color-hud-bright) hover:drop-shadow-[0_0_10px_var(--color-hud-dim)]"
 		>
 			<span class="font-bold text-(--color-amber-bright) opacity-80 transition-opacity group-hover:opacity-100">//</span>
 			<span class="h-px w-4 shrink-0 bg-(--color-hud) opacity-50 transition-all group-hover:w-6 group-hover:opacity-100"></span>
@@ -28,7 +27,7 @@ const nav = [
 		<nav class="hidden items-center gap-2 md:flex" aria-label="Navigation">
 			{
 				nav.map(({ href, label }) => (
-					<a href={href} class="btn-tactical btn-tactical--ghost px-4! py-2! text-[9px]!">
+					<a href={href} class="btn-tactical btn-tactical--ghost px-4! py-2!">
 						{label}
 					</a>
 				))
@@ -38,7 +37,7 @@ const nav = [
 			href={profile}
 			target="_blank"
 			rel="noopener noreferrer"
-			class="btn-tactical shrink-0! py-2! pl-3! pr-3! text-[9px]!"
+			class="btn-tactical shrink-0! py-2! pl-3! pr-3!"
 			aria-label="Profil GitHub"
 		>
 			<i class="fa-brands fa-github text-sm" aria-hidden="true"></i>

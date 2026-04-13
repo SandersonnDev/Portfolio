@@ -1,7 +1,6 @@
 ---
 import "../styles/icons.css";
 import "../styles/app.css";
-import { ClientRouter } from "astro:transitions";
 import { site } from "../site.config";
 import Rail from "../components/Rail.astro";
 import { withBase } from "../lib/paths";
@@ -14,23 +13,58 @@ interface Props {
 const { title = `${site.displayName} · Portfolio`, description = site.pitch } = Astro.props;
 
 const routePath = Astro.url.pathname;
+function normalizePathname(p: string): string {
+	const x = p.replace(/\/$/, "");
+	return x === "" ? "/" : x;
+}
+/** Même logique que `transition-nav` : fiche projet seulement (évite un slide sur les autres routes). */
+const isProjectDetailRoute = /\/projets\/[^/]+$/.test(normalizePathname(routePath));
 ---
 
 <!doctype html>
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script is:inline define:vars={{ isProjectDetailRoute }}>
+			try {
+				const r = sessionStorage.getItem("routeEnter");
+				if (r === "from-home" || r === "from-project") {
+					document.documentElement.setAttribute("data-route-enter", r);
+					sessionStorage.removeItem("routeEnter");
+				}
+			} catch (e) {}
+			try {
+				if (isProjectDetailRoute) {
+					const d = sessionStorage.getItem("projArticleDir");
+					if (d === "prev" || d === "next") {
+						document.documentElement.setAttribute("data-page-slide", d);
+					}
+				}
+			} catch (e) {}
+		</script>
+		<style is:inline>
+			html[data-route-enter="from-home"] .main-shift,
+			html[data-route-enter="from-project"] .main-shift {
+				opacity: 0;
+				visibility: hidden;
+			}
+			html[data-page-slide="next"] .project-page__journal {
+				transform: translate3d(100%, 0, 0);
+			}
+			html[data-page-slide="prev"] .project-page__journal {
+				transform: translate3d(-100%, 0, 0);
+			}
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
 		<meta name="description" content={description} />
 		<title>{title}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;600&family=Share+Tech+Mono&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;600&family=Share+Tech+Mono&display=optional"
 			rel="stylesheet"
 		/>
-		<ClientRouter />
 	</head>
 	<body data-route={routePath}>
 		<Rail />
@@ -39,7 +73,7 @@ const routePath = Astro.url.pathname;
 		</div>
 		<script>
 			import { boot } from "../scripts/client";
-			document.addEventListener("astro:page-load", boot);
+			boot();
 		</script>
 	</body>
 </html>

@@ -1,7 +1,6 @@
 ---
 import "../styles/icons.css";
 import "../styles/app.css";
-import { ClientRouter } from "astro:transitions";
 import { site } from "../site.config";
 import { withBase } from "../lib/paths";
 ---
@@ -13,7 +12,6 @@ import { withBase } from "../lib/paths";
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
 		<title>Page introuvable · {site.displayName}</title>
-		<ClientRouter />
 	</head>
 	<body class="font-sans text-(--fg)">
 		<main class="flex min-h-dvh flex-col items-center justify-center px-6">

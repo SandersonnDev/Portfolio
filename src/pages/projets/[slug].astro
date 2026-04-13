@@ -1,5 +1,4 @@
 ---
-import { projectArticleParallax } from "../../lib/projectArticleParallax";
 import Layout from "../../layouts/Layout.astro";
 import { site, copy } from "../../site.config";
 import { withBase } from "../../lib/paths";
@@ -39,31 +38,28 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 ---
 
 <Layout title={title} description={project.description}>
-	<article
-		class="mx-auto max-w-5xl px-5 pb-28 pt-20 project-page md:px-12 md:pt-24"
-		transition:name="project-fiche"
-		transition:animate={projectArticleParallax()}
-	>
+	<article class="mx-auto max-w-5xl px-5 pb-28 pt-20 project-page md:px-12 md:pt-24">
 		<a
 			href={withBase("#projects")}
-			class="inline-flex items-center gap-2 sys-mono text-[10px] tracking-[0.25em] text-(--fg-dim) transition-colors hover:text-(--accent)"
+			class="project-page__back"
 			title={copy.projectBackTitle}
 			aria-label={copy.projectBackTitle}
 		>
-			<i class="fa-solid fa-arrow-left-long text-[10px]" aria-hidden="true"></i>
+			<i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>
 			{copy.projectBackLabel}
 		</a>
 
 		{
 			prev || next ? (
-				<div class="mt-6 flex flex-wrap items-center justify-between gap-4 sys-mono text-[10px] tracking-[0.18em] project-page__jump">
+				<div class="mt-6 flex flex-wrap items-center justify-between gap-3 project-page__jump md:gap-4">
 					{prev ? (
 						<a
 							href={withBase(`projets/${prev.slug}`)}
-							class="max-w-[min(100%,16rem)] truncate text-(--fg-dim) transition-colors hover:text-(--accent) md:max-w-[20rem]"
+							class="project-page__jump-link project-page__jump-link--prev"
 							data-project-nav="prev"
 						>
-							← {prev.title}
+							<span class="project-page__jump-arrow" aria-hidden="true">←</span>
+							<span class="project-page__jump-title">{prev.title}</span>
 						</a>
 					) : (
 						<span />
@@ -71,10 +67,11 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 					{next ? (
 						<a
 							href={withBase(`projets/${next.slug}`)}
-							class="max-w-[min(100%,16rem)] truncate text-right text-(--fg-dim) transition-colors hover:text-(--accent) md:max-w-[20rem]"
+							class="project-page__jump-link project-page__jump-link--next"
 							data-project-nav="next"
 						>
-							{next.title} →
+							<span class="project-page__jump-title">{next.title}</span>
+							<span class="project-page__jump-arrow" aria-hidden="true">→</span>
 						</a>
 					) : (
 						<span />
@@ -110,12 +107,12 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 			<aside class="flex min-w-0 flex-col gap-5 project-page__aside lg:sticky lg:top-24 lg:self-start">
 				<div class="rounded-xl p-6 glass glass--panel md:p-7">
 					<p class="about-block__label mb-0">{copy.projectDetailLinks}</p>
-					<div class="mt-5 flex flex-col gap-2.5">
+					<div class="mt-5 flex flex-col gap-3">
 						<a
 							href={project.href}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="btn-sys btn-sys--sm justify-center"
+							class="btn-sys justify-center"
 							title={copy.tileTitleGithub(project.title)}
 						>
 							<i class="fa-brands fa-github mr-2" aria-hidden="true"></i>
@@ -127,7 +124,7 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 									href={project.liveHref}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="btn-sys btn-sys--sm btn-sys--muted justify-center"
+									class="btn-sys btn-sys--muted justify-center"
 									title="Ouvrir la démo dans un nouvel onglet"
 								>
 									<i class="fa-solid fa-globe mr-2" aria-hidden="true"></i>
@@ -177,14 +174,16 @@ const next = idx >= 0 && idx < projects.length - 1 ? projects[idx + 1]! : null;
 
 		{
 			contentBlocks.length ? (
-				<section class="mt-16 project-page__journal md:mt-20" aria-labelledby="project-journal-h">
-					<h2 id="project-journal-h" class="display-heading display-heading--lg">
-						{copy.projectJournalHeading}
-					</h2>
-					<div class="mt-10 project-page__readme">
-						<ReadmeBlocks blocks={contentBlocks} />
-					</div>
-				</section>
+				<div class="project-page__journal-clip">
+					<section class="mt-16 project-page__journal md:mt-20" aria-labelledby="project-journal-h">
+						<h2 id="project-journal-h" class="display-heading display-heading--lg">
+							{copy.projectJournalHeading}
+						</h2>
+						<div class="mt-10 project-page__readme">
+							<ReadmeBlocks blocks={contentBlocks} />
+						</div>
+					</section>
+				</div>
 			) : null
 		}
 

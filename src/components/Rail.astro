@@ -6,7 +6,7 @@ import gh from "../data/github-projects.generated.json";
 const ghUrl = `https://github.com/${gh.sourceUser}`;
 ---
 
-<aside class="rail" aria-label={copy.railNavAria} transition:persist="rail">
+<aside class="rail" aria-label={copy.railNavAria}>
 	<div class="rail__dock">
 		<nav class="rail__cluster">
 			<a href={withBase("#hero")} class="rail__link" title={copy.railHome} aria-label={copy.railHome}>
