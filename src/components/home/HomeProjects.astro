@@ -1,0 +1,28 @@
+---
+import ProjectGlass from "../ProjectGlass.astro";
+import type { GithubProjectCard } from "../../types/github-projects";
+
+interface Props {
+	projects: GithubProjectCard[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section id="projects" class="section-viewport relative" aria-labelledby="pj">
+	<div class="projects-pin flex min-h-[100svh] flex-col" data-projects-pin>
+		<div class="shrink-0 px-5 pt-24 pb-10 md:px-12 md:pb-12 md:pt-28">
+			<div class="mx-auto w-full max-w-5xl">
+				<h2 id="pj" class="display-heading display-heading--lg" data-rise>
+					<span data-scramble data-scramble-final="Section · Projets" class="inline-block min-h-[1.35em]"></span>
+				</h2>
+			</div>
+		</div>
+		<div class="flex flex-1 min-h-0 items-center justify-start" data-projects-viewport>
+			<div class="flex w-max items-stretch gap-6 pr-5 will-change-transform md:gap-8 md:pr-12" data-projects-track>
+				{projects.map((p, i) => <ProjectGlass {...p} index={i} layout="strip" />)}
+				<div class="projects-strip__end-spacer shrink-0" aria-hidden="true" />
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,18 @@
+---
+import HomeHero from "./HomeHero.astro";
+import HomeAbout from "./HomeAbout.astro";
+import HomeProjects from "./HomeProjects.astro";
+import type { GithubProjectCard } from "../../types/github-projects";
+
+interface Props {
+	projects: GithubProjectCard[];
+	githubUser: string;
+	githubProfileUrl: string;
+}
+
+const { projects, githubUser, githubProfileUrl } = Astro.props;
+---
+
+<HomeHero />
+<HomeProjects projects={projects} />
+<HomeAbout githubProfileUrl={githubProfileUrl} githubUser={githubUser} />

@@ -1,0 +1,95 @@
+---
+import { site, copy, brand } from "../../site.config";
+import { withBase } from "../../lib/paths";
+---
+
+<section
+	id="hero"
+	class="section-viewport hero-section relative min-h-svh overflow-hidden border-b border-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+	aria-label="Accueil"
+>
+	<div id="hero-logo-panel" class="hero-logo-panel" aria-hidden="true" />
+	<div
+		class="hero-section__inner relative z-10 flex flex-col justify-center px-5 py-16 pointer-events-none md:px-12 md:py-20"
+	>
+		<div id="hero-content" class="mx-auto w-full max-w-5xl pointer-events-none">
+			<div
+				class="mb-10 flex flex-col gap-8 pointer-events-none md:mb-12 md:flex-row md:items-end md:justify-between md:gap-10"
+			>
+				<div class="flex flex-wrap items-end gap-5 pointer-events-auto md:gap-8">
+					<div class="logo-slot shrink-0" title={copy.logoAstroTitle}>
+						<img src={brand.placeholderLogo} width="44" height="44" alt="" decoding="async" />
+					</div>
+					<div class="min-w-0 pb-0.5">
+						<p class="sys-mono text-[10px] tracking-[0.22em] text-(--accent)">
+							◆ {site.codename.toUpperCase()} · {copy.heroStatusSuffix}
+						</p>
+						<p class="mt-2 font-display text-sm font-light tracking-wide text-(--fg-dim) md:text-base">
+							{site.displayName}
+						</p>
+					</div>
+				</div>
+				<div
+					class="sys-mono text-[10px] leading-relaxed tracking-[0.12em] text-(--fg-dim) pointer-events-auto md:max-w-56 md:text-right"
+				>
+					<span class="block text-(--fg-dim) opacity-80">{copy.heroClockLabel}</span>
+					<span id="sys-clock" class="mt-1.5 block text-(--amber)">…</span>
+				</div>
+			</div>
+
+			<h1
+				class="w-fit max-w-full font-sans text-4xl hero-title pointer-events-auto md:text-6xl lg:text-7xl"
+				aria-label={site.displayName}
+			>
+				<span data-scramble data-scramble-final={site.displayName} class="inline-block min-h-[1.05em]"></span>
+			</h1>
+
+			<p
+				class="mt-8 max-w-2xl min-h-16 font-light text-lg leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-18 md:text-xl"
+				data-typewriter
+				data-tw-final={site.role}
+				data-tw-speed="28"
+			>
+			</p>
+			<p
+				class="mt-6 max-w-xl min-h-28 text-sm leading-relaxed text-(--fg-dim) tw-paragraph pointer-events-auto md:min-h-32 md:text-base"
+				data-typewriter
+				data-tw-final={site.pitch}
+				data-tw-speed="22"
+			>
+			</p>
+
+			<div class="mt-12 flex flex-wrap gap-4 pointer-events-none">
+				<a
+					href={withBase("#projects")}
+					class="pointer-events-auto btn-sys"
+					title={copy.ctaProjectsTitle}
+					aria-label={copy.ctaProjectsTitle}
+				>
+					<i class="fa-solid fa-layer-group mr-2 text-[10px]" aria-hidden="true"></i>
+					{copy.ctaProjects}
+				</a>
+				<a
+					href={withBase("#about")}
+					class="pointer-events-auto btn-sys btn-sys--muted"
+					title={copy.ctaHeroAboutTitle}
+					aria-label={copy.ctaHeroAboutTitle}
+				>
+					<i class="fa-solid fa-user mr-2 text-[10px]" aria-hidden="true"></i>
+					{copy.ctaHeroAbout}
+				</a>
+			</div>
+
+			<div class="mt-12 flex justify-center pointer-events-none md:mt-16">
+				<a
+					href={withBase("#projects")}
+					class="scroll-hint text-(--fg-dim) transition-colors hover:text-(--amber) pointer-events-auto"
+					title={copy.ctaScrollProjectsTitle}
+					aria-label={copy.ctaScrollProjects}
+				>
+					<i class="fa-solid fa-chevron-down text-xl" aria-hidden="true"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>

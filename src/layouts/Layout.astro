@@ -13,6 +13,7 @@ interface Props {
 
 const { title = `${site.displayName} · Portfolio`, description = site.pitch } = Astro.props;
 
+const routePath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -31,7 +32,7 @@ const { title = `${site.displayName} · Portfolio`, description = site.pitch } =
 		/>
 		<ClientRouter />
 	</head>
-	<body>
+	<body data-route={routePath}>
 		<Rail />
 		<div class="relative z-10 main-shift">
 			<slot />

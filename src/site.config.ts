@@ -22,24 +22,50 @@ export const site = {
 		"Aujourd’hui je renforce Git, Docker, SQL et l’écosystème outillé pour livrer des solutions alignées sur les métiers. Je contribue aussi à des projets privés que je ne peux pas exposer ici.",
 	],
 	email: "kouziaeffa.pro@gmail.com",
-	stack: [
-		{ label: "HTML · CSS", icon: "fa-brands fa-html5" },
-		{ label: "CMS", icon: "fa-brands fa-wordpress" },
-		{ label: "Astro", icon: "fa-solid fa-bolt" },
-		{ label: "Vite", icon: "fa-brands fa-vite" },
-		{ label: "Tailwind", icon: "fa-brands fa-tailwind-css" },
-		{ label: "Electron", icon: "fa-solid fa-atom" },
-		{ label: "REST API", icon: "fa-solid fa-code" },
-		{ label: "WebSocket", icon: "fa-solid fa-code" },
-		{ label: "JavaScript", icon: "fa-brands fa-js" },
-		{ label: "TypeScript", icon: "fa-brands fa-js" },
-		{ label: "Node.js", icon: "fa-brands fa-node-js" },
-		{ label: "React", icon: "fa-brands fa-react" },
-		{ label: "PHP", icon: "fa-brands fa-php" },
-		{ label: "Docker", icon: "fa-brands fa-docker" },
-		{ label: "Proxmox", icon: "fa-solid fa-code" },
-		{ label: "Git", icon: "fa-brands fa-git-alt" },
-		{ label: "SQL", icon: "fa-solid fa-database" },
+	/** Stack regroupée par famille (section À propos). */
+	stackByCategory: [
+		{
+			category: "Intégration & contenus",
+			items: [
+				{ label: "HTML · CSS", icon: "fa-brands fa-html5" },
+				{ label: "CMS", icon: "fa-brands fa-wordpress" },
+				{ label: "Tailwind", icon: "fa-brands fa-tailwind-css" },
+			],
+		},
+		{
+			category: "Frameworks & build front",
+			items: [
+				{ label: "Astro", icon: "fa-solid fa-bolt" },
+				{ label: "Vite", icon: "fa-brands fa-vite" },
+				{ label: "React", icon: "fa-brands fa-react" },
+				{ label: "Electron", icon: "fa-solid fa-atom" },
+			],
+		},
+		{
+			category: "Langages & runtimes",
+			items: [
+				{ label: "JavaScript", icon: "fa-brands fa-js" },
+				{ label: "TypeScript", icon: "fa-brands fa-js" },
+				{ label: "Node.js", icon: "fa-brands fa-node-js" },
+				{ label: "PHP", icon: "fa-brands fa-php" },
+			],
+		},
+		{
+			category: "APIs & données",
+			items: [
+				{ label: "REST API", icon: "fa-solid fa-code" },
+				{ label: "WebSocket", icon: "fa-solid fa-code" },
+				{ label: "SQL", icon: "fa-solid fa-database" },
+			],
+		},
+		{
+			category: "Infra & outillage",
+			items: [
+				{ label: "Docker", icon: "fa-brands fa-docker" },
+				{ label: "Proxmox", icon: "fa-solid fa-code" },
+				{ label: "Git", icon: "fa-brands fa-git-alt" },
+			],
+		},
 	] as const,
 } as const;
 
@@ -51,6 +77,9 @@ export const copy = {
 	ctaEmailTitle: "Ouvre votre messagerie pour envoyer un e-mail",
 	ctaScrollAbout: "Descendre à la section À propos",
 	ctaScrollAboutTitle: "Fait défiler la page vers la section identité et stack",
+	/** Flèche sous le hero : section suivante = projets (ordre de page). */
+	ctaScrollProjects: "Descendre aux projets",
+	ctaScrollProjectsTitle: "Faire défiler vers la liste des projets",
 	/** Bouton hero (à la place du mail) : lien vers la section À propos. */
 	ctaHeroAbout: "À propos",
 	ctaHeroAboutTitle: "Aller à la section À propos : présentation, technologies et contact",

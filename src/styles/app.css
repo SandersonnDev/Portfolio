@@ -1,12 +1,38 @@
 @import "tailwindcss";
 
+/*
+ * Hero : hauteur = viewport stable (svh) + marge haute (encoche + barres de prévisualisation).
+ * Surcharge manuelle : --preview-chrome-top sur :root (ex. 42px).
+ * Prévisualisation Cursor : hitbox souvent présente dans le DOM.
+ */
+html:has(#dev-bar-hitbox-above) {
+	--preview-chrome-top: 42px;
+}
+
+#hero.hero-section {
+	--hero-top-inset: max(env(safe-area-inset-top, 0px), var(--preview-chrome-top, 0px));
+	box-sizing: border-box;
+	min-height: 100svh;
+	padding-top: var(--hero-top-inset);
+}
+
+#hero .hero-section__inner {
+	box-sizing: border-box;
+	min-height: calc(100svh - var(--hero-top-inset));
+	max-height: calc(100svh - var(--hero-top-inset));
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior-y: contain;
+	-webkit-overflow-scrolling: touch;
+}
+
 /* Fond décoratif plein hero (z-0) ; le contenu reste au-dessus (#hero-content z-10). */
 .hero-logo-panel {
 	position: absolute;
 	inset: 0;
 	z-index: 0;
 	width: 100%;
-	min-height: 100dvh;
+	min-height: 100svh;
 	pointer-events: none;
 	background: radial-gradient(
 		ellipse 120% 80% at 70% 18%,
@@ -517,6 +543,10 @@
 	text-transform: uppercase;
 	color: var(--amber);
 	margin-bottom: 1rem;
+}
+
+.about-block__label--compact {
+	margin-bottom: 0.45rem;
 }
 
 .about-panel {
@@ -1090,6 +1120,16 @@
  */
 #projects.section-viewport {
 	min-height: 100svh;
+	/* overflow-x-clip créait un recontainment qui perturbait le pin (saut vertical). */
+	overflow-x: visible;
+	container-type: inline-size;
+	container-name: projects;
+}
+
+/* Isolation : pas de `transform` ici (ScrollTrigger pinType transform pilote le transform). */
+.projects-pin {
+	isolation: isolate;
+	backface-visibility: hidden;
 }
 
 /* Alignement 1re carte = bord gauche du h2 (même logique que max-w-5xl + px-5 / md:px-12) */
@@ -1109,6 +1149,7 @@
 
 [data-projects-viewport] {
 	overflow: hidden;
+	overflow-x: clip;
 	width: 100%;
 	min-height: 52svh;
 }
@@ -1121,15 +1162,27 @@
 
 .project-card--strip {
 	flex: 0 0 auto;
-	width: min(100vw - 2.75rem, 21rem);
+	width: min(21rem, calc(100vw - 3rem));
 	min-height: 19rem;
 	max-width: 100%;
 }
 
 @media (min-width: 640px) {
 	.project-card--strip {
-		width: min(100vw - 4rem, 23rem);
+		width: min(23rem, calc(100vw - 4.5rem));
 		min-height: 21rem;
+	}
+}
+
+@supports (width: 1cqw) {
+	.project-card--strip {
+		width: min(21rem, 85cqw);
+	}
+
+	@media (min-width: 640px) {
+		.project-card--strip {
+			width: min(23rem, 82cqw);
+		}
 	}
 }
 
@@ -1225,9 +1278,20 @@ body.cursor-hover #cursor-ring {
 }
 
 /* Stack « À propos » : masques type CodePen GreenSock JojaebV (tags qui tombent) */
-.about-stack-tags > li {
+.about-stack-tags li {
 	overflow: hidden;
 	padding-bottom: 0.15rem;
+}
+
+.stack-category__label {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: 0.54rem;
+	font-weight: 400;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--accent) 72%, var(--fg-dim));
+	opacity: 0.92;
 }
 
 .about-stack-tags .chip {
