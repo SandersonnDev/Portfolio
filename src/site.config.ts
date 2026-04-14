@@ -13,13 +13,30 @@ export const site = {
 	displayName: "Alexandre Kouziaeff",
 	role: "Concepteur·développeur d’interfaces, du print au web moderne",
 	pitch:
-		"Issu de l’infographie et de la mise en page, diplômé en CDUI, je travaille en ESN sur des sites statiques et des stacks Jamstack, avec un renfort net sur JavaScript, TypeScript et l’écosystème associé.",
+		"Issu du design et de l'infographie, diplomé d'une licence CDUI, J'élabore des applications web du développement à la mise en production pour des ESN.",
 	bio: [
 		"Mon parcours commence en infographie et mise en page, sur une base de niveau bac : chaîne graphique, typographie, et supports print comme numériques.",
-		"La licence Conception, développement et univers interactifs (CDUI) m’a fait passer de la mise en page à la conception d’interfaces et de livrables interactifs, entre design, ergonomie et mise en œuvre technique.",
-		"En entreprise de services du numérique, j’interviens sur des sites (CMS, HTML/CSS), le support utilisateur et la refactorisation vers du code maison. J’ai aussi participé à la création d'un framework PHP/JS pour des sites orientés TPE et PME, avec une démarche RSE (Responsabilité sociétale des entreprises), des gains sur les coûts et le trafic, et une intégration de contenu simplifiée.",
-		"Les missions autour des sites statiques, du Jamstack et des générateurs de sites (SSG) ont été le bon terrain pour consolider JavaScript et TypeScript, les pipelines de build, le déploiement et la performance côté front.",
-		"Aujourd’hui je renforce Git, Docker, SQL et l’écosystème outillé pour livrer des solutions alignées sur les métiers. Je contribue aussi à des projets privés que je ne peux pas exposer ici.",
+		"La licence Conception, développement et interfaces utilisateurs (CDUI) m'a fait passer du design à la conception d'interfaces et de livrables interactifs, ergonomique et mise en œuvre technique.",
+		"En entreprise de services du numérique, j'interviens sur des sites (CMS, HTML/CSS), le support utilisateur et la refactorisation vers du code maison. J'ai aussi participé à la création d'un framework PHP/JS pour des sites orientés TPE et PME, avec une démarche (RSE), des gains sur les coûts et le trafic, et une intégration de contenu simplifiée.",
+		"Les missions autour des sites statiques, de la Jamstack et du rendu (SSR) ont été le bon terrain pour consolider mon expérience en JavaScript, les pipelines de build, le déploiement et la performance côté front.",
+		"Aujourd'hui je renforce Git, Docker, SQL et l'écosystème outillé pour livrer des solutions alignées sur les métiers. Je contribue aussi à des projets privés que je ne peux pas exposer ici.",
+	],
+	lien: [
+		{
+			href: "https://www.onisep.fr/ressources/univers-metier/metiers/ui-designer-concepteur-conceptrice-d-interface-utilisateur",
+			label: "CDUI",
+			tip: "Concepteur·développeur d’interfaces utilisateur : design d’interface + intégration + prototypage.",
+		},
+		{
+			href: "https://www.economie.gouv.fr/entreprises/gerer-son-entreprise-au-quotidien/gerer-sa-comptabilite-et-ses-demarches/quest-ce-que-la-responsabilite-societale-des-entreprises-rse",
+			label: "RSE",
+			tip: "Responsabilité Sociétale des Entreprises : impact social, environnemental et éthique.",
+		},
+		{
+			href: "https://www.bob-le-developpeur.com/notions/server-side-rendering-ssr",
+			label: "SSR",
+			tip: "Server-Side Rendering : rendu côté serveur, HTML prêt à l’affichage (SEO/perf selon cas).",
+		},
 	],
 	email: "kouziaeffa.pro@gmail.com",
 	/** Stack regroupée par famille (section À propos). */

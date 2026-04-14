@@ -11,6 +11,78 @@ const textFxState = new WeakMap<HTMLElement, {
 }>();
 const typewriterCompleted = new WeakSet<HTMLElement>();
 const typewriterEverSeen = new WeakSet<HTMLElement>();
+
+type AbbrLink = {
+    label: string;
+};
+
+let abbrTipId = 0;
+
+function escapeHtml(s: string): string {
+    return s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function getAbbrLinksFor(el: HTMLElement): AbbrLink[] {
+    const root = el.closest<HTMLElement>(".about-block--present");
+    const raw = root?.dataset.abbr;
+    if (!raw)
+        return [];
+    try {
+        const parsed = JSON.parse(raw) as unknown;
+        if (!Array.isArray(parsed))
+            return [];
+        return parsed
+            .filter((x): x is AbbrLink => typeof x === "object" && x !== null && "label" in x && typeof (x as any).label === "string")
+            .map((x) => ({ label: x.label }));
+    }
+    catch {
+        return [];
+    }
+}
+
+function buildAbbrEnhancedHtml(text: string, links: AbbrLink[]): string {
+    if (!text || links.length === 0)
+        return escapeHtml(text);
+    // Remplace uniquement les occurrences entre parenthèses (ex: (CDUI), (SSR), (RSE))
+    // par l’abréviation + une pastille info (sans tooltip).
+    const keys = links
+        .map((l) => (l.label.endsWith("*") ? l.label.slice(0, -1) : l.label))
+        .filter((k) => k.length > 0);
+    if (keys.length === 0)
+        return escapeHtml(text);
+    const pattern = new RegExp(`\\((?:\\s*)(${keys.map((k) => k.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")).join("|")})(?:\\s*)\\)`, "g");
+    let last = 0;
+    let out = "";
+    for (const m of text.matchAll(pattern)) {
+        const idx = m.index ?? 0;
+        const key = m[1] ?? "";
+        out += escapeHtml(text.slice(last, idx));
+        // L’icône doit être *dans* la parenthèse : (SSRⓘ)
+        out += `(${escapeHtml(key)}<span class="abbr-inline" aria-hidden="true">` +
+            `<i class="fa-solid fa-info abbr-inline__icon" aria-hidden="true"></i>` +
+            `</span>)`;
+        last = idx + (m[0]?.length ?? 0);
+    }
+    out += escapeHtml(text.slice(last));
+    return out;
+}
+
+function applyAbbrEnhancements(el: HTMLElement, finalText?: string) {
+    if (!el.closest(".about-block--present"))
+        return;
+    const links = getAbbrLinksFor(el);
+    if (links.length === 0)
+        return;
+    const txt = finalText ?? el.textContent ?? "";
+    if (!txt.includes("("))
+        return;
+    el.innerHTML = buildAbbrEnhancedHtml(txt, links);
+}
 function pickGlyph() {
     return GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? ".";
 }
@@ -88,6 +160,7 @@ function runTypewriter(el: HTMLElement, final: string, speedMs: number, onComple
             timeoutId = window.setTimeout(tick, speedMs);
         }
         else {
+            applyAbbrEnhancements(el, final);
             onComplete?.();
         }
     };
@@ -128,6 +201,7 @@ function runTypewriterGsap(el: HTMLElement, final: string, durationSec: number, 
             },
             onComplete: () => {
                 el.textContent = final;
+                applyAbbrEnhancements(el, final);
                 onComplete?.();
                 resolve();
             },
@@ -195,6 +269,7 @@ export function initTextFX(ac: AbortController) {
             const sc = el.dataset.scrambleFinal ?? "";
             if (el.hasAttribute("data-typewriter") && tw) {
                 el.textContent = tw;
+                applyAbbrEnhancements(el, tw);
                 typewriterCompleted.add(el);
                 typewriterEverSeen.add(el);
             }
@@ -222,6 +297,7 @@ export function initTextFX(ac: AbortController) {
                     typewriterEverSeen.add(el);
                     if (typewriterCompleted.has(el)) {
                         el.textContent = twFinal;
+                        applyAbbrEnhancements(el, twFinal);
                     }
                     else {
                         const speed = Math.max(12, Number(el.dataset.twSpeed ?? "34") || 34);
@@ -238,9 +314,11 @@ export function initTextFX(ac: AbortController) {
                     textFxState.get(el)?.cancel?.();
                     if (typewriterCompleted.has(el)) {
                         el.textContent = twF;
+                        applyAbbrEnhancements(el, twF);
                     }
                     else if (typewriterEverSeen.has(el) && twF) {
                         el.textContent = twF;
+                        applyAbbrEnhancements(el, twF);
                         typewriterCompleted.add(el);
                     }
                     else {

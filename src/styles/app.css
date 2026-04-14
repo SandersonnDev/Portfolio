@@ -135,42 +135,6 @@ html:has(#dev-bar-hitbox-above) {
 	}
 }
 
-/* Vignette cockpit */
-.cockpit-vignette {
-	position: fixed;
-	inset: 0;
-	pointer-events: none;
-	z-index: 5;
-	box-shadow: inset 0 0 min(100px, 14vw) color-mix(in srgb, var(--void) 88%, transparent),
-		inset 0 0 min(200px, 28vw) color-mix(in srgb, #001018 40%, transparent);
-}
-
-/* Ligne de visée horizontale très légère */
-.cockpit-scan {
-	position: fixed;
-	left: 0;
-	right: 0;
-	height: 1px;
-	top: 50%;
-	pointer-events: none;
-	z-index: 4;
-	background: linear-gradient(
-		90deg,
-		transparent,
-		var(--accent-dim),
-		var(--amber-dim),
-		transparent
-	);
-	opacity: 0.12;
-	transform: translateY(-50%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.cockpit-scan {
-		opacity: 0.06;
-	}
-}
-
 /* Barre latérale : seulement navigation + réseaux (fixe à gauche, reste visible au scroll) */
 .rail {
 	position: fixed;
@@ -207,7 +171,6 @@ html:has(#dev-bar-hitbox-above) {
 	padding: 0.55rem 0.35rem;
 	border-radius: 12px;
 	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-	background: color-mix(in srgb, var(--void) 78%, transparent);
 	backdrop-filter: blur(16px);
 	box-shadow: 0 8px 32px color-mix(in srgb, var(--void) 90%, transparent);
 }
@@ -369,14 +332,35 @@ html:has(#dev-bar-hitbox-above) {
 }
 
 .main-shift {
-	padding-left: 4.15rem;
+	/*
+	 * Gouttière réservée au rail : les sections plein écran « débordent » visuellement
+	 * dans cette zone (voir `.main-shift > .section-viewport`) pour éviter une bande
+	 * de fond différente entre rail et contenu, tout en gardant l’alignement du texte.
+	 */
+	--main-gutter: 4.15rem;
+	padding-left: var(--main-gutter);
 	overflow-x: clip;
 	max-width: 100%;
 }
 
+/*
+ * Accueil + 404 : le contenu est dans `<main>` (voir `index.astro` / `404.astro`).
+ * Un sélecteur du type `.main-shift > .section-viewport` ne matchait jamais → la gouttière du padding restait visible.
+ * On étend `<main>` pour que les fonds des sections (hero, etc.) recouvrent toute la largeur utile.
+ *
+ * Fiches projet : `<article class="mx-auto max-w-5xl">` — pas le même modèle (centrage) ; on ne touche pas ici.
+ */
+.main-shift > main {
+	margin-left: calc(-1 * var(--main-gutter));
+	width: calc(100% + var(--main-gutter));
+	padding-left: var(--main-gutter);
+	box-sizing: border-box;
+}
+
 @media (max-width: 767px) {
 	.main-shift {
-		padding-left: max(1rem, env(safe-area-inset-left, 0px));
+		--main-gutter: max(1rem, env(safe-area-inset-left, 0px));
+		padding-left: var(--main-gutter);
 		padding-right: max(1rem, env(safe-area-inset-right, 0px));
 		/* Espace pour la barre fixe en bas */
 		padding-bottom: calc(4.35rem + env(safe-area-inset-bottom, 0px));
@@ -1564,6 +1548,92 @@ html:has(#dev-bar-hitbox-above) {
 
 .about-bio {
 	font-size: clamp(0.9rem, 0.25rem + 1.4vw, 1.05rem);
+}
+
+.about-abbr__label {
+	color: color-mix(in srgb, var(--accent) 72%, var(--fg-dim));
+	opacity: 0.92;
+}
+
+.abbr-chip {
+	position: relative;
+	text-decoration: none;
+	user-select: none;
+	border-style: dashed;
+	border-width: 1.5px;
+	justify-content: center;
+	align-items: center;
+	gap: 0.45rem;
+}
+
+.abbr-chip__icon {
+	font-size: 0.62rem;
+	line-height: 1;
+	opacity: 0.92;
+}
+
+.abbr-item:focus-within .abbr-chip,
+.abbr-item:hover .abbr-chip {
+	border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+	color: var(--accent);
+	box-shadow: 0 0 18px var(--accent-dim);
+}
+
+.abbr-tooltip {
+	position: absolute;
+	left: 0;
+	top: calc(100% + 0.55rem);
+	z-index: 6;
+	min-width: min(22rem, 80vw);
+	max-width: min(28rem, 88vw);
+	padding: 0.65rem 0.85rem;
+	border-radius: 0.75rem;
+	border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+	background: color-mix(in srgb, var(--void) 76%, transparent);
+	backdrop-filter: blur(10px);
+	box-shadow: 0 0 26px color-mix(in srgb, var(--accent) 22%, transparent);
+	color: var(--fg);
+	font-family: var(--font-mono);
+	font-size: 0.64rem;
+	letter-spacing: 0.06em;
+	line-height: 1.45;
+	opacity: 0;
+	transform: translateY(-4px);
+	pointer-events: none;
+	transition:
+		opacity 0.16s ease,
+		transform 0.16s ease;
+}
+
+.abbr-tooltip::before {
+	content: "";
+	position: absolute;
+	top: -6px;
+	left: 1.1rem;
+	width: 10px;
+	height: 10px;
+	background: inherit;
+	border-left: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+	border-top: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+	transform: rotate(45deg);
+}
+
+.abbr-item:hover .abbr-tooltip,
+.abbr-item:focus-within .abbr-tooltip {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.abbr-inline {
+	display: inline-flex;
+	align-items: baseline;
+	padding-left: 0.22rem;
+}
+
+.abbr-inline__icon {
+	font-size: 0.72em;
+	line-height: 1;
+	color: color-mix(in srgb, var(--accent) 78%, var(--fg-dim));
 }
 
 .about-contact-link {
