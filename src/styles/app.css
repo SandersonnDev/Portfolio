@@ -76,21 +76,6 @@ html:has(#dev-bar-hitbox-above) {
 	font-size: clamp(0.8125rem, 0.2rem + 1.35vw, 1rem);
 }
 
-/* Fond décoratif plein hero (z-0) ; le contenu reste au-dessus (#hero-content z-10). */
-.hero-logo-panel {
-	position: absolute;
-	inset: 0;
-	z-index: 0;
-	width: 100%;
-	min-height: 100svh;
-	pointer-events: none;
-	background: radial-gradient(
-		ellipse 120% 80% at 70% 18%,
-		color-mix(in srgb, var(--accent) 9%, var(--void)) 0%,
-		var(--void) 58%
-	);
-}
-
 @theme {
 	--void: #070712;
 	--haze: #0e1022;
@@ -105,6 +90,21 @@ html:has(#dev-bar-hitbox-above) {
 	--amber-dim: color-mix(in srgb, var(--amber) 32%, transparent);
 	--font-display: "Exo 2", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "Share Tech Mono", ui-monospace, monospace;
+}
+
+/* Fond décoratif plein hero (z-0) ; le contenu reste au-dessus (#hero-content z-10). */
+.hero-logo-panel {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	min-height: 100svh;
+	pointer-events: none;
+	background: radial-gradient(
+		ellipse 120% 80% at 70% 18%,
+		color-mix(in srgb, var(--accent) 9%, var(--void)) 0%,
+		var(--void) 58%
+	);
 }
 
 @layer base {
@@ -185,7 +185,8 @@ html:has(#dev-bar-hitbox-above) {
  * quand le contenu derrière peint en retard (fonts, hydratation, GH Pages).
  */
 .rail__cluster,
-.rail__social {
+.rail__social,
+.rail__theme {
 	isolation: isolate;
 	-webkit-backdrop-filter: blur(16px);
 	backdrop-filter: blur(16px);
@@ -214,9 +215,24 @@ html:has(#dev-bar-hitbox-above) {
 	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
+.rail__theme {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 0.45rem 0.35rem;
+	border-radius: 12px;
+	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.rail__theme-toggle {
+	border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
 @media (prefers-reduced-transparency: reduce) {
 	.rail__cluster,
-	.rail__social {
+	.rail__social,
+	.rail__theme {
 		-webkit-backdrop-filter: none;
 		backdrop-filter: none;
 		background: color-mix(in srgb, var(--haze) 88%, transparent);
@@ -295,6 +311,16 @@ html:has(#dev-bar-hitbox-above) {
 		position: relative;
 	}
 
+	.rail__theme {
+		flex-direction: row;
+		flex-wrap: nowrap;
+		padding: 0.4rem 0.45rem;
+		gap: 0.3rem;
+		border-radius: 14px;
+		flex: 0 1 auto;
+		position: relative;
+	}
+
 	/* Séparation légère entre sections et réseaux */
 	.rail__social::before {
 		content: "";
@@ -312,8 +338,26 @@ html:has(#dev-bar-hitbox-above) {
 		pointer-events: none;
 	}
 
+	/* Séparation réseaux → thème */
+	.rail__theme::before {
+		content: "";
+		position: absolute;
+		left: -0.28rem;
+		top: 18%;
+		bottom: 18%;
+		width: 1px;
+		background: linear-gradient(
+			180deg,
+			transparent,
+			color-mix(in srgb, var(--accent) 28%, transparent),
+			transparent
+		);
+		pointer-events: none;
+	}
+
 	.rail__link,
-	.rail__social-btn {
+	.rail__social-btn,
+	.rail__theme-toggle {
 		width: 2.55rem;
 		height: 2.55rem;
 		min-width: 2.55rem;
@@ -338,7 +382,8 @@ html:has(#dev-bar-hitbox-above) {
 		}
 
 		.rail__link,
-		.rail__social-btn {
+		.rail__social-btn,
+		.rail__theme-toggle {
 			width: 2.4rem;
 			height: 2.4rem;
 			min-width: 2.4rem;

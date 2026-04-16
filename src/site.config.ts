@@ -2,11 +2,9 @@ import { withBase } from "./lib/paths";
 
 /** Marques / logos (fichiers dans `public/`). */
 export const brand = {
-	/** Logo Astro (fusée officielle, tracé Simple Icons CC0 — `public/logo-astro.svg`). */
 	placeholderLogo: withBase("logo-astro.svg"),
 } as const;
 
-/** Contenu (hors JSON GitHub). Aligné sur le CV (MonCV/CV). */
 export const site = {
 	/** Libellé court (rail, onglet, copyright). */
 	codename: "Sandersonn",
@@ -53,7 +51,6 @@ export const site = {
 			category: "Frameworks & build front",
 			items: [
 				{ label: "Astro", icon: "fa-solid fa-bolt" },
-				/* Pas de marque « vite » dans Font Awesome Free ; éclair = build rapide, distinct d’Astro (fa-bolt). */
 				{ label: "Vite", icon: "fa-solid fa-bolt-lightning" },
 				{ label: "React", icon: "fa-brands fa-react" },
 				{ label: "Electron", icon: "fa-solid fa-atom" },
@@ -119,6 +116,9 @@ export const copy = {
 	railAbout: "Aller à la section À propos",
 	railProjects: "Aller à la section Projets",
 	railGithub: "Ouvrir le profil GitHub",
+	/** Rail : bouton décoratif (thème désactivé). */
+	railThemeGroup: "Élément décoratif",
+	railThemeToggle: "Thème (désactivé, élément décoratif)",
 	aboutMailTitle: "Envoyer un e-mail à l’adresse affichée",
 	aboutGithubTitle: "Ouvrir le profil GitHub",
 	aboutBlockPresent: "Présentation",

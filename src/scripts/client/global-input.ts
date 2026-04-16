@@ -18,17 +18,16 @@ export function initGlobalPointer(ac: AbortController) {
     }, { passive: true, signal: ac.signal });
 }
 export function initParallax(ac: AbortController) {
-    const el = document.querySelector<HTMLElement>("[data-parallax]");
-    if (!el || reduce())
-        return;
-    const max = Number(el.dataset.parallaxMax ?? "14");
-    const move = () => {
-        const x = (mouseX / innerWidth - 0.5) * 2;
-        const y = (mouseY / innerHeight - 0.5) * 2;
-        el.style.transform = `translate3d(${x * max}px, ${y * max}px, 0)`;
-    };
-    document.addEventListener("pointermove", move, { passive: true, signal: ac.signal });
-    move();
+	const el = document.querySelector<HTMLElement>("[data-parallax]");
+	if (!el || reduce()) return;
+	const max = Number(el.dataset.parallaxMax ?? "14");
+	const move = () => {
+		const x = (mouseX / innerWidth - 0.5) * 2;
+		const y = (mouseY / innerHeight - 0.5) * 2;
+		el.style.transform = `translate3d(${x * max}px, ${y * max}px, 0)`;
+	};
+	document.addEventListener("pointermove", move, { passive: true, signal: ac.signal });
+	move();
 }
 export function initSysClock() {
     killSysClock();
