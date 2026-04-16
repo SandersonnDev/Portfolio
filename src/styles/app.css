@@ -34,6 +34,7 @@ html:has(#dev-bar-hitbox-above) {
 
 #hero.hero-section {
 	--hero-top-inset: max(env(safe-area-inset-top, 0px), var(--preview-chrome-top, 0px));
+	--hero-bottom-inset: env(safe-area-inset-bottom, 0px);
 	box-sizing: border-box;
 	min-height: 100svh;
 	padding-top: var(--hero-top-inset);
@@ -41,12 +42,29 @@ html:has(#dev-bar-hitbox-above) {
 
 #hero .hero-section__inner {
 	box-sizing: border-box;
-	min-height: calc(100svh - var(--hero-top-inset));
-	max-height: calc(100svh - var(--hero-top-inset));
+	min-height: calc(100svh - var(--hero-top-inset) - var(--hero-bottom-inset));
+	max-height: calc(100svh - var(--hero-top-inset) - var(--hero-bottom-inset));
 	overflow-x: hidden;
 	overflow-y: auto;
 	overscroll-behavior-y: contain;
 	-webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+	#hero.hero-section {
+		/*
+		 * Sur mobile on réserve aussi de la place pour le dock fixe en bas (rail).
+		 * (valeur cohérente avec `.main-shift`).
+		 */
+		--hero-bottom-inset: max(env(safe-area-inset-bottom, 0px), 4.35rem);
+	}
+
+	/* Sur mobile: pas de scroll interne au hero (la page scroll, pas la section). */
+	#hero .hero-section__inner {
+		max-height: none;
+		overflow-y: visible;
+		overscroll-behavior-y: auto;
+	}
 }
 
 .hero-content {
@@ -163,6 +181,14 @@ html:has(#dev-bar-hitbox-above) {
 	z-index: 61;
 }
 
+/* Même « verre » pour nav et social (mobile + desktop). */
+.rail__cluster,
+.rail__social {
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	box-shadow: 0 8px 32px color-mix(in srgb, var(--void) 90%, transparent);
+}
+
 .rail__cluster {
 	display: flex;
 	flex-direction: column;
@@ -171,8 +197,6 @@ html:has(#dev-bar-hitbox-above) {
 	padding: 0.55rem 0.35rem;
 	border-radius: 12px;
 	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-	backdrop-filter: blur(16px);
-	box-shadow: 0 8px 32px color-mix(in srgb, var(--void) 90%, transparent);
 }
 
 .rail__social {
@@ -182,40 +206,11 @@ html:has(#dev-bar-hitbox-above) {
 	gap: 0.45rem;
 	padding: 0.5rem 0.35rem;
 	border-radius: 12px;
-	border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
-	background: color-mix(in srgb, var(--void) 72%, transparent);
-	backdrop-filter: blur(14px);
-	box-shadow: 0 8px 28px color-mix(in srgb, var(--void) 88%, transparent);
+	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
+	background: transparent;
 }
 
-.rail__link {
-	display: grid;
-	place-items: center;
-	width: 2.65rem;
-	height: 2.65rem;
-	border-radius: 8px;
-	color: var(--fg-dim);
-	text-decoration: none;
-	font-size: 0.82rem;
-	transition:
-		color 0.28s ease,
-		background 0.28s ease,
-		box-shadow 0.32s ease,
-		transform 0.28s ease;
-}
-
-.rail__link:hover {
-	color: var(--accent);
-	background: color-mix(in srgb, var(--accent) 10%, transparent);
-	box-shadow: 0 0 20px var(--accent-dim);
-	transform: scale(1.04);
-}
-
-.rail__link--active {
-	color: var(--accent);
-	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent);
-}
-
+.rail__link,
 .rail__social-btn {
 	display: grid;
 	place-items: center;
@@ -235,13 +230,21 @@ html:has(#dev-bar-hitbox-above) {
 		transform 0.28s ease;
 }
 
+.rail__link:hover,
 .rail__social-btn:hover {
 	color: var(--accent);
 	border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 	background: color-mix(in srgb, var(--accent) 8%, transparent);
-	box-shadow: 0 0 18px var(--accent-dim);
+	box-shadow: 0 0 20px var(--accent-dim);
 	transform: scale(1.04);
 }
+
+.rail__link--active {
+	color: var(--accent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+/* Hover social déjà géré par le bloc commun ci-dessus. */
 
 /* Mobile / petite tablette : dock en bas, navigation + réseaux en ligne */
 @media (max-width: 767px) {
@@ -341,6 +344,17 @@ html:has(#dev-bar-hitbox-above) {
 	padding-left: var(--main-gutter);
 	overflow-x: clip;
 	max-width: 100%;
+}
+
+/*
+ * Desktop : `overflow-x: clip` sur ce parent rognait le `margin-left` négatif de
+ * `.main-shift > main` → bande pleine hauteur (padding) visible à gauche du contenu.
+ * Le débordement doit rester visible ; le clip global reste sur `html`.
+ */
+@media (min-width: 768px) {
+	.main-shift {
+		overflow-x: visible;
+	}
 }
 
 /*
@@ -1349,7 +1363,22 @@ html:has(#dev-bar-hitbox-above) {
 
 /* Indicateur scroll */
 .scroll-hint {
+	display: grid;
+	place-items: center;
+	width: 2.55rem;
+	height: 2.55rem;
+	border-radius: 8px;
+	border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
+	color: var(--fg-dim);
+	background: color-mix(in srgb, var(--haze) 40%, transparent);
+	backdrop-filter: blur(14px);
+	box-shadow: 0 8px 28px color-mix(in srgb, var(--void) 88%, transparent);
 	animation: scroll-hint-y 2.2s ease-in-out infinite;
+}
+
+.scroll-hint i {
+	color: var(--amber);
+	opacity: 0.92;
 }
 
 @keyframes scroll-hint-y {
@@ -1473,7 +1502,7 @@ html:has(#dev-bar-hitbox-above) {
 	flex: 0 0 auto;
 	max-width: 100%;
 	width: 27.5rem;
-	min-height: 27.5rem;
+	height: 27.5rem;
 	margin-block: 0.15rem;
 }
 
@@ -1484,7 +1513,140 @@ html:has(#dev-bar-hitbox-above) {
 			27.5rem,
 			calc(100svi - max(2.25rem, env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px)))
 		);
-		min-height: 23.5rem;
+		height: 23.5rem;
+	}
+}
+
+/* Mobile : carrousel projets en scroll horizontal natif (pas de pin GSAP). */
+@media (max-width: 767px) {
+	#projects .projects-pin {
+		min-height: auto;
+	}
+
+	[data-projects-viewport] {
+		--projects-pad-x: max(1.25rem, env(safe-area-inset-left, 0px));
+		overflow-x: auto;
+		overflow-y: hidden;
+		overscroll-behavior-x: contain;
+		overscroll-behavior-y: none;
+		-webkit-overflow-scrolling: touch;
+		touch-action: pan-x pinch-zoom;
+		scroll-snap-type: x mandatory;
+		scroll-padding-inline: var(--projects-pad-x, 1.25rem);
+		scrollbar-width: none;
+	}
+
+	[data-projects-viewport]::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+	}
+
+	[data-projects-track] {
+		will-change: auto;
+		scroll-snap-stop: always;
+	}
+
+	.project-card--strip {
+		scroll-snap-align: start;
+	}
+
+	/* Stage : la flèche est en overlay sur la zone visible des cartes (hors piste qui défile). */
+	.projects-strip-stage {
+		flex: 1 1 auto;
+		min-height: 0;
+		min-width: 0;
+	}
+
+	.projects-scroll-hint {
+		position: absolute;
+		right: max(0.65rem, env(safe-area-inset-right, 0px));
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 6;
+		display: grid;
+		place-items: center;
+		width: 2.55rem;
+		height: 2.55rem;
+		border-radius: 8px;
+		border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
+		color: var(--fg-dim);
+		background: color-mix(in srgb, var(--haze) 40%, transparent);
+		backdrop-filter: blur(14px);
+		box-shadow: 0 8px 28px color-mix(in srgb, var(--void) 88%, transparent);
+	}
+
+	.projects-scroll-hint__icon {
+		display: grid;
+		place-items: center;
+		animation: projects-hint-x 2.2s ease-in-out infinite;
+	}
+
+	.projects-scroll-hint__icon i {
+		font-size: 1.05rem;
+		color: var(--amber);
+		opacity: 0.92;
+	}
+
+	@keyframes projects-hint-x {
+		0%,
+		100% {
+			transform: translateX(0);
+			opacity: 0.45;
+		}
+		50% {
+			transform: translateX(7px);
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.projects-scroll-hint__icon {
+			animation: none;
+			opacity: 0.65;
+		}
+	}
+
+	/* Cartes strip mobile : contenu contenu dans la hauteur fixe, CTA qui ne débordent pas. */
+	.project-card--strip {
+		min-width: 0;
+		overflow: hidden;
+	}
+
+	.project-card--strip.project-card--pad {
+		padding: 1.2rem 1.15rem;
+	}
+
+	.project-card--strip > header {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	.project-card--strip .project-card__lead {
+		-webkit-line-clamp: 3;
+	}
+
+	.project-card--strip .project-card__stack {
+		max-width: 100%;
+		overflow: hidden;
+	}
+
+	.project-card--strip .tile-actions {
+		grid-template-columns: 1fr;
+		gap: 0.45rem;
+		padding-top: 1rem;
+	}
+
+	.project-card--strip .tile-action {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		justify-content: center;
+		text-align: center;
+		white-space: normal;
+		line-height: 1.25;
+		word-break: break-word;
 	}
 }
 

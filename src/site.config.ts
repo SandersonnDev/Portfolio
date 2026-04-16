@@ -104,7 +104,7 @@ export const copy = {
 	heroStatusSuffix: "en ligne",
 	heroClockLabel: "Heure locale",
 	/** Cartes projet accueil : fiche locale (infobulle = détail). */
-	ctaViewFiche: "Fiche ici",
+	ctaViewFiche: "Voir plus",
 	ctaViewSource: "GitHub",
 	/** Cartes projet accueil : dépôt public (nouvel onglet). */
 	ctaViewSourceFull: "Sur GitHub",

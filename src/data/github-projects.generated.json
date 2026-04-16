@@ -1,5 +1,5 @@
 {
-	"syncedAt": "2026-04-14T13:29:08.528Z",
+	"syncedAt": "2026-04-16T09:46:45.088Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
 		{
@@ -1255,12 +1255,11 @@
 			"coverImage": null,
 			"sections": [
 				{
-					"type": "badgeStrip",
-					"items": [
+					"type": "paragraph",
+					"parts": [
 						{
-							"href": null,
-							"imgSrc": "https://raw.githubusercontent.com/SandersonnDev/workspace/main/apps/client/assets/workspacebanner.svg",
-							"alt": "Workspace_logo"
+							"k": "text",
+							"v": "![Workspace_banner](https://raw.githubusercontent.com/SandersonnDev/workspace/apps/client/assets/workspacebanner.svg)"
 						}
 					]
 				},

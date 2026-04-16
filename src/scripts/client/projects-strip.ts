@@ -3,10 +3,30 @@ import { reduce } from "./env";
 
 let projectsStripTL: gsap.core.Timeline | null = null;
 let projectsStripRefreshInit: (() => void) | null = null;
+let projectsStripMql: MediaQueryList | null = null;
+let projectsStripMqlListener: ((ev: MediaQueryListEvent) => void) | null = null;
+
+function isMobileProjectsMode(): boolean {
+	// Sur mobile on préfère un scroll horizontal natif (touch).
+	return window.matchMedia("(max-width: 767px)").matches;
+}
 
 function clearProjectsScrollPad() {
 	const pad = document.querySelector<HTMLElement>("[data-projects-scroll-pad]");
 	if (pad) pad.style.width = "";
+}
+
+function killProjectsStripTimeline() {
+	projectsStripTL?.scrollTrigger?.kill();
+	projectsStripTL?.kill();
+	projectsStripTL = null;
+	if (projectsStripRefreshInit) {
+		ScrollTrigger.removeEventListener("refreshInit", projectsStripRefreshInit);
+		projectsStripRefreshInit = null;
+	}
+	clearProjectsScrollPad();
+	const track = document.querySelector<HTMLElement>("[data-projects-track]");
+	if (track) gsap.set(track, { clearProps: "x" });
 }
 
 /** Sur grands écrans la piste tient sans débordement : on élargit le spacer pour garder un vrai scrub horizontal + pin. */
@@ -32,29 +52,20 @@ function syncProjectsStripScrollPad(
 }
 
 export function killProjectsHorizontalScroll() {
-	projectsStripTL?.scrollTrigger?.kill();
-	projectsStripTL?.kill();
-	projectsStripTL = null;
-	if (projectsStripRefreshInit) {
-		ScrollTrigger.removeEventListener("refreshInit", projectsStripRefreshInit);
-		projectsStripRefreshInit = null;
+	killProjectsStripTimeline();
+	if (projectsStripMql && projectsStripMqlListener) {
+		projectsStripMql.removeEventListener("change", projectsStripMqlListener);
+		projectsStripMqlListener = null;
+		projectsStripMql = null;
 	}
-	clearProjectsScrollPad();
-	const track = document.querySelector<HTMLElement>("[data-projects-track]");
-	if (track) gsap.set(track, { clearProps: "x" });
 }
 
-/**
- * Défilement vertical pendant le pin :
- * 1) phase « centrage » : piste immobile (x = 0) ;
- * 2) phase horizontale : translation du track ;
- * 3) phase « verrou fin » : x inchangé mais scroll vertical prolongé (moins de lâcher brutal en fin de strip).
- */
-export function initProjectsHorizontalScroll() {
-	killProjectsHorizontalScroll();
+function applyProjectsMode() {
+	killProjectsStripTimeline();
 
 	const section = document.getElementById("projects");
 	if (!section || reduce()) return;
+	if (isMobileProjectsMode()) return;
 
 	const pinEl = section.querySelector<HTMLElement>("[data-projects-pin]");
 	const viewport = section.querySelector<HTMLElement>("[data-projects-viewport]");
@@ -116,4 +127,20 @@ export function initProjectsHorizontalScroll() {
 	};
 	projectsStripRefreshInit = onRefreshInit;
 	ScrollTrigger.addEventListener("refreshInit", onRefreshInit);
+}
+
+/**
+ * Défilement vertical pendant le pin :
+ * 1) phase « centrage » : piste immobile (x = 0) ;
+ * 2) phase horizontale : translation du track ;
+ * 3) phase « verrou fin » : x inchangé mais scroll vertical prolongé (moins de lâcher brutal en fin de strip).
+ */
+export function initProjectsHorizontalScroll() {
+	if (!projectsStripMql) {
+		projectsStripMql = window.matchMedia("(max-width: 767px)");
+		projectsStripMqlListener = () => applyProjectsMode();
+		projectsStripMql.addEventListener("change", projectsStripMqlListener);
+	}
+
+	applyProjectsMode();
 }
