@@ -42,7 +42,11 @@ const abbrLinks = site.lien ?? [];
 							}
 						</div>
 						{abbrLinks.length > 0 && (
-							<div class="about-abbr mt-4 flex w-full flex-col items-center gap-2">
+							<div
+								class="about-abbr mt-4 flex w-full flex-col items-center gap-2"
+								hidden
+								data-about-abbr-panel
+							>
 								<p class="about-abbr__label sys-mono mb-0 text-center">Abréviations</p>
 								<div class="about-abbr__items flex flex-wrap justify-center gap-2">
 									{abbrLinks.map((l, i) => (

@@ -18,11 +18,14 @@ import { killProjectLineReveal, initProjectReadmeLineReveal } from "./project-re
 import { disconnectTextFX, initTextFX } from "./text-fx";
 import { initViewportRhythm } from "./viewport-rhythm";
 import { initLenisScroll, killLenisScroll } from "./lenis-scroll";
+import { registerScrollPositionSave, restoreScrollPositionAfterBoot } from "./scroll-restore";
 
 let cleanupBoot: (() => void) | null = null;
 
 export function boot() {
 	cleanupBoot?.();
+
+	registerScrollPositionSave();
 
 	killSysClock();
 	gsap.killTweensOf(window);
@@ -50,6 +53,7 @@ export function boot() {
 
 	initGlobalPointer(ac);
 	initLenisScroll();
+	restoreScrollPositionAfterBoot();
 	initProjectDetailNavTransitionDirection(ac);
 	initRouteEnterMarkers(ac);
 	initSmoothNav(ac);

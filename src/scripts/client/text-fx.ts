@@ -237,6 +237,10 @@ async function runHeroTextSequence() {
         await runTypewriterGsap(el, tw, sec, () => typewriterCompleted.add(el));
     }
 }
+function revealAboutAbbrPanel() {
+    document.querySelector<HTMLElement>("[data-about-abbr-panel]")?.removeAttribute("hidden");
+}
+
 async function runAboutBioSequence() {
     const twEls = [...document.querySelectorAll<HTMLElement>(".about-block--present [data-typewriter]")];
     for (const el of twEls) {
@@ -245,6 +249,7 @@ async function runAboutBioSequence() {
         const sec = typewriterDurationForText(tw, 0.55, 1.15);
         await runTypewriterGsap(el, tw, sec, () => typewriterCompleted.add(el));
     }
+    revealAboutAbbrPanel();
 }
 function resetTextEl(el: HTMLElement) {
     textFxState.get(el)?.cancel?.();
@@ -276,6 +281,7 @@ export function initTextFX(ac: AbortController) {
             else if (el.hasAttribute("data-scramble") && sc)
                 el.textContent = sc;
         }
+        revealAboutAbbrPanel();
         return;
     }
     for (const el of nodes) {

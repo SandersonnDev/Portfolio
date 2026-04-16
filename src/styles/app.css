@@ -52,10 +52,7 @@ html:has(#dev-bar-hitbox-above) {
 
 @media (max-width: 767px) {
 	#hero.hero-section {
-		/*
-		 * Sur mobile on réserve aussi de la place pour le dock fixe en bas (rail).
-		 * (valeur cohérente avec `.main-shift`).
-		 */
+		/* Sur mobile : réserve pour le dock rail fixe en bas. */
 		--hero-bottom-inset: max(env(safe-area-inset-bottom, 0px), 4.35rem);
 	}
 
@@ -334,49 +331,30 @@ html:has(#dev-bar-hitbox-above) {
 	}
 }
 
+/*
+ * Conteneur page (sous le rail fixe) : plus de `padding-left` global — ça décalait tout
+ * le `<main>` et laissait une bande vide à gauche ; les cartes / fonds n’allaient pas au bord.
+ * Le rail reste en overlay ; le texte garde son retrait via `ps-*` / `.section-shell` dans les sections.
+ */
 .main-shift {
-	/*
-	 * Gouttière réservée au rail : les sections plein écran « débordent » visuellement
-	 * dans cette zone (voir `.main-shift > .section-viewport`) pour éviter une bande
-	 * de fond différente entre rail et contenu, tout en gardant l’alignement du texte.
-	 */
-	--main-gutter: 4.15rem;
-	padding-left: var(--main-gutter);
-	overflow-x: clip;
 	max-width: 100%;
+	overflow-x: visible;
+	box-sizing: border-box;
 }
 
-/*
- * Desktop : `overflow-x: clip` sur ce parent rognait le `margin-left` négatif de
- * `.main-shift > main` → bande pleine hauteur (padding) visible à gauche du contenu.
- * Le débordement doit rester visible ; le clip global reste sur `html`.
- */
-@media (min-width: 768px) {
-	.main-shift {
-		overflow-x: visible;
-	}
-}
-
-/*
- * Accueil + 404 : le contenu est dans `<main>` (voir `index.astro` / `404.astro`).
- * Un sélecteur du type `.main-shift > .section-viewport` ne matchait jamais → la gouttière du padding restait visible.
- * On étend `<main>` pour que les fonds des sections (hero, etc.) recouvrent toute la largeur utile.
- *
- * Fiches projet : `<article class="mx-auto max-w-5xl">` — pas le même modèle (centrage) ; on ne touche pas ici.
- */
 .main-shift > main {
-	margin-left: calc(-1 * var(--main-gutter));
-	width: calc(100% + var(--main-gutter));
-	padding-left: var(--main-gutter);
+	margin: 0;
+	width: 100%;
+	max-width: 100%;
+	padding: 0;
 	box-sizing: border-box;
 }
 
 @media (max-width: 767px) {
 	.main-shift {
-		--main-gutter: max(1rem, env(safe-area-inset-left, 0px));
-		padding-left: var(--main-gutter);
-		padding-right: max(1rem, env(safe-area-inset-right, 0px));
-		/* Espace pour la barre fixe en bas */
+		padding-left: env(safe-area-inset-left, 0px);
+		padding-right: env(safe-area-inset-right, 0px);
+		/* Espace pour le dock rail en bas */
 		padding-bottom: calc(4.35rem + env(safe-area-inset-bottom, 0px));
 	}
 }
