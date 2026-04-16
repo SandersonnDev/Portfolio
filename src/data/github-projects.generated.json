@@ -1,7 +1,30 @@
 {
-	"syncedAt": "2026-04-03T14:24:55.415Z",
+	"syncedAt": "2026-04-16T09:43:49.978Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
+		{
+			"slug": "portfolio",
+			"title": "Portfolio",
+			"description": "Portfolio statique : présentation, stack et projets synchronisés depuis l’API GitHub (README, topics, etc.). Interface type « cockpit », Tailwind v4, transitions de page Astro. Node.js ≥ 22.12 (voir → ) Copie vers au premier lancement ( peut aussi t’aider via ). En GitHub Actions…",
+			"stack": [
+				"Astro",
+				"JavaScript",
+				"CSS",
+				"TypeScript"
+			],
+			"href": "https://github.com/SandersonnDev/Portfolio",
+			"liveHref": null,
+			"sections": [
+				{
+					"type": "paragraph",
+					"text": "Portfolio statique : présentation, stack et projets synchronisés depuis l’API GitHub (README, topics, etc.). Interface type « cockpit », Tailwind v4, transitions de page Astro. Node.js ≥ 22.12 (voir → ) Copie vers au premier lancement ( peut aussi t’aider via ). En GitHub Actions, le secret du dépôt est injecté pour le build (voir et ). Le workflow Build and push gh-pages ( ) build le site et pousse le contenu de sur la branche . Il se déclenche sur les pushes vers , ou (et en manuel via Run workflow). Settings → Actions → General → Workflow permissions : activer Read and write pour que le workflow puisse pousser sur . Settings → Pages : source Deploy from a branch, branche , dossier (root). Le site est servi sous . Les chemins internes utilisent Astro (dérivé de en CI) pour éviter les 404 sur ce sous-chemin. : sur / vers ou , installe les dépendances et lance (avec le secret si défini)."
+				},
+				{
+					"type": "paragraph",
+					"text": "Documentation Astro"
+				}
+			]
+		},
 		{
 			"slug": "convertalllocal",
 			"title": "ConvertAllLocal",
@@ -19,7 +42,7 @@
 		{
 			"slug": "workspace",
 			"title": "workspace",
-			"description": "Application de bureau (Electron) conçue pour centraliser et gérer les activités quotidiennes d'une structure. Elle s'appuie sur un serveur backend déployé séparément (sur Proxmox) auquel elle se connecte via HTTP REST et WebSocket.",
+			"description": "Application desktop Electron, monorepo npm (workspaces) : REST, WebSocket, JWT. Backend Fastify, TypeScript, PostgreSQL;",
 			"stack": [
 				"JavaScript",
 				"CSS",
@@ -31,77 +54,37 @@
 			"sections": [
 				{
 					"type": "paragraph",
-					"text": "Application de bureau (Electron) conçue pour centraliser et gérer les activités quotidiennes d'une structure. Elle s'appuie sur un serveur backend déployé séparément (sur Proxmox) auquel elle se connecte via HTTP REST et WebSocket. Workspace est une interface unifiée qui regroupe plusieurs modules fonctionnels accessibles depuis un seul client : Page principale affichant un tableau de bord avec l'heure et la date en temps réel, ainsi qu'un aperçu des informations importantes de la structure (La Capsule). Calendrier interactif permettant de consulter et gérer les événements. Les vues semaine, mois et année sont disponibles. Les événements sont créés, modifiés et supprimés directement depuis l'interface."
+					"text": "!Workspace_banner <p align=\"center\"> <a href=\"https://github.com/SandersonnDev/workspace/tree/main/docs\"><img src=\"https://img.shields.io/badge/docs-GitHub-181717?style=for-the-badge&logo=github&logoColor=white\" alt=\"Documentation\"></a> <a href=\"https://opensource.org/licenses/MIT\"><img src=\"https://img.shields.io/badge/License-MIT-green?style=for-the-badge\" alt=\"License: MIT\"></a> <a href=\"https://github.com/SandersonnDev\"><img src=\"https://img.shields.io/badge/Built%20by-SandersonnDev-blueviolet?style=for-the-badge\" alt=\"Built by SandersonnDev\"></a> </p> <p align=\"center\"> <a href=\"https://github.com/SandersonnDev/workspace/blob/main/package.json\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FSandersonnDev%2Fworkspace%2Fmain%2Fpackage.json&amp;query=%24.version&amp;label=version&amp;logo=npm&amp;logoColor=white&amp;style=for-the-badge\" alt=\"Version npm\"></a> <a href=\"https://github.com/SandersonnDev/workspace/blob/main/package.json\"><img src=\"https://img.shields.io/badge/node.js-%3E%3D18-339933?style=for-the-badge&logo=node.js&logoColor=white\" alt=\"Node.js\"></a> <a href=\"https://github.com/SandersonnDev/workspace/blob/main/apps/client/package.json\"><img src=\"https://img.shields.io/badge/Electron-39.x-47848F?style=for-the-badge&logo=electron&logoColor=white\" alt=\"Electron\"></a> </p> Dans un contexte de structure (ESN, atelier numérique ou équivalent), les outils métiers, les liens intranet, les partages fichiers et les processus de réception matériel sont souvent éclatés entre plusieurs applications et raccourcis."
 				},
 				{
 					"type": "paragraph",
-					"text": "Module dédié à la gestion du matériel reconditionné, composé de quatre sous-sections : Entrée : saisie des nouveaux lots de machines (numéros de série, marques, modèles) Inventaire : état des stocks en cours, filtrage par état, assignation des techniciens Historique : suivi de l'ensemble des mouvements de matériel Traçabilité : lien entre les machines et leur historique de reconditionnement Gestionnaire de fichiers donnant accès aux documents internes de la structure, organisés par entité. Raccourcis vers les applications internes regroupées par catégorie (Développement, Streaming, Bureautique, etc.), gérées dynamiquement depuis le serveur. Accès rapide aux liens et outils fréquemment utilisés. Paramètres de l'application : configuration de la connexion au serveur, préférences d'affichage et gestion du compte utilisateur."
-				},
-				{
-					"type": "paragraph",
-					"text": "L'application suit une architecture client/serveur distincte : Le client Electron tourne localement sur la machine de l'utilisateur. Il gère l'interface, les interactions utilisateur et toutes les communications avec le serveur via un module API centralisé ( ). Le serveur backend est déployé sur une machine Proxmox (192.168.1.62:4000). Il expose une API REST et un canal WebSocket pour les mises à jour en temps réel. La configuration de connexion (URL du serveur, endpoints) est centralisée dans un unique fichier , ce qui permet de basculer facilement entre les environnements local, Proxmox et production."
+					"text": "Cela entraîne perte de temps, oublis et multiplication des fenêtres ou favoris à maintenir. Objectifs du projet : Centraliser l’accès aux applications internes, aux raccourcis et aux informations utiles dans une interface unique. Structurer la réception du matériel professionnel (saisie, stocks, historique, traçabilité) avec une piste d’audit exploitable. Faciliter l’accès aux documents et dossiers du serveur interne via une navigation cohérente (par entité), alignée sur la configuration serveur."
 				}
 			]
 		},
 		{
-			"slug": "mjc_safenet",
-			"title": "MJC_Safenet",
-			"description": "Projet pour la MJC de Morlaix, journée Safenet",
+			"slug": "safenet",
+			"title": "Safenet",
+			"description": "Application web statique : simulateur d’interface « hacking » pour un escape game autour de la cybersécurité, destiné à un public jeune en contexte d’animation (ex. événement, atelier sensibilisation).",
 			"stack": [
 				"JavaScript",
 				"CSS",
 				"HTML"
 			],
-			"href": "https://github.com/SandersonnDev/MJC_Safenet",
+			"href": "https://github.com/SandersonnDev/Safenet",
 			"liveHref": null,
 			"sections": [
 				{
 					"type": "paragraph",
-					"text": "Fichiers à créer : : Structure de la page : Habillage visuel (animation, fond binaire, esthétique du terminal) : Gestion du minuteur, du code de désactivation et du menu admin Section principale du scénario : - Conteneur global ( ) - Logo en haut à droite ( ) - Champ de texte pour entrer le code ( ) Menu administrateur masqué (accès par Alt + A) : - Fenêtre modale ( ) - Champs : - Durée du minuteur (HH:MM:SS) - Mot de passe de désactivation - Pénalité pour erreur - Boutons : - Démarrer minuteur - Réinitialiser - Sauvegarder paramètres Effets visuels : - Fond animé de chiffres binaires ( ) - Sons (explosion, validation) Principaux éléments : Corps : fond noir, police monospace. Fond binaire : animation verticale lente avec opacité. Timer : police large, couleur changeant (vert → orange → rouge selon le temps restant). Zone de saisie : effet terminal (texte vert, curseur clignotant)."
+					"text": "Le besoin exprimé portait sur un événement de sensibilisation à la cybersécurité auprès de jeunes : il fallait un support numérique capable de matérialiser, de façon ludique et collective, la tension d’une situation de crise cyber sans utiliser d’outils réels d’attaque ou d’accès à des systèmes. Légitimité et cadre légal : proposer une mise en scène explicitement fictive, sans connexion à des infrastructures réelles ni incitation à des comportements illicites ; l’outil sert le discours pédagogique (réaction face à une alerte, importance des mots de passe, gestion du stress, etc.). Clarté pour le public jeune : distinguer jeu / simulation et cybersécurité réelle ; le narratif « empêcher le hacking » reste symbolique et encadré par l’animation."
 				},
 				{
 					"type": "paragraph",
-					"text": "Popup d’erreur : animation “shake”, couleur rouge, disparition après 5 secondes. Menu admin : design minimaliste avec bordures lumineuses et fond semi-transparent. Variables principales : (par défaut 3600 s) (par défaut \"netsafe\") Fonctionnalités clés : Initialisation du minuteur - Afficher les heures, minutes, secondes. - Décrémentation chaque 100 ms. - Changement de couleur lors du seuil critique (par exemple < 5 min). Validation du code - Comparer la saisie avec le code secret. - Si correct → Arrêt minuteur + message succès. - Si incorrect → pénalité + animation rouge + popup “Code invalide”. Menu admin (Alt + A) - Ouverture/fermeture du panneau. - Application des réglages personnalisés. Fin du compte à rebours* - Arrêt minuteur. - Animation explosion + son."
-				}
-			]
-		},
-		{
-			"slug": "lacapsule-ssa_capsule",
-			"title": "lacapsule/SSA_Capsule",
-			"description": "Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou M…",
-			"stack": [
-				"PHP",
-				"JavaScript",
-				"Hack",
-				"CSS",
-				"Shell",
-				"Makefile",
-				"Dockerfile"
-			],
-			"href": "https://github.com/lacapsule/SSA_Capsule",
-			"liveHref": null,
-			"sections": [
+					"text": "Fiabilité en conditions réelles d’événement : installation rapide, peu de dépendances ; audio et affichage stables selon le navigateur et le mode de service (HTTP local vs ). Gestion du secret : le code est une énigme à résoudre dans le parcours (indices, énigmes papier, etc.) tout en restant configurable côté animateur — avec les limites de sécurité propres à une appli entièrement côté client (voir § 3). Build : aucun. Runtime : moteur JavaScript du navigateur uniquement. Le point d’exécution est la fonction dans , déclenchée sur (ou immédiatement si le DOM est déjà prêt). Aucune authentification : le panneau d’administration est accessible via le raccourci clavier Alt + A ; toute personne connaissant ce raccourci peut modifier les paramètres en session. Aucun serveur applicatif : pas de base de données, pas d’API, pas de journalisation centralisée."
+				},
 				{
 					"type": "paragraph",
-					"text": "Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou MySQL sans ORM ni dépendance externe Appliquer le modèle MVC minimal Gérer les routes, les vues, et l’authentification proprement Offrir une architecture modulaire type framework Ou via Apache : 🔑 Système simple basé sur (PHP pur) 🔒 Middleware à inclure dans toute route protégée ✅ Gestion de session, mot de passe hashé, redirections 🧱 100% PHP natif, aucun framework externe 🔍 Code clair et lisible pour apprentissage ou projet associatif 🧩 Architecture extensible par dossiers ( ) 📦 Support multilingue, sécurité headers, layouts, middleware, SQLite [ ] Middleware CSRF"
-				}
-			]
-		},
-		{
-			"slug": "lacapsule-deffinovmjc",
-			"title": "lacapsule/deffinovMJC",
-			"description": "Un jeu de quizz pour les visiteurs de la MJC dans le cadre de l'appel à projet DEFFINOV",
-			"stack": [
-				"JavaScript",
-				"CSS",
-				"HTML"
-			],
-			"href": "https://github.com/lacapsule/deffinovMJC",
-			"liveHref": null,
-			"sections": [
-				{
-					"type": "paragraph",
-					"text": "Un jeu de quizz pour les visiteurs de la MJC dans le cadre de l'appel à projet DEFFINOV"
+					"text": "Logique et secrets côté client : le code de désactivation et les réglages ne sont pas protégés par chiffrement ; ils sont visibles dans le code source et la mémoire du navigateur. Dépendance réseau : chargement optionnel de polices depuis (fuite d’information minimale : requête vers Google lors de la visite). > Rappel pédagogique : cette application est une simulation visuelle et sonore. Elle ne doit pas être utilisée pour la protection de données sensibles ni comme démonstration de sécurité réelle."
 				}
 			]
 		}
