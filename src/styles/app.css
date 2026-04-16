@@ -170,7 +170,8 @@ html:has(#dev-bar-hitbox-above) {
 	position: fixed;
 	left: 0.65rem;
 	top: 50%;
-	transform: translateY(-50%);
+	/* translate3d : couche GPU stable (évite sauts de backdrop-filter au 1er paint / Safari / build prod). */
+	transform: translate3d(0, -50%, 0);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -178,12 +179,19 @@ html:has(#dev-bar-hitbox-above) {
 	z-index: 61;
 }
 
-/* Même « verre » pour nav et social (mobile + desktop). */
+/*
+ * Verre rail : toujours une sous-couche semi-opaque sous le blur (comme `.glass`).
+ * Un fond 100 % transparent + seul backdrop-filter provoque souvent un « saut » / flash
+ * quand le contenu derrière peint en retard (fonts, hydratation, GH Pages).
+ */
 .rail__cluster,
 .rail__social {
-	backdrop-filter: blur(16px);
+	isolation: isolate;
 	-webkit-backdrop-filter: blur(16px);
+	backdrop-filter: blur(16px);
+	background: color-mix(in srgb, var(--haze) 42%, transparent);
 	box-shadow: 0 8px 32px color-mix(in srgb, var(--void) 90%, transparent);
+	transform: translateZ(0);
 }
 
 .rail__cluster {
@@ -204,7 +212,15 @@ html:has(#dev-bar-hitbox-above) {
 	padding: 0.5rem 0.35rem;
 	border-radius: 12px;
 	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-	background: transparent;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	.rail__cluster,
+	.rail__social {
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+		background: color-mix(in srgb, var(--haze) 88%, transparent);
+	}
 }
 
 .rail__link,
@@ -250,7 +266,7 @@ html:has(#dev-bar-hitbox-above) {
 		right: auto;
 		top: auto;
 		bottom: max(0.55rem, env(safe-area-inset-bottom, 0px));
-		transform: translateX(-50%);
+		transform: translate3d(-50%, 0, 0);
 		flex-direction: row;
 		flex-wrap: nowrap;
 		align-items: stretch;
