@@ -153,14 +153,18 @@ html:has(#dev-bar-hitbox-above) {
 	}
 }
 
-/* Barre latérale : seulement navigation + réseaux (fixe à gauche, reste visible au scroll) */
+/*
+ * Barre latérale : dock fixe, pas le `<aside>` en plein viewport + z-index élevé
+ * (sinon calque pleine hauteur au-dessus du contenu).
+ */
 .rail {
-	position: fixed;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	z-index: 60;
+	position: relative;
+	z-index: auto;
 	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	overflow: visible;
 	pointer-events: none;
 	background: transparent;
 	border: none;
@@ -178,12 +182,13 @@ html:has(#dev-bar-hitbox-above) {
 	flex-direction: column;
 	align-items: center;
 	gap: 0.75rem;
-	z-index: 61;
+	z-index: 55;
 }
 
-/* Même « verre » pour nav et social (mobile + desktop). */
+/* Verre nav + social : fond léger + flou (le flou seul peut être invisible selon moteur). */
 .rail__cluster,
 .rail__social {
+	background: color-mix(in srgb, var(--haze) 52%, transparent);
 	backdrop-filter: blur(16px);
 	-webkit-backdrop-filter: blur(16px);
 	box-shadow: 0 8px 32px color-mix(in srgb, var(--void) 90%, transparent);
@@ -207,7 +212,6 @@ html:has(#dev-bar-hitbox-above) {
 	padding: 0.5rem 0.35rem;
 	border-radius: 12px;
 	border: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-	background: transparent;
 }
 
 .rail__link,
@@ -342,19 +346,9 @@ html:has(#dev-bar-hitbox-above) {
 	 */
 	--main-gutter: 4.15rem;
 	padding-left: var(--main-gutter);
-	overflow-x: clip;
+	/* `clip` rognait le `margin-left` négatif de `<main>` → bande à gauche. `html` garde `overflow-x: clip`. */
+	overflow-x: visible;
 	max-width: 100%;
-}
-
-/*
- * Desktop : `overflow-x: clip` sur ce parent rognait le `margin-left` négatif de
- * `.main-shift > main` → bande pleine hauteur (padding) visible à gauche du contenu.
- * Le débordement doit rester visible ; le clip global reste sur `html`.
- */
-@media (min-width: 768px) {
-	.main-shift {
-		overflow-x: visible;
-	}
 }
 
 /*
@@ -1457,8 +1451,7 @@ html:has(#dev-bar-hitbox-above) {
 .projects-pin {
 	isolation: isolate;
 	backface-visibility: hidden;
-	/* Même espace titre → contenu que « À propos » (mt après h2), au lieu d’un vide centré. */
-	gap: var(--section-heading-gap);
+	/* Espace titre → cartes : `.section-after-h2` sur `.projects-strip-stage` (comme « À propos »). */
 }
 
 /* Alignement 1re carte = bord gauche du h2 (même logique que .section-shell + gouttières) */
@@ -1528,12 +1521,16 @@ html:has(#dev-bar-hitbox-above) {
 		overflow-x: auto;
 		overflow-y: hidden;
 		overscroll-behavior-x: contain;
-		overscroll-behavior-y: none;
+		overscroll-behavior-y: auto;
 		-webkit-overflow-scrolling: touch;
-		touch-action: pan-x pinch-zoom;
+		/* `pan-x` seul empêche le scroll vertical de la page quand le geste commence sur le carrousel. */
+		touch-action: auto;
 		scroll-snap-type: x mandatory;
 		scroll-padding-inline: var(--projects-pad-x, 1.25rem);
 		scrollbar-width: none;
+		/* Alignement titre → cartes comme « À propos » : pas de padding haut en plus du `section-after-h2`. */
+		padding-top: 0;
+		padding-bottom: 1.75rem;
 	}
 
 	[data-projects-viewport]::-webkit-scrollbar {

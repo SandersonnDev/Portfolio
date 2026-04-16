@@ -4,6 +4,8 @@ import { reduce } from "./env";
 
 let lenis: Lenis | null = null;
 let tickerRaf: ((time: number) => void) | null = null;
+let lenisBreakpointMql: MediaQueryList | null = null;
+let lenisBreakpointListener: (() => void) | null = null;
 
 /** Valeurs par défaut GSAP `lagSmoothing` (rétablies à la destruction de Lenis). */
 const GSAP_LAG_SMOOTHING_DEFAULT: [number, number] = [500, 33];
@@ -14,6 +16,11 @@ export function getLenis(): Lenis | null {
 }
 
 export function killLenisScroll() {
+	if (lenisBreakpointMql && lenisBreakpointListener) {
+		lenisBreakpointMql.removeEventListener("change", lenisBreakpointListener);
+		lenisBreakpointMql = null;
+		lenisBreakpointListener = null;
+	}
 	if (tickerRaf) {
 		gsap.ticker.remove(tickerRaf);
 		tickerRaf = null;
@@ -30,11 +37,24 @@ export function killLenisScroll() {
 
 /**
  * Défilement vertical amorti (effet « glace ») + synchro ScrollTrigger.
- * Désactivé si `prefers-reduced-motion: reduce`.
+ * Désactivé si `prefers-reduced-motion: reduce`, ou viewport ≤767px
+ * (scroll natif + carrousel projets sans conflit Lenis).
  */
 export function initLenisScroll() {
 	killLenisScroll();
 	if (reduce()) return;
+
+	/* Lenis + scroll tactile natif (carrousel projets, etc.) : conflits fréquents sur petit écran. */
+	const isMobileViewport = () => window.matchMedia("(max-width: 767px)").matches;
+
+	lenisBreakpointMql = window.matchMedia("(max-width: 767px)");
+	lenisBreakpointListener = () => initLenisScroll();
+	lenisBreakpointMql.addEventListener("change", lenisBreakpointListener);
+
+	if (isMobileViewport()) {
+		requestAnimationFrame(() => ScrollTrigger.refresh());
+		return;
+	}
 
 	lenis = new Lenis({
 		orientation: "vertical",
