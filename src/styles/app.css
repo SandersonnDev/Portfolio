@@ -43,24 +43,16 @@ html:has(#dev-bar-hitbox-above) {
 #hero .hero-section__inner {
 	box-sizing: border-box;
 	min-height: calc(100svh - var(--hero-top-inset) - var(--hero-bottom-inset));
-	max-height: calc(100svh - var(--hero-top-inset) - var(--hero-bottom-inset));
+	max-height: none;
 	overflow-x: hidden;
-	overflow-y: auto;
-	overscroll-behavior-y: contain;
-	-webkit-overflow-scrolling: touch;
+	overflow-y: visible;
+	overscroll-behavior-y: auto;
 }
 
 @media (max-width: 767px) {
 	#hero.hero-section {
 		/* Sur mobile : réserve pour le dock rail fixe en bas. */
 		--hero-bottom-inset: max(env(safe-area-inset-bottom, 0px), 4.35rem);
-	}
-
-	/* Sur mobile: pas de scroll interne au hero (la page scroll, pas la section). */
-	#hero .hero-section__inner {
-		max-height: none;
-		overflow-y: visible;
-		overscroll-behavior-y: auto;
 	}
 }
 
