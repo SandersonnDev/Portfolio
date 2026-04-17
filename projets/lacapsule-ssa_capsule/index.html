@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="fr"> <head><meta charset="UTF-8"><script>
+			try {
+				const k = "portfolio-theme:v1";
+				const v = localStorage.getItem(k);
+				document.documentElement.setAttribute("data-theme", v === "light" ? "light" : "dark");
+			} catch (e) {
+				document.documentElement.setAttribute("data-theme", "dark");
+			}
+		</script><script>(function(){const isProjectDetailRoute = true;
+
+			try {
+				const r = sessionStorage.getItem("routeEnter");
+				if (r === "from-home" || r === "from-project") {
+					document.documentElement.setAttribute("data-route-enter", r);
+					sessionStorage.removeItem("routeEnter");
+				}
+			} catch (e) {}
+			try {
+				if (isProjectDetailRoute) {
+					/* Slide journal : uniquement si clic prev/next entre fiches (voir transition-nav). Sans le
+					 * drapeau `projArticleInterNav`, une `projArticleDir` orpheline déclenchait le slide alors que
+					 * `data-route-enter` masquait tout le `.main-shift` → contenu invisible / nav « sans style ». */
+					const inter = sessionStorage.getItem("projArticleInterNav") === "1";
+					const d = sessionStorage.getItem("projArticleDir");
+					if (inter && (d === "prev" || d === "next")) {
+						document.documentElement.setAttribute("data-page-slide", d);
+					}
+				}
+			} catch (e) {}
+		})();</script><style>
+			html[data-route-enter="from-home"] .main-shift,
+			html[data-route-enter="from-project"] .main-shift {
+				opacity: 0;
+				visibility: hidden;
+			}
+			html[data-page-slide="next"] .project-page__journal {
+				transform: translate3d(100%, 0, 0);
+			}
+			html[data-page-slide="prev"] .project-page__journal {
+				transform: translate3d(-100%, 0, 0);
+			}
+		</style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/Portfolio/favicon.svg"><meta name="description" content="Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose > Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou M…"><title>lacapsule/SSA_Capsule · Alexandre Kouziaeff</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;600&family=Share+Tech+Mono&display=optional" rel="stylesheet"><link rel="stylesheet" href="/Portfolio/_astro/Layout.DLLQhjU9.css"></head> <body data-route="/Portfolio/projets/lacapsule-ssa_capsule/">  <aside class="rail" aria-label="Navigation du portfolio"> <div class="rail__dock"> <nav class="rail__cluster"> <a href="/Portfolio/#hero" class="rail__link" title="Retour en haut de page" aria-label="Retour en haut de page"> <i class="fa-solid fa-house" aria-hidden="true"></i> </a> <a href="/Portfolio/#projects" class="rail__link" title="Aller à la section Projets" aria-label="Aller à la section Projets"> <i class="fa-solid fa-list-check" aria-hidden="true"></i> </a> <a href="/Portfolio/#about" class="rail__link" title="Aller à la section À propos" aria-label="Aller à la section À propos"> <i class="fa-solid fa-address-card" aria-hidden="true"></i> </a> </nav> <div class="rail__social" role="group" aria-label="Contact et réseaux"> <a href="https://github.com/SandersonnDev" target="_blank" rel="noopener noreferrer" class="rail__social-btn" title="Ouvrir le profil GitHub" aria-label="Ouvrir le profil GitHub"> <i class="fa-brands fa-github" aria-hidden="true"></i> </a> <a href="mailto:kouziaeffa.pro@gmail.com" class="rail__social-btn" title="Envoyer un e-mail à l’adresse affichée" aria-label="Envoyer un e-mail à l’adresse affichée"> <i class="fa-regular fa-envelope" aria-hidden="true"></i> </a> </div> <div class="rail__theme" role="group" aria-label="Thème clair ou sombre"> <button type="button" class="rail__social-btn rail__theme-toggle" id="rail-theme-toggle" data-label-to-light="Passer au thème clair" data-label-to-dark="Passer au thème sombre" title="Passer au thème clair" aria-label="Passer au thème clair"> <i class="fa-solid fa-sun rail__theme-icon" aria-hidden="true"></i> </button> </div> </div> </aside> <div class="relative z-10 main-shift">  <article class="mx-auto max-w-5xl px-5 pb-28 pt-20 project-page md:px-12 md:pt-24"> <a href="/Portfolio/#projects" class="project-page__back" title="Revenir à la liste des projets" aria-label="Revenir à la liste des projets"> <i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> Retour aux projets </a> <div class="mt-6 flex flex-wrap items-center justify-between gap-3 project-page__jump md:gap-4"> <a href="/Portfolio/projets/safenet" class="project-page__jump-link project-page__jump-link--prev" data-project-nav="prev"> <span class="project-page__jump-arrow" aria-hidden="true">←</span> <span class="project-page__jump-title">Safenet</span> </a> <a href="/Portfolio/projets/lacapsule-deffinovmjc" class="project-page__jump-link project-page__jump-link--next" data-project-nav="next"> <span class="project-page__jump-title">lacapsule/deffinovMJC</span> <span class="project-page__jump-arrow" aria-hidden="true">→</span> </a> </div> <p class="mt-10 sys-mono text-[10px] tracking-[0.22em] project-page__repo"> <a href="https://github.com/lacapsule/SSA_Capsule" target="_blank" rel="noopener noreferrer" class="text-(--accent) transition-opacity hover:opacity-90" title="Dépôt GitHub « lacapsule/SSA_Capsule »"> <span class="text-(--fg-dim)">GitHub · </span>lacapsule/SSA_Capsule </a> </p> <div class="mt-6 grid gap-10 project-page__hero lg:grid-cols-[minmax(0,1fr)_min(100%,17.5rem)] lg:items-start lg:gap-14 xl:grid-cols-[minmax(0,1fr)_19.5rem]"> <div class="min-w-0"> <h1 class="text-3xl article-title md:text-4xl lg:text-[2.35rem]" aria-label="lacapsule/SSA_Capsule"> <span data-scramble data-scramble-final="lacapsule/SSA_Capsule" class="inline-block min-h-[1.2em]"></span> </h1> <p class="mt-6 min-h-16 text-base leading-relaxed text-(--fg-dim) project-page__lead tw-paragraph md:text-lg"> Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose &gt; Pour sites statiques, associatifs ou petits back-offices sécurisés Fournir une base claire, maintenable et extensible pour : Créer un site vitrine dynamique ou un back-office léger Utiliser SQLite ou M… </p> </div> <aside class="flex min-w-0 flex-col gap-5 project-page__aside lg:sticky lg:top-24 lg:self-start"> <div class="rounded-xl p-6 glass glass--panel md:p-7"> <p class="about-block__label mb-0">Liens</p> <div class="mt-5 flex flex-col gap-3"> <a href="https://github.com/lacapsule/SSA_Capsule" target="_blank" rel="noopener noreferrer" class="btn-sys justify-center" title="Dépôt GitHub « lacapsule/SSA_Capsule »"> <i class="fa-brands fa-github mr-2" aria-hidden="true"></i>
+Dépôt
+</a>  </div> </div> <div class="rounded-xl p-6 glass glass--panel md:p-7"> <p class="about-block__label mb-0">Technologies</p> <ul id="project-stack-tags" class="about-stack-tags mt-5 flex flex-wrap gap-2" aria-label="Technologies"> <li> <span class="chip">PHP</span> </li><li> <span class="chip">JavaScript</span> </li><li> <span class="chip">Hack</span> </li><li> <span class="chip">CSS</span> </li><li> <span class="chip">Shell</span> </li><li> <span class="chip">Makefile</span> </li><li> <span class="chip">Dockerfile</span> </li> </ul> </div> </aside> </div>  <div class="project-page__journal-clip"> <section class="mt-16 project-page__journal md:mt-20" aria-labelledby="project-journal-h"> <h2 id="project-journal-h" class="display-heading display-heading--lg"> Notes &amp; détails </h2> <div class="mt-10 project-page__readme"> <div class="readme-content"> <h2 class="readme-heading readme-heading--l1">🧱 CapsulePHP</h2><p class="readme-p"> <strong class="readme-strong">Boilerplate PHP MVC léger et moderne (sans dépendance externe) - Dev Purpose</strong> </p><blockquote class="readme-quote"> <span>Pour sites statiques, associatifs ou petits back-offices sécurisés</span> </blockquote><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">🎯 Objectif</h3><p class="readme-p"> <span>Fournir une base claire, maintenable et extensible pour :</span> </p><ul class="readme-list"><li class="readme-li"> <span>Créer un site vitrine dynamique ou un back-office léger</span> </li><li class="readme-li"> <span>Utiliser SQLite ou MySQL sans ORM ni dépendance externe</span> </li><li class="readme-li"> <span>Appliquer le modèle </span><strong class="readme-strong">MVC minimal</strong> </li><li class="readme-li"> <span>Gérer les </span><strong class="readme-strong">routes</strong><span>, les </span><strong class="readme-strong">vues</strong><span>, et l’</span><strong class="readme-strong">authentification</strong><span> proprement</span> </li><li class="readme-li"> <span>Offrir une architecture modulaire </span><strong class="readme-strong">type framework</strong> </li></ul><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">🗂 Structure</h3><div class="readme-pre-wrap" data-lenis-prevent>  <pre class="readme-pre">							<code>src/                        # Composants internes (framework)
+├── Framework/              # BaseController, Router, Kernel…
+├── Http/                   # Middleware, Headers…
+├── Security/               # Authenticator, PasswordHasher
+├── Database/               # Connexion PDO / gestion SQLite
+├── Lang/                   # Traductions multilingues
+
+app/                        # Application métier
+└── Controller/             # Contrôleurs liés aux pages
+
+templates/                  # Vues HTML (layout + pages)
+public/                     # Point d’entrée (index.php, login.php, etc.)
+config/                     # Configuration des routes, DB, constantes</code>
+						</pre> </div><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">🚀 Lancer le projet</h3><h4 class="readme-heading readme-heading--l3">1. Cloner le dépôt</h4><div class="readme-pre-wrap" data-lenis-prevent> <p class="readme-pre-label sys-mono">bash</p> <pre class="readme-pre">							<code>git clone https://github.com/tonuser/capsulephp.git
+cd capsulephp</code>
+						</pre> </div><h4 class="readme-heading readme-heading--l3">2. Démarrer un serveur local</h4><div class="readme-pre-wrap" data-lenis-prevent> <p class="readme-pre-label sys-mono">bash</p> <pre class="readme-pre">							<code>php -S localhost:8000 -t public/</code>
+						</pre> </div><p class="readme-p"> <span>Ou via Apache :</span> </p><div class="readme-pre-wrap" data-lenis-prevent> <p class="readme-pre-label sys-mono">bash</p> <pre class="readme-pre">							<code>bash bin/boot_apache.sh</code>
+						</pre> </div><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">🔐 Authentification</h3><ul class="readme-list"><li class="readme-li"> <span>🔑 Système simple basé sur </span><code class="readme-code readme-code--inline">Authenticator::login()</code><span> (PHP pur)</span> </li><li class="readme-li"> <span>🔒 Middleware </span><code class="readme-code readme-code--inline">AuthMiddleware::handle()</code><span> à inclure dans toute route protégée</span> </li><li class="readme-li"> <span>✅ Gestion de session, mot de passe hashé, redirections</span> </li></ul><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">🛠 Exemple de route</h3><div class="readme-pre-wrap" data-lenis-prevent> <p class="readme-pre-label sys-mono">php</p> <pre class="readme-pre">							<code>// config/routes.php
+
+use App\Controller\MainController;
+
+return [
+    &#39;/&#39; =&gt; [ MainController::class, &#39;home&#39; ],
+    &#39;/contact&#39; =&gt; [ MainController::class, &#39;contact&#39; ],
+];</code>
+						</pre> </div><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">📄 Exemple de contrôleur</h3><div class="readme-pre-wrap" data-lenis-prevent> <p class="readme-pre-label sys-mono">php</p> <pre class="readme-pre">							<code>class MainController extends AbstractController
+{
+    public function home(): void
+    {
+        echo $this-&gt;renderView(&#39;pages/home.php&#39;, [&#39;title&#39; =&gt; &#39;Accueil&#39;]);
+    }
+}</code>
+						</pre> </div><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">📦 Avantages</h3><ul class="readme-list"><li class="readme-li"> <span>🧱 100% PHP natif, aucun framework externe</span> </li><li class="readme-li"> <span>🔍 Code clair et lisible pour apprentissage ou projet associatif</span> </li><li class="readme-li"> <span>🧩 Architecture extensible par dossiers (</span><code class="readme-code readme-code--inline">lib/</code><span>)</span> </li><li class="readme-li"> <span>📦 Support multilingue, sécurité headers, layouts, middleware, SQLite</span> </li></ul><hr class="readme-hr"><h3 class="readme-heading readme-heading--l2">📌 À venir</h3><ul class="readme-list"><li class="readme-li"> <span>[ ] Middleware CSRF</span> </li></ul><h2 class="readme-heading readme-heading--l1">PHPCapsule</h2> </div> </div> </section> </div> <nav class="project-article-nav" aria-label="Passer à une autre fiche projet"><div class="project-article-nav__inner"><div class="project-article-nav__cell"><a href="/Portfolio/projets/safenet" class="project-article-nav__link project-article-nav__link--prev" data-project-nav="prev"><span class="project-article-nav__dir sys-mono"><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i>Précédent</span><span class="project-article-nav__title">Safenet</span></a></div><div class="project-article-nav__cell project-article-nav__cell--end"><a href="/Portfolio/projets/lacapsule-deffinovmjc" class="project-article-nav__link project-article-nav__link--next" data-project-nav="next"><span class="project-article-nav__dir sys-mono">Suivant<i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i></span><span class="project-article-nav__title">lacapsule/deffinovMJC</span></a></div></div></nav> </article>  </div> <script type="module" src="/Portfolio/_astro/Layout.astro_astro_type_script_index_0_lang.-klolqea.js"></script> </body> </html>

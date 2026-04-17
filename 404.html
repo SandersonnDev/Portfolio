@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="fr"> <head><meta charset="UTF-8"><script>
+			try {
+				const k = "portfolio-theme:v1";
+				const v = localStorage.getItem(k);
+				document.documentElement.setAttribute("data-theme", v === "light" ? "light" : "dark");
+			} catch (e) {
+				document.documentElement.setAttribute("data-theme", "dark");
+			}
+		</script><script>(function(){const isProjectDetailRoute = false;
+
+			try {
+				const r = sessionStorage.getItem("routeEnter");
+				if (r === "from-home" || r === "from-project") {
+					document.documentElement.setAttribute("data-route-enter", r);
+					sessionStorage.removeItem("routeEnter");
+				}
+			} catch (e) {}
+			try {
+				if (isProjectDetailRoute) {
+					/* Slide journal : uniquement si clic prev/next entre fiches (voir transition-nav). Sans le
+					 * drapeau `projArticleInterNav`, une `projArticleDir` orpheline déclenchait le slide alors que
+					 * `data-route-enter` masquait tout le `.main-shift` → contenu invisible / nav « sans style ». */
+					const inter = sessionStorage.getItem("projArticleInterNav") === "1";
+					const d = sessionStorage.getItem("projArticleDir");
+					if (inter && (d === "prev" || d === "next")) {
+						document.documentElement.setAttribute("data-page-slide", d);
+					}
+				}
+			} catch (e) {}
+		})();</script><style>
+			html[data-route-enter="from-home"] .main-shift,
+			html[data-route-enter="from-project"] .main-shift {
+				opacity: 0;
+				visibility: hidden;
+			}
+			html[data-page-slide="next"] .project-page__journal {
+				transform: translate3d(100%, 0, 0);
+			}
+			html[data-page-slide="prev"] .project-page__journal {
+				transform: translate3d(-100%, 0, 0);
+			}
+		</style><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/Portfolio/favicon.svg"><meta name="description" content="404"><title>Signal perdu · Alexandre Kouziaeff</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;600&family=Share+Tech+Mono&display=optional" rel="stylesheet"><link rel="stylesheet" href="/Portfolio/_astro/Layout.DLLQhjU9.css"></head> <body data-route="/Portfolio/404/">  <aside class="rail" aria-label="Navigation du portfolio"> <div class="rail__dock"> <nav class="rail__cluster"> <a href="/Portfolio/#hero" class="rail__link" title="Retour en haut de page" aria-label="Retour en haut de page"> <i class="fa-solid fa-house" aria-hidden="true"></i> </a> <a href="/Portfolio/#projects" class="rail__link" title="Aller à la section Projets" aria-label="Aller à la section Projets"> <i class="fa-solid fa-list-check" aria-hidden="true"></i> </a> <a href="/Portfolio/#about" class="rail__link" title="Aller à la section À propos" aria-label="Aller à la section À propos"> <i class="fa-solid fa-address-card" aria-hidden="true"></i> </a> </nav> <div class="rail__social" role="group" aria-label="Contact et réseaux"> <a href="https://github.com/SandersonnDev" target="_blank" rel="noopener noreferrer" class="rail__social-btn" title="Ouvrir le profil GitHub" aria-label="Ouvrir le profil GitHub"> <i class="fa-brands fa-github" aria-hidden="true"></i> </a> <a href="mailto:kouziaeffa.pro@gmail.com" class="rail__social-btn" title="Envoyer un e-mail à l’adresse affichée" aria-label="Envoyer un e-mail à l’adresse affichée"> <i class="fa-regular fa-envelope" aria-hidden="true"></i> </a> </div> <div class="rail__theme" role="group" aria-label="Thème clair ou sombre"> <button type="button" class="rail__social-btn rail__theme-toggle" id="rail-theme-toggle" data-label-to-light="Passer au thème clair" data-label-to-dark="Passer au thème sombre" title="Passer au thème clair" aria-label="Passer au thème clair"> <i class="fa-solid fa-sun rail__theme-icon" aria-hidden="true"></i> </button> </div> </div> </aside> <div class="relative z-10 main-shift">  <main class="flex min-h-[75dvh] flex-col items-center justify-center px-6 text-center"> <p class="sys-mono text-[10px] tracking-[0.5em] text-(--accent)">404</p> <h1 class="font-display mt-6 text-3xl font-light tracking-[0.15em] text-(--fg) md:text-4xl">HORS GRILLE</h1> <p class="mt-4 max-w-sm text-sm leading-normal text-(--fg-dim)">Aucune ressource à ces coordonnées.</p> <a href="/Portfolio/" class="mt-12 btn-sys">Revenir au vaisseau</a> </main>  </div> <script type="module" src="/Portfolio/_astro/Layout.astro_astro_type_script_index_0_lang.-klolqea.js"></script> </body> </html>
