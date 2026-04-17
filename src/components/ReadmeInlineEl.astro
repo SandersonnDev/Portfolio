@@ -1,0 +1,23 @@
+---
+import type { ReadmeInlinePart } from "../types/readme-blocks";
+
+interface Props {
+	part: ReadmeInlinePart;
+}
+
+const { part } = Astro.props;
+---
+
+{
+	part.k === "link" ? (
+		<a class="readme-inline-link" href={part.href} target="_blank" rel="noopener noreferrer">
+			{part.label}
+		</a>
+	) : part.k === "bold" ? (
+		<strong class="readme-strong">{part.v}</strong>
+	) : part.k === "code" ? (
+		<code class="readme-code readme-code--inline">{part.v}</code>
+	) : (
+		<span>{part.v}</span>
+	)
+}

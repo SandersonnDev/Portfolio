@@ -4,10 +4,45 @@ import { reduce } from "./env";
 
 let lenis: Lenis | null = null;
 let tickerRaf: ((time: number) => void) | null = null;
+let scrollTriggerProxyAttached = false;
 
 /** Valeurs par défaut GSAP `lagSmoothing` (rétablies à la destruction de Lenis). */
 const GSAP_LAG_SMOOTHING_DEFAULT: [number, number] = [500, 33];
 let lenisTickerActive = false;
+
+function attachScrollTriggerScrollerProxy(): void {
+	if (scrollTriggerProxyAttached || !lenis || typeof document === "undefined")
+		return;
+	const root = document.documentElement;
+	ScrollTrigger.scrollerProxy(root, {
+		scrollTop(value) {
+			if (!lenis) {
+				if (arguments.length)
+					window.scrollTo(0, Number(value));
+				return window.scrollY || document.documentElement.scrollTop;
+			}
+			if (arguments.length)
+				lenis.scrollTo(Number(value), { immediate: true });
+			return lenis.scroll;
+		},
+		getBoundingClientRect() {
+			return {
+				top: 0,
+				left: 0,
+				width: window.innerWidth,
+				height: window.innerHeight,
+			};
+		},
+	});
+	scrollTriggerProxyAttached = true;
+}
+
+function detachScrollTriggerScrollerProxy(): void {
+	if (!scrollTriggerProxyAttached || typeof document === "undefined")
+		return;
+	ScrollTrigger.scrollerProxy(document.documentElement);
+	scrollTriggerProxyAttached = false;
+}
 
 export function getLenis(): Lenis | null {
 	return lenis;
@@ -22,6 +57,7 @@ export function killLenisScroll() {
 		lenis.destroy();
 		lenis = null;
 	}
+	detachScrollTriggerScrollerProxy();
 	if (lenisTickerActive) {
 		gsap.ticker.lagSmoothing(GSAP_LAG_SMOOTHING_DEFAULT[0], GSAP_LAG_SMOOTHING_DEFAULT[1]);
 		lenisTickerActive = false;
@@ -40,12 +76,13 @@ export function initLenisScroll() {
 		orientation: "vertical",
 		gestureOrientation: "vertical",
 		smoothWheel: true,
-		/** Plus bas = inertie plus longue après lâcher la molette. */
-		lerp: 0.048,
-		wheelMultiplier: 0.88,
+		/** Un peu plus haut qu’avant : moins d’oscillation quand la molette change de sens vite (pages longues + ScrollTrigger). */
+		lerp: 0.085,
+		wheelMultiplier: 1,
 		touchMultiplier: 1,
 	});
 
+	attachScrollTriggerScrollerProxy();
 	lenis.on("scroll", ScrollTrigger.update);
 
 	tickerRaf = (time: number) => {

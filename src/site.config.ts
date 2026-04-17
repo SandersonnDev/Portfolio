@@ -116,9 +116,12 @@ export const copy = {
 	railAbout: "Aller à la section À propos",
 	railProjects: "Aller à la section Projets",
 	railGithub: "Ouvrir le profil GitHub",
-	/** Rail : bouton décoratif (thème désactivé). */
-	railThemeGroup: "Élément décoratif",
-	railThemeToggle: "Thème (désactivé, élément décoratif)",
+	/** Rail : bascule thème clair / sombre. */
+	railThemeGroup: "Thème clair ou sombre",
+	/** Bouton rail : on affiche le soleil quand le site est en thème sombre (action = passer au clair). */
+	railThemeToLight: "Passer au thème clair",
+	/** Bouton rail : on affiche la lune quand le site est en thème clair (action = passer au sombre). */
+	railThemeToDark: "Passer au thème sombre",
 	aboutMailTitle: "Envoyer un e-mail à l’adresse affichée",
 	aboutGithubTitle: "Ouvrir le profil GitHub",
 	aboutBlockPresent: "Présentation",

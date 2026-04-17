@@ -9,6 +9,15 @@ import { withBase } from "../lib/paths";
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>
+			try {
+				const k = "portfolio-theme:v1";
+				const v = localStorage.getItem(k);
+				document.documentElement.setAttribute("data-theme", v === "light" ? "light" : "dark");
+			} catch (e) {
+				document.documentElement.setAttribute("data-theme", "dark");
+			}
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
 		<title>Page introuvable · {site.displayName}</title>

@@ -17,14 +17,26 @@ function normalizePathname(p: string): string {
 	const x = p.replace(/\/$/, "");
 	return x === "" ? "/" : x;
 }
+const pathNorm = normalizePathname(routePath);
+const baseNorm = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+const isHome = pathNorm === baseNorm;
 /** Même logique que `transition-nav` : fiche projet seulement (évite un slide sur les autres routes). */
-const isProjectDetailRoute = /\/projets\/[^/]+$/.test(normalizePathname(routePath));
+const isProjectDetailRoute = /\/projets\/[^/]+$/.test(pathNorm);
 ---
 
 <!doctype html>
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>
+			try {
+				const k = "portfolio-theme:v1";
+				const v = localStorage.getItem(k);
+				document.documentElement.setAttribute("data-theme", v === "light" ? "light" : "dark");
+			} catch (e) {
+				document.documentElement.setAttribute("data-theme", "dark");
+			}
+		</script>
 		<script is:inline define:vars={{ isProjectDetailRoute }}>
 			try {
 				const r = sessionStorage.getItem("routeEnter");
@@ -46,6 +58,7 @@ const isProjectDetailRoute = /\/projets\/[^/]+$/.test(normalizePathname(routePat
 				}
 			} catch (e) {}
 		</script>
+
 		<style is:inline>
 			html[data-route-enter="from-home"] .main-shift,
 			html[data-route-enter="from-project"] .main-shift {
@@ -71,6 +84,15 @@ const isProjectDetailRoute = /\/projets\/[^/]+$/.test(normalizePathname(routePat
 		/>
 	</head>
 	<body data-route={routePath}>
+		{
+			isHome ? (
+				<canvas
+					id="hero-three-canvas"
+					class="pointer-events-none fixed inset-0 z-1 block h-full min-h-dvh w-full max-w-none"
+					aria-hidden="true"
+				/>
+			) : null
+		}
 		<Rail />
 		<div class="relative z-10 main-shift">
 			<slot />

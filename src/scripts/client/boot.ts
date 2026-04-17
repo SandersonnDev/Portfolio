@@ -19,6 +19,7 @@ import { disconnectTextFX, initTextFX } from "./text-fx";
 import { initViewportRhythm } from "./viewport-rhythm";
 import { initLenisScroll, killLenisScroll } from "./lenis-scroll";
 import { registerScrollPositionSave, restoreScrollPositionAfterBoot } from "./scroll-restore";
+import { initThemeToggle } from "./theme-toggle";
 
 let cleanupBoot: (() => void) | null = null;
 
@@ -52,6 +53,7 @@ export function boot() {
 	};
 
 	initGlobalPointer(ac);
+	initThemeToggle(ac.signal);
 	initLenisScroll();
 	restoreScrollPositionAfterBoot();
 	initProjectDetailNavTransitionDirection(ac);

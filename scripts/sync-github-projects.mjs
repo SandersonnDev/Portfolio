@@ -220,11 +220,29 @@ function pickLiveHref(homepage, readmeRaw) {
         return h;
     return extractDemoUrlFromReadme(readmeRaw);
 }
-function parseInlineParts(str) {
+/** Corrige des README fréquents : `` `**nom`** `` au lieu de `` `**nom**` `` ou **nom** (backtick coupé avant la fin du gras). */
+function normalizeReadmeInlineMarkdown(str) {
+    let t = String(str);
+    t = t.replace(/`(\*\*[^`]+)`\*\*/g, "$1**");
+    t = t.replace(/\*\*([^*\n`]+)\n\*\*/g, "**$1**");
+    return t;
+}
+function resolveReadmeMarkdownHref(href, linkCtx) {
+    const h = (href || "").trim();
+    if (!h || !linkCtx)
+        return h;
+    if (/^https?:\/\//i.test(h) || h.startsWith("#") || h.startsWith("mailto:"))
+        return h;
+    const { owner, name, defaultBranch } = linkCtx;
+    const path = h.replace(/^\/+/, "");
+    return `https://github.com/${owner}/${name}/blob/${defaultBranch}/${path}`;
+}
+function parseInlineParts(str, linkCtx = null) {
     if (!str)
         return [{ k: "text", v: "" }];
     const parts = [];
-    let s = String(str);
+    const rawInput = String(str);
+    let s = normalizeReadmeInlineMarkdown(rawInput);
     while (s.length) {
         if (s.startsWith("**")) {
             const end = s.indexOf("**", 2);
@@ -246,13 +264,26 @@ function parseInlineParts(str) {
             s = s.slice(end + 1);
             continue;
         }
+        const linkM = /^\[([^\]]*)\]\(([^)\s]+)\)/.exec(s);
+        if (linkM) {
+            parts.push({
+                k: "link",
+                label: linkM[1],
+                href: resolveReadmeMarkdownHref(linkM[2], linkCtx),
+            });
+            s = s.slice(linkM[0].length);
+            continue;
+        }
         let n = s.length;
         const bi = s.indexOf("**");
         const ci = s.indexOf("`");
+        const linkStart = s.search(/\[[^\]]*\]\([^)\s]+\)/);
         if (bi !== -1)
             n = Math.min(n, bi);
         if (ci !== -1)
             n = Math.min(n, ci);
+        if (linkStart !== -1)
+            n = Math.min(n, linkStart);
         parts.push({ k: "text", v: s.slice(0, n) });
         s = s.slice(n);
     }
@@ -264,9 +295,9 @@ function parseInlineParts(str) {
         if (last?.k === "text" && p.k === "text")
             last.v += p.v;
         else
-            merged.push({ k: p.k, v: p.v });
+            merged.push(p);
     }
-    return merged.length ? merged : [{ k: "text", v: str }];
+    return merged.length ? merged : [{ k: "text", v: rawInput }];
 }
 function isTableLine(line) {
     const t = line.trim();
@@ -363,7 +394,7 @@ function tryParseBadgeTable(tableLines) {
     return { type: "tagTable", rows: tagRows };
 }
 const MAX_MARKDOWN_TABLE_ROWS = 120;
-function tryParseGenericMarkdownTable(tableLines) {
+function tryParseGenericMarkdownTable(tableLines, linkCtx = null) {
     const rawRows = tableLines.map(splitTableRow).filter((r) => r.some((c) => c.trim().length > 0));
     if (rawRows.length < 2)
         return null;
@@ -385,7 +416,7 @@ function tryParseGenericMarkdownTable(tableLines) {
     const rowToCells = (cellArr) => {
         const cells = [];
         for (let c = 0; c < colCount; c++) {
-            cells.push(parseInlineParts((cellArr[c] ?? "").trim()));
+            cells.push(parseInlineParts((cellArr[c] ?? "").trim(), linkCtx));
         }
         return cells;
     };
@@ -654,7 +685,7 @@ function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000, readmCtx = null
                 blocks.push(tagBlock);
             }
             else {
-                const mdTable = tryParseGenericMarkdownTable(tableLines);
+                const mdTable = tryParseGenericMarkdownTable(tableLines, readmCtx);
                 if (mdTable && blocks.length < maxBlocks)
                     blocks.push(mdTable);
             }
@@ -699,7 +730,7 @@ function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000, readmCtx = null
                 i++;
             }
             if (q.length)
-                blocks.push({ type: "quote", parts: parseInlineParts(q.join(" ")) });
+                blocks.push({ type: "quote", parts: parseInlineParts(q.join(" "), readmCtx) });
             continue;
         }
         if (/^[-*+]\s/.test(t) || /^\d+\.\s/.test(t)) {
@@ -713,12 +744,12 @@ function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000, readmCtx = null
                 const ul = /^[-*+]\s+(.*)$/.exec(tr);
                 const ol = /^(\d+)\.\s+(.*)$/.exec(tr);
                 if (ordered && ol) {
-                    items.push(parseInlineParts(ol[2]));
+                    items.push(parseInlineParts(ol[2], readmCtx));
                     i++;
                     continue;
                 }
                 if (!ordered && ul) {
-                    items.push(parseInlineParts(ul[1]));
+                    items.push(parseInlineParts(ul[1], readmCtx));
                     i++;
                     continue;
                 }
@@ -770,7 +801,7 @@ function readmeToBlocks(raw, { maxBlocks = 100, maxCode = 12000, readmCtx = null
             if (linkOnly)
                 blocks.push(linkOnly);
             else
-                blocks.push({ type: "paragraph", parts: parseInlineParts(text) });
+                blocks.push({ type: "paragraph", parts: parseInlineParts(text, readmCtx) });
         }
     }
     return blocks;
@@ -779,7 +810,7 @@ function sectionsFromReadme(readmeRaw, description, readmeCtx) {
     const desc = (description || "").trim();
     const blocks = readmeCtx
         ? readmeToBlocksInterleaved(readmeRaw, readmeCtx)
-        : readmeToBlocks(readmeRaw);
+        : readmeToBlocks(readmeRaw, { readmCtx: readmeCtx });
     if (blocks.length)
         return blocks;
     if (desc)

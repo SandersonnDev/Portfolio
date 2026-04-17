@@ -1,6 +1,14 @@
 import SplitType from "split-type";
+import type { SplitTypeOptions } from "split-type";
 import { gsap, ScrollTrigger } from "./register-gsap";
 import { reduce } from "./env";
+
+const SPLIT_TYPE_OPTS: Partial<SplitTypeOptions> = {
+	types: "lines,words",
+	lineClass: "readme-split-line",
+	wordClass: "readme-split-word",
+};
+
 const projectLineSplitInstances: SplitType[] = [];
 const projectLineAnimations: gsap.core.Animation[] = [];
 let lineRevealResizeTimer = 0;
@@ -11,7 +19,7 @@ function scheduleProjectLineRevealResize() {
             return;
         for (const s of projectLineSplitInstances) {
             try {
-                s.split();
+                s.split(SPLIT_TYPE_OPTS);
             }
             catch {
             }
@@ -49,11 +57,7 @@ export function initProjectReadmeLineReveal(ac: AbortController) {
     const textEls = [...document.querySelectorAll<HTMLElement>(`.project-page ${textSelectors}`)].filter((el) => (el.textContent?.trim().length ?? 0) > 0);
     const run = () => {
         for (const el of textEls) {
-            const split = new SplitType(el, {
-                types: "lines,words",
-                lineClass: "readme-split-line",
-                wordClass: "readme-split-word",
-            });
+            const split = new SplitType(el, SPLIT_TYPE_OPTS);
             projectLineSplitInstances.push(split);
             const lines = split.lines;
             if (!lines?.length)

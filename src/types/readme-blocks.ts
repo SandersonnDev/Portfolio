@@ -1,7 +1,8 @@
-export interface ReadmeInlinePart {
-    k: string;
-    v: string;
-}
+export type ReadmeInlinePart =
+	| { k: "text"; v: string }
+	| { k: "bold"; v: string }
+	| { k: "code"; v: string }
+	| { k: "link"; label: string; href: string };
 export type ReadmeTagTableRow = {
     label: string;
     hint: string;

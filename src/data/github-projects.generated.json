@@ -1,5 +1,5 @@
 {
-	"syncedAt": "2026-04-17T07:25:45.632Z",
+	"syncedAt": "2026-04-17T10:06:40.623Z",
 	"sourceUser": "SandersonnDev",
 	"projects": [
 		{
@@ -260,7 +260,16 @@
 							[
 								{
 									"k": "text",
-									"v": "Sync GitHub puis serveur de dev ([localhost:4321](http://localhost:4321))."
+									"v": "Sync GitHub puis serveur de dev ("
+								},
+								{
+									"k": "link",
+									"label": "localhost:4321",
+									"href": "http://localhost:4321"
+								},
+								{
+									"k": "text",
+									"v": ")."
 								}
 							]
 						],
@@ -588,8 +597,9 @@
 					"items": [
 						[
 							{
-								"k": "text",
-								"v": "[Documentation Astro](https://docs.astro.build)"
+								"k": "link",
+								"label": "Documentation Astro",
+								"href": "https://docs.astro.build"
 							}
 						]
 					]
@@ -1259,7 +1269,12 @@
 					"parts": [
 						{
 							"k": "text",
-							"v": "![Workspace_banner](https://raw.githubusercontent.com/SandersonnDev/workspace/apps/client/assets/workspacebanner.svg)"
+							"v": "!"
+						},
+						{
+							"k": "link",
+							"label": "Workspace_banner",
+							"href": "https://raw.githubusercontent.com/SandersonnDev/workspace/apps/client/assets/workspacebanner.svg"
 						}
 					]
 				},
@@ -1523,7 +1538,16 @@
 								},
 								{
 									"k": "text",
-									"v": " (voir [proxmox/app/README.md](proxmox/app/README.md))."
+									"v": " (voir "
+								},
+								{
+									"k": "link",
+									"label": "proxmox/app/README.md",
+									"href": "https://github.com/SandersonnDev/workspace/blob/main/proxmox/app/README.md"
+								},
+								{
+									"k": "text",
+									"v": ")."
 								}
 							]
 						]
@@ -2006,7 +2030,16 @@
 							[
 								{
 									"k": "text",
-									"v": "Workflow [.github/workflows/build-client.yml](.github/workflows/build-client.yml) sur push "
+									"v": "Workflow "
+								},
+								{
+									"k": "link",
+									"label": ".github/workflows/build-client.yml",
+									"href": "https://github.com/SandersonnDev/workspace/blob/main/.github/workflows/build-client.yml"
+								},
+								{
+									"k": "text",
+									"v": " sur push "
 								},
 								{
 									"k": "code",
@@ -2041,12 +2074,53 @@
 							"v": "Déploiement documenté sur la branche "
 						},
 						{
-							"k": "code",
-							"v": "**proxmox"
+							"k": "bold",
+							"v": "proxmox"
 						},
 						{
 							"k": "text",
-							"v": "** : `proxmox/docker/` (Docker Compose), `proxmox/docs/DEPLOYMENT.md`, [proxmox/app/README.md](proxmox/app/README.md). L’URL et le port (ex. `http://192.168.1.62:4000`) sont paramétrés dans `connection.json` côté client."
+							"v": " : "
+						},
+						{
+							"k": "code",
+							"v": "proxmox/docker/"
+						},
+						{
+							"k": "text",
+							"v": " (Docker Compose), "
+						},
+						{
+							"k": "code",
+							"v": "proxmox/docs/DEPLOYMENT.md"
+						},
+						{
+							"k": "text",
+							"v": ", "
+						},
+						{
+							"k": "link",
+							"label": "proxmox/app/README.md",
+							"href": "https://github.com/SandersonnDev/workspace/blob/main/proxmox/app/README.md"
+						},
+						{
+							"k": "text",
+							"v": ". L’URL et le port (ex. "
+						},
+						{
+							"k": "code",
+							"v": "http://192.168.1.62:4000"
+						},
+						{
+							"k": "text",
+							"v": ") sont paramétrés dans "
+						},
+						{
+							"k": "code",
+							"v": "connection.json"
+						},
+						{
+							"k": "text",
+							"v": " côté client."
 						}
 					]
 				},

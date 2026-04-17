@@ -93,3 +93,19 @@ import { withBase } from "../../lib/paths";
 		</div>
 	</div>
 </section>
+
+<script>
+	import { startHeroThree } from "../../scripts/hero-three.mjs";
+
+	function bootHeroThree() {
+		const el = document.getElementById("hero-three-canvas");
+		if (!(el instanceof HTMLCanvasElement)) return;
+		startHeroThree(el);
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", bootHeroThree, { once: true });
+	} else {
+		bootHeroThree();
+	}
+</script>
