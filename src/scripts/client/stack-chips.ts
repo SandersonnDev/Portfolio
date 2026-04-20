@@ -41,7 +41,7 @@ function clearStackTagGsapArtifacts() {
 	const selectors = [
 		"#about-stack-tags .chip",
 		"#project-stack-tags .chip",
-		".project-card__stack-badge",
+		".project-cardstack-badge",
 	];
 	for (const sel of selectors) {
 		document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
@@ -68,7 +68,7 @@ export function initStackTagChips() {
 		document.getElementById("project-stack-tags"),
 	].filter((n): n is HTMLElement => !!n);
 
-	const cardStackRoots = [...document.querySelectorAll<HTMLElement>(".project-card__stack")];
+	const cardStackRoots = [...document.querySelectorAll<HTMLElement>(".project-cardstack")];
 
 	if ((!chipRoots.length && !cardStackRoots.length) || reduce()) return;
 
@@ -87,7 +87,7 @@ export function initStackTagChips() {
 		}
 
 		for (const root of cardStackRoots) {
-			const badges = [...root.querySelectorAll<HTMLElement>(".project-card__stack-badge")];
+			const badges = [...root.querySelectorAll<HTMLElement>(".project-cardstack-badge")];
 			if (!badges.length) continue;
 			/* Trigger sur la carte : la stack est en bas, sinon `top 92%` sur le bloc seul ne part pas toujours (strip horizontal, etc.). */
 			const triggerEl = root.closest<HTMLElement>(".project-card") ?? root;

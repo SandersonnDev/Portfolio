@@ -1,0 +1,55 @@
+---
+import { site, nav } from "../site.config";
+import { withBase } from "../lib/paths";
+---
+
+<aside class="nav" aria-label={nav.navNavAria}>
+	<div class="navdock">
+		<nav class="navcluster">
+			<a href={withBase("#top")} class="navlink" title={nav.navHome} aria-label={nav.navHome}>
+				<i class="fa-solid fa-house" aria-hidden="true"></i>
+			</a>
+			<a href={withBase("#tags")} class="navlink" title={nav.navTags} aria-label={nav.navTags}>
+				<i class="fa-solid fa-tags" aria-hidden="true"></i>
+			</a>
+			<a href={withBase("#badges")} class="navlink" title={nav.navBadges} aria-label={nav.navBadges}>
+				<i class="fa-solid fa-certificate" aria-hidden="true"></i>
+			</a>
+		</nav>
+
+		<div class="navsocial" role="group" aria-label="Contact et réseaux">
+			<a
+				href={site.githubProfileUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="navsocial-btn"
+				title={nav.aboutGithubTitle}
+				aria-label={nav.aboutGithubTitle}
+			>
+				<i class="fa-brands fa-github" aria-hidden="true"></i>
+			</a>
+			<a
+				href={`mailto:${site.email}`}
+				class="navsocial-btn"
+				title={nav.aboutMailTitle}
+				aria-label={nav.aboutMailTitle}
+			>
+				<i class="fa-regular fa-envelope" aria-hidden="true"></i>
+			</a>
+		</div>
+
+		<div class="navtheme" role="group" aria-label={nav.navThemeGroup}>
+			<button
+				type="button"
+				class="navsocial-btn navtheme-toggle"
+				id="nav-theme-toggle"
+				data-label-to-light={nav.navThemeToLight}
+				data-label-to-dark={nav.navThemeToDark}
+				title={nav.navThemeToLight}
+				aria-label={nav.navThemeToLight}
+			>
+				<i class="fa-solid fa-sun navtheme-icon" aria-hidden="true"></i>
+			</button>
+		</div>
+	</div>
+</aside>

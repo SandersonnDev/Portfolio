@@ -3,11 +3,18 @@ import Layout from "../layouts/Layout.astro";
 import { site } from "../site.config";
 import { withBase } from "../lib/paths";
 ---
-<Layout title={`Signal perdu · ${site.displayName}`} description="404">
-	<main class="flex min-h-[75dvh] flex-col items-center justify-center px-6 text-center">
-		<p class="sys-mono text-[10px] tracking-[0.5em] text-(--accent)">404</p>
-		<h1 class="font-display mt-6 text-3xl font-light tracking-[0.15em] text-(--fg) md:text-4xl">HORS GRILLE</h1>
-		<p class="mt-4 max-w-sm text-sm leading-normal text-(--fg-dim)">Aucune ressource à ces coordonnées.</p>
-		<a href={withBase("")} class="mt-12 btn-sys">Revenir au vaisseau</a>
+
+<Layout title={`404 · ${site.name}`} description="Page introuvable">
+	<main class="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
+		<p class="font-mono text-xs tracking-[0.35em]" style="color: var(--accent)">404</p>
+		<h1 class="text-2xl font-light tracking-wide md:text-3xl" style="color: var(--fg)">Introuvable</h1>
+		<p class="max-w-sm text-sm" style="color: var(--fg-dim)">Cette URL n’existe pas.</p>
+		<a
+			href={withBase("")}
+			class="mt-6 inline-flex rounded-md border px-4 py-2 font-mono text-xs tracking-widest uppercase no-underline transition"
+			style="border-color: color-mix(in srgb, var(--accent) 35%, transparent); color: var(--fg); background: color-mix(in srgb, var(--accent) 14%, transparent)"
+		>
+			Accueil
+		</a>
 	</main>
 </Layout>

@@ -1,16 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HomePage from "../components/home/HomePage.astro";
-import gh from "../data/github-projects.generated.json";
-import type { GithubProjectCard } from "../types/github-projects";
-
-const projects = gh.projects as GithubProjectCard[];
-const githubUser = gh.sourceUser;
-const githubProfileUrl = `https://github.com/${githubUser}`;
+import { site } from "../site.config";
 ---
 
 <Layout>
 	<main>
-		<HomePage projects={projects} githubUser={githubUser} githubProfileUrl={githubProfileUrl} />
+		
 	</main>
 </Layout>
