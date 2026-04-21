@@ -1,20 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { site } from "../site.config";
 import { withBase } from "../lib/paths";
 ---
 
-<Layout title={`404 · ${site.name}`} description="Page introuvable">
-	<main class="flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
-		<p class="font-mono text-xs tracking-[0.35em]" style="color: var(--accent)">404</p>
-		<h1 class="text-2xl font-light tracking-wide md:text-3xl" style="color: var(--fg)">Introuvable</h1>
-		<p class="max-w-sm text-sm" style="color: var(--fg-dim)">Cette URL n’existe pas.</p>
-		<a
-			href={withBase("")}
-			class="mt-6 inline-flex rounded-md border px-4 py-2 font-mono text-xs tracking-widest uppercase no-underline transition"
-			style="border-color: color-mix(in srgb, var(--accent) 35%, transparent); color: var(--fg); background: color-mix(in srgb, var(--accent) 14%, transparent)"
-		>
-			Accueil
-		</a>
-	</main>
+
+<Layout>
+	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-sm h-[400px]">
+		<p class="font-medium text-lg text-indigo-500">404 Error</p>
+		<h2 class="md:text-6xl text-4xl font-semibold text-gray-300 ">Page Not Found</h2>
+		<p class="text-base mt-4 text-gray-300">Sorry, we couldn’t find the page you’re looking for.</p>
+		<div class="flex items-center gap-4 mt-6">
+			<button type="button" class="bg-indigo-500 hover:bg-indigo-600 px-7 py-2.5 text-white rounded active:scale-95 transition-all">
+				<a href={withBase("#home")}>Go back home</a>
+			</button>
+		</div>
+	</div>
 </Layout>

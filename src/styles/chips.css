@@ -1,0 +1,58 @@
+/* Tags / badges (cibles stack-chips, cartes projet) */
+#about-stack-tags li,
+.demo-tags li {
+	overflow: hidden;
+	padding-bottom: 0.15rem;
+}
+
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-family: var(--font-mono);
+	font-size: 0.58rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 0.35rem 0.65rem;
+	border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+	color: var(--fg-dim);
+	background: color-mix(in srgb, var(--void) 60%, transparent);
+	transition:
+		border-color 0.3s ease,
+		color 0.3s ease,
+		box-shadow 0.35s ease;
+}
+
+.chip:hover {
+	border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+	color: var(--accent);
+	box-shadow: 0 0 16px var(--accent-dim);
+}
+
+.project-cardstack {
+	overflow: visible;
+	padding-top: 0.2rem;
+	row-gap: 0.5rem;
+	column-gap: 0.55rem;
+	align-content: flex-start;
+}
+
+.project-cardstack-item {
+	padding-block: 0.08rem;
+}
+
+.project-cardstack-badge {
+	height: 1.38rem;
+	width: auto;
+	max-width: min(16rem, 100%);
+	object-fit: contain;
+	object-position: left center;
+	vertical-align: middle;
+	border-radius: 0.2rem;
+	opacity: 0.94;
+	transition: opacity 0.25s ease;
+}
+
+.project-cardstack-badge:hover {
+	opacity: 1;
+}

@@ -1,16 +1,16 @@
 ---
 import "../styles/icons.css";
 import "../styles/app.css";
-import { site } from "../site.config";
-import Navside from "../components/navside.astro";
+import { info } from "../site.config.ts";
 import { withBase } from "../lib/paths";
+import Navside from "../components/navside.astro";
 
 interface Props {
 	title?: string;
 	description?: string;
 }
 
-const { title = `${site.name}`, description = site.pitch } = Astro.props;
+const { title = `${info.name}`, description = info.pitch } = Astro.props;
 ---
 
 <!doctype html>
@@ -30,6 +30,6 @@ const { title = `${site.name}`, description = site.pitch } = Astro.props;
 	</head>
 	<body>
 		<Navside />
-		<slot />
+		<slot/>
 	</body>
 </html>

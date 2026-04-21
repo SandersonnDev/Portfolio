@@ -1,0 +1,9 @@
+/* Rail nav : pas de masquage du libellé ; accent au survol / entrée active */
+.nav-rail-link:not(.is-active):hover,
+.nav-rail-link:not(.is-active):focus-visible {
+	color: var(--accent);
+}
+
+.nav-rail-link.is-active {
+	color: var(--accent);
+}

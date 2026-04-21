@@ -1,55 +1,140 @@
 ---
-import { site, nav } from "../site.config";
+import { info, nav } from "../site.config.ts";
 import { withBase } from "../lib/paths";
 ---
-
-<aside class="nav" aria-label={nav.navNavAria}>
-	<div class="navdock">
-		<nav class="navcluster">
-			<a href={withBase("#top")} class="navlink" title={nav.navHome} aria-label={nav.navHome}>
-				<i class="fa-solid fa-house" aria-hidden="true"></i>
-			</a>
-			<a href={withBase("#tags")} class="navlink" title={nav.navTags} aria-label={nav.navTags}>
-				<i class="fa-solid fa-tags" aria-hidden="true"></i>
-			</a>
-			<a href={withBase("#badges")} class="navlink" title={nav.navBadges} aria-label={nav.navBadges}>
-				<i class="fa-solid fa-certificate" aria-hidden="true"></i>
-			</a>
-		</nav>
-
-		<div class="navsocial" role="group" aria-label="Contact et réseaux">
+<section>
+		<div
+			class="pointer-events-none fixed bottom-0 right-8 z-10 hidden w-10 flex-col items-center gap-5 after:block after:h-32 after:w-px after:shrink-0 after:bg-(--fg-dim) after:opacity-55 after:content-[''] lg:flex xl:right-10"
+		>
 			<a
-				href={site.githubProfileUrl}
+				href={info.githubProfileUrl}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="navsocial-btn"
+				class="pointer-events-auto flex size-10 shrink-0 items-center justify-center text-(--fg-dim) transition-[color,transform] duration-200 hover:text-(--accent) motion-safe:hover:-translate-y-0.5 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
 				title={nav.aboutGithubTitle}
 				aria-label={nav.aboutGithubTitle}
 			>
-				<i class="fa-brands fa-github" aria-hidden="true"></i>
+				<i class="fa-brands fa-github inline-block text-center text-2xl leading-none" aria-hidden="true"></i>
 			</a>
 			<a
-				href={`mailto:${site.email}`}
-				class="navsocial-btn"
+				class="pointer-events-auto flex w-10 shrink-0 flex-col items-center justify-center py-1 text-center font-mono text-sm leading-none tracking-[0.14em] text-(--fg-dim) transition-[color,transform] duration-200 [writing-mode:vertical-rl] hover:text-(--accent) motion-safe:hover:translate-x-0.5 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
+				href={`mailto:${info.email}`}
 				title={nav.aboutMailTitle}
-				aria-label={nav.aboutMailTitle}
+				aria-label={`${nav.aboutMailTitle} (${info.email})`}
 			>
-				<i class="fa-regular fa-envelope" aria-hidden="true"></i>
+				{info.email}
 			</a>
 		</div>
 
-		<div class="navtheme" role="group" aria-label={nav.navThemeGroup}>
+	<div
+		class="pointer-events-none fixed bottom-0 left-8 z-10 hidden w-auto min-w-10 flex-col items-center gap-2 overflow-visible lg:flex xl:left-10"
+	>
+		<nav id="nav-rail" class="flex w-10 min-w-0 flex-col items-stretch gap-6 self-stretch" aria-label={nav.navNavAria}>
+			<a
+				href={withBase("#home")}
+				class="nav-rail-link pointer-events-auto flex w-full min-w-0 flex-row items-center justify-start gap-2 whitespace-nowrap rounded-sm font-mono text-sm leading-none tracking-[0.14em] text-(--fg-dim) transition-[color,transform] duration-200 hover:text-(--accent) motion-safe:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
+				data-nav-hash="home"
+				title={nav.navHome}
+				aria-label={nav.navHome}
+			>
+				<span class="nav-rail-num flex w-10 shrink-0 items-baseline justify-center gap-0" aria-hidden="true">
+					<span class="text-amber-500">01</span><span class="text-(--fg-dim)">.</span>
+				</span>
+				<span class="nav-rail-title min-w-0 shrink text-left text-(--fg)" aria-hidden="true">Home</span>
+			</a>
+
+			<a
+				href={withBase("#projects")}
+				class="nav-rail-link pointer-events-auto flex w-full min-w-0 flex-row items-center justify-start gap-2 whitespace-nowrap rounded-sm font-mono text-sm leading-none tracking-[0.14em] text-(--fg-dim) transition-[color,transform] duration-200 hover:text-(--accent) motion-safe:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
+				data-nav-hash="projects"
+				title={nav.navProjects}
+				aria-label={nav.navProjects}
+			>
+				<span class="nav-rail-num flex w-10 shrink-0 items-baseline justify-center gap-0" aria-hidden="true">
+					<span class="text-amber-500">02</span><span class="text-(--fg-dim)">.</span>
+				</span>
+				<span class="nav-rail-title min-w-0 shrink text-left text-(--fg)" aria-hidden="true">Projects</span>
+			</a>
+
+			<a
+				href={withBase("#about")}
+				class="nav-rail-link pointer-events-auto flex w-full min-w-0 flex-row items-center justify-start gap-2 whitespace-nowrap rounded-sm font-mono text-sm leading-none tracking-[0.14em] text-(--fg-dim) transition-[color,transform] duration-200 hover:text-(--accent) motion-safe:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
+				data-nav-hash="about"
+				title={nav.navAbout}
+				aria-label={nav.navAbout}
+			>
+				<span class="nav-rail-num flex w-10 shrink-0 items-baseline justify-center gap-0" aria-hidden="true">
+					<span class="text-amber-500">03</span><span class="text-(--fg-dim)">.</span>
+				</span>
+				<span class="nav-rail-title min-w-0 shrink text-left text-(--fg)" aria-hidden="true">About</span>
+			</a>
+
+			<a
+				href={withBase("#contact")}
+				class="nav-rail-link pointer-events-auto flex w-full min-w-0 flex-row items-center justify-start gap-2 whitespace-nowrap rounded-sm font-mono text-sm leading-none tracking-[0.14em] text-(--fg-dim) transition-[color,transform] duration-200 hover:text-(--accent) motion-safe:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
+				data-nav-hash="contact"
+				title={nav.navContact}
+				aria-label={nav.navContact}
+			>
+				<span class="nav-rail-num flex w-10 shrink-0 items-baseline justify-center gap-0" aria-hidden="true">
+					<span class="text-amber-500">04</span><span class="text-(--fg-dim)">.</span>
+				</span>
+				<span class="nav-rail-title min-w-0 shrink text-left text-(--fg)" aria-hidden="true">Contact</span>
+			</a>
+		</nav>
 			<button
 				type="button"
-				class="navsocial-btn navtheme-toggle"
+				class="pointer-events-auto flex size-10 shrink-0 items-center justify-center text-(--fg-dim) transition-[color,transform] duration-200 hover:text-(--accent) motion-safe:hover:-translate-y-0.5 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent)"
 				id="nav-theme-toggle"
 				data-label-to-light={nav.navThemeToLight}
 				data-label-to-dark={nav.navThemeToDark}
 				title={nav.navThemeToLight}
 				aria-label={nav.navThemeToLight}
 			>
-				<i class="fa-solid fa-sun navtheme-icon" aria-hidden="true"></i>
+				<i class="fa-solid fa-sun navtheme-icon text-[0.95rem]" aria-hidden="true"></i>
 			</button>
+			<span
+				class="block h-32 w-px shrink-0 bg-(--fg-dim) opacity-55"
+				aria-hidden="true"
+			></span>
 		</div>
-	</div>
-</aside>
+</section>
+
+<script>
+	function navRailInit() {
+		const nav = document.getElementById("nav-rail");
+		if (!nav) return;
+		const links = Array.from(nav.querySelectorAll("a[data-nav-hash]")).filter(
+			(el): el is HTMLAnchorElement => el instanceof HTMLAnchorElement,
+		);
+		const valid = new Set(["home", "projects", "about", "contact"]);
+
+		function idFromHash() {
+			let h = (window.location.hash || "#home").replace(/^#/, "").toLowerCase();
+			if (!valid.has(h)) h = "home";
+			return h;
+		}
+
+		function sync() {
+			const id = idFromHash();
+			for (const a of links) {
+				if (a.dataset.navHash === id) {
+					a.classList.add("is-active");
+					a.setAttribute("aria-current", "true");
+				} else {
+					a.classList.remove("is-active");
+					a.removeAttribute("aria-current");
+				}
+			}
+		}
+
+		window.addEventListener("hashchange", sync);
+		sync();
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", navRailInit, { once: true });
+	} else {
+		navRailInit();
+	}
+</script>

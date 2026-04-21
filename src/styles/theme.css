@@ -1,0 +1,36 @@
+@theme {
+	--void: #070712;
+	--haze: #0e1022;
+	--fg: #e8eaf8;
+	--fg-dim: #8b92b0;
+	--accent: #818cf8;
+	--accent-dim: color-mix(in srgb, var(--accent) 26%, transparent);
+	--amber: #fbbf24;
+	--font-display: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Share Tech Mono", ui-monospace, monospace;
+	--nav-dock-shadow: color-mix(in srgb, var(--void) 90%, transparent);
+	--shadow-elevated: color-mix(in srgb, #000 42%, transparent);
+	--shadow-elevated-strong: color-mix(in srgb, #000 55%, transparent);
+	--glass-inset: color-mix(in srgb, #fff 6%, transparent);
+}
+
+html[data-theme="light"] {
+	color-scheme: light;
+	--void: #f4f4f5;
+	--haze: #e4e4e7;
+	--fg: #1c1917;
+	--fg-dim: #57534e;
+	--accent: #4f46e5;
+	--accent-dim: color-mix(in srgb, var(--accent) 32%, transparent);
+	--amber: #6366f1;
+	--nav-dock-shadow: var(--shadow-elevated);
+	--glass-inset: color-mix(in srgb, #fff 85%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 0.42s;
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+}

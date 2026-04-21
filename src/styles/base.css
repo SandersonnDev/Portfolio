@@ -1,0 +1,17 @@
+@layer base {
+	html {
+		font-family: var(--font-display);
+		color-scheme: dark;
+		background: var(--void);
+		color: var(--fg);
+		scroll-behavior: auto;
+		overflow-x: clip;
+		@apply antialiased;
+	}
+
+	body {
+		@apply min-h-dvh;
+		margin: 0;
+		overflow-x: clip;
+	}
+}
