@@ -1,0 +1,15 @@
+---
+description: Consulter la doc Tailwind CSS pour tout travail de styles (utilitaires, variants, thème).
+alwaysApply: true
+---
+
+# Tailwind CSS — référence doc obligatoire
+
+Dès qu’il s’agit d’ajouter ou de modifier du **style** (couleurs, espacements, états hover/focus, responsive, thème, etc.) :
+
+1. **S’appuyer sur la documentation officielle** [Tailwind CSS](https://tailwindcss.com/docs) (pages pertinentes : *Styling with utility classes*, *Hover, focus, and other states*, *Responsive design*, *Theme*, *Adding custom styles*, etc.) plutôt que d’improviser du CSS ad hoc.
+2. **Privilégier les utilitaires et patterns documentés** (variants `hover:`, `focus:`, `group-*`, `aria-*`, breakpoints, `@theme`, `@layer`) pour rester cohérent avec le projet et bénéficier du **scan / JIT** correct.
+3. **N’introduire du CSS custom** (`*.css`, balises `<style>`, etc.) que si la doc Tailwind le préconise pour ce cas (ex. `@apply` limité, `@theme` étendu, petites exceptions) ou si le besoin est **hors périmètre** des utilitaires ; dans ce cas, **citer la section doc** consultée ou expliquer brièvement pourquoi le CSS custom est nécessaire.
+4. **Vérifier la version** du projet (`package.json` : `tailwindcss`) et les exemples de la doc correspondants (v3 vs v4) pour éviter les API obsolètes.
+
+Objectif : **meilleure utilisation de Tailwind**, feuilles générées **optimisées** et styles **maintenables**.

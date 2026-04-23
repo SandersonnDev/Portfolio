@@ -1,0 +1,25 @@
+@layer components {
+	.i18n-pair .i18n-fr {
+		display: none;
+	}
+
+	html[data-lang="fr"] .i18n-pair .i18n-en {
+		display: none;
+	}
+
+	html[data-lang="fr"] .i18n-pair .i18n-fr {
+		display: inline;
+	}
+
+	.i18n-pair.i18n-block .i18n-en {
+		display: block;
+	}
+
+	.i18n-pair.i18n-block .i18n-fr {
+		display: none;
+	}
+
+	html[data-lang="fr"] .i18n-pair.i18n-block .i18n-fr {
+		display: block;
+	}
+}

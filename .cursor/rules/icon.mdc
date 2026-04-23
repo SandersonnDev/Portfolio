@@ -1,0 +1,8 @@
+---
+alwaysApply: true
+---
+
+# Icônes
+
+1. **Utiliser uniquement [Font Awesome](https://fontawesome.com/)** pour les icônes (classes `fa-*`, composants ou intégration déjà en place dans le projet).
+2. **Ne pas remplacer** un SVG (ou un bloc d’icône en SVG) **que tu as déjà mis toi-même** dans le code : le considérer comme intentionnel et le laisser tel quel.

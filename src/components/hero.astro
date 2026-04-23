@@ -1,29 +1,51 @@
+---
+import { hero as heroEn } from "../site.ENconfig.ts";
+import { hero as heroFr } from "../site.FRconfig.ts";
+import I18n from "./I18n.astro";
+---
+
 <section
 	id="home"
 	class="bg-white lg:grid lg:h-screen lg:place-content-center dark:bg-gray-900"
 >
-    <div class="mx-auto w-screen max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
-      <div class="mx-auto max-w-prose text-center">
-        <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl dark:text-white">
-          Understand user flow and
-          <strong class="text-indigo-600"> increase </strong>
-          conversions
-        </h1>
-  
-        <p class="mt-4 text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-gray-200">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, nisi. Natus, provident
-          accusamus impedit minima harum corporis iusto.
-        </p>
-  
-        <div class="mt-4 flex justify-center gap-4 sm:mt-6">
-          <a class="inline-block rounded border border-indigo-600 bg-indigo-600 px-5 py-3 font-medium text-white shadow-sm transition-colors hover:bg-indigo-700" href="#">
-            Get Started
-          </a>
-  
-          <a class="inline-block rounded border border-gray-200 px-5 py-3 font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white" href="#">
-            Learn More
-          </a>
-        </div>
-      </div>
-    </div>
+	<div class="mx-auto w-screen max-w-15xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+		<div class="mx-auto max-w-4xl text-start">
+			<h1 class="mb-5 font-mono text-lg font-bold text-gray-900 sm:text-xl dark:text-amber-500">
+				<I18n en={heroEn.heroTitle} fr={heroFr.heroTitle} block />
+			</h1>
+			<h2 class="text-4xl font-bold text-gray-900 sm:text-4xl dark:text-white">
+				<I18n en={heroEn.heroSubtitle} fr={heroFr.heroSubtitle} block />
+			</h2>
+			<h3 class="mb-10 text-5xl font-bold text-gray-900 sm:text-3xl dark:text-gray-400">
+				<I18n en={heroEn.heroDescription} fr={heroFr.heroDescription} block />
+			</h3>
+			<p class="max-w-1xl text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-gray-400">
+				<I18n en={heroEn.heroSubdescription} fr={heroFr.heroSubdescription} />
+				<a
+					class="text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-amber-500"
+					target="_blank"
+					rel="noopener noreferrer"
+					href={heroEn.heroLink1}
+					data-i18n-title-en={heroEn.heroLink1Title}
+					data-i18n-title-fr={heroFr.heroLink1Title}
+					title={heroEn.heroLink1Title}
+				>
+					<I18n en={heroEn.heroLink1Text} fr={heroFr.heroLink1Text} />.</a>
+				<I18n en={heroEn.heroSubdescription2} fr={heroFr.heroSubdescription2} />
+				<a
+					class="text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-amber-500"
+					target="_blank"
+					rel="noopener noreferrer"
+					href={heroEn.heroLink2}
+					data-i18n-title-en={heroEn.heroLink2Title}
+					data-i18n-title-fr={heroFr.heroLink2Title}
+					title={heroEn.heroLink2Title}
+				>
+					<I18n en={heroEn.heroLink2Text} fr={heroFr.heroLink2Text} />.</a>
+			</p>
+			<button class="mt-10 rounded-md border border-amber-500 px-4 py-2 text-amber-500" type="button">
+				<I18n en={heroEn.heroButton} fr={heroFr.heroButton} />
+			</button>
+		</div>
+	</div>
 </section>

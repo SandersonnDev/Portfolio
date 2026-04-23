@@ -1,0 +1,20 @@
+---
+/**
+ * Paire de chaînes EN/FR : visibilité pilotée par `html[data-lang="fr"]` (voir `i18n.css`).
+ * Utiliser `block` pour les titres en bloc (h1, etc.).
+ */
+interface Props {
+	en: string;
+	fr: string;
+	/** Affichage bloc pour les deux variantes (ex. titres) */
+	block?: boolean;
+	class?: string;
+}
+
+const { en, fr, block = false, class: className } = Astro.props;
+---
+
+<span class:list={["i18n-pair", block && "i18n-block", className]}>
+	<span class="i18n-en">{en}</span>
+	<span class="i18n-fr">{fr}</span>
+</span>

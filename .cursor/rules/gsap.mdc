@@ -1,0 +1,15 @@
+---
+alwaysApply: true
+---
+
+# GSAP — animations (scroll, texte, timelines)
+
+Dès qu’il s’agit d’**animer au scroll**, d’**animer du texte**, ou d’**animations JS** (timelines, séquences, scrub, etc.) :
+
+1. **Utiliser uniquement [GSAP](https://gsap.com/)** (déjà présent dans le projet : `package.json` → `gsap`). Ne pas introduire d’autre librairie d’animation ni remplacer par des équivalents ad hoc (gros `requestAnimationFrame` + listeners scroll maison, chaînes de `setTimeout`, etc.) pour ces besoins.
+2. **S’appuyer sur la documentation officielle** [GSAP v3 — Docs & Learning](https://gsap.com/docs/v3/) : lire les pages pertinentes (*Tween*, *Timeline*, *ScrollTrigger*, plugins texte / scroll listés dans la doc, *context()* / *revert()*, *matchMedia()*, etc.) et **reproduire les patterns documentés** plutôt que d’improviser des APIs ou des options non vérifiées.
+3. **Respecter la version** du dépôt (`gsap` dans `package.json`) et les exemples **v3** de la doc ; enregistrer les plugins comme le préconise la doc (et comme le fait le projet si un module central existe).
+4. **Durées des tweens / timelines** : pour les animations d’interface (entrées, hovers pilotés GSAP, transitions de contenu, etc.), viser une **`duration` entre 0,15 s (150 ms) minimum et 0,25 s (250 ms) maximum**, sauf exception documentée (ex. scroll animé vers une ancre, *scrub* lié au scroll, lecture utilisateur `prefers-reduced-motion`). Ajuster aussi `stagger` pour rester cohérent avec cette fenêtre.
+5. **Code propre et maintenable** : factoriser les timelines quand c’est pertinent, nettoyer les instances / *ScrollTriggers* lors des changements de page ou de composant (patterns doc : *revert*, *kill*, etc.).
+
+Objectif : **comportements prévisibles**, alignement **licence / plugins** avec la doc GSAP, et pas de solutions « inventées » en parallèle de la lib.

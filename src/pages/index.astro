@@ -1,16 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { info, nav } from "../site.config.ts";
 import Hero from "../components/hero.astro";
-import { withBase } from "../lib/paths";
 import About from "../components/about.astro";
-import Stack from "../components/stack.astro";
-import Projects from "../components/project.astro";
+import Work from "../components/work.astro";
 import Contact from "../components/contact.astro";
 ---
 
 <Layout>
 	<main>		
 		<Hero />
+		<About />
+		<Work />
+		<Contact />
 	</main>
 </Layout>
