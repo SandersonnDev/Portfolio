@@ -53,7 +53,7 @@ export const hero = {
 } as const;
 
 export const about = {
-	aboutTitle: "01. À propos de moi",
+	aboutTitle: "02. À propos de moi",
 	aboutDescription: "Mon parcours professionnel a débuté en infographie et mise en page, avec une formation de niveau bac axée sur la production graphique, la typographie, ainsi que les supports imprimés et numériques.",
 	aboutDescription2: "La licence en Conception, Développement et Interfaces Utilisateurs",
 	aboutDescription2Link: "https://www.onisep.fr/ressources/univers-metier/metiers/designer-developpeur-interface-utilisateur",
@@ -72,9 +72,5 @@ export const about = {
 } as const;
 
 export const work = {
-	workTitle: "Mes travaux",
-} as const;
-
-export const contact = {
-	contactTitle: "Contactez-moi",
+	workTitle: "03. Mes travaux",
 } as const;

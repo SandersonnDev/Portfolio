@@ -3,6 +3,7 @@ export const info = {
 	job: "Designer·developer",
 	email: "kouziaeffa.pro@gmail.com",
 	githubProfileUrl: "https://github.com/SandersonnDev",
+	linkedinProfileUrl: "https://www.linkedin.com/in/alexandre-kouziaeff/",
 	pitch: "of digital interfaces, from print to modern web",
 } as const;
 
@@ -20,6 +21,7 @@ export const nav = {
 	navlinkAbout: "#about",
 	navlinkContact: "#contact",
 	/* Button Title */
+	buttonLinkedin: "LinkedIn profile",
 	buttonGithub: "GitHub profile",
 	buttonEmail: "Email me",
 	/** Toggle theme */
@@ -68,9 +70,5 @@ export const about = {
 } as const;
 
 export const work = {
-	workTitle: "02. My work",
+	workTitle: "03. My work",
 } 	as const;
-
-export const contact = {
-	contactTitle: "03.Contact me",
-} as const;
