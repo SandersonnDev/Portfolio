@@ -6,51 +6,60 @@ import I18n from "./I18n.astro";
 
 <section
 	id="about"
-	class="bg-white lg:grid lg:h-screen lg:place-content-center dark:bg-gray-900"
+	class="bg-white grid min-h-screen place-items-center dark:bg-gray-900"
 >
-	<div class="mx-auto w-screen max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
-		<div class="mx-auto max-w-prose text-start">
-			<h1 class="text-lg font-bold text-gray-900 sm:text-xl dark:text-amber-500 font-mono mb-5">
+	<div class="mx-auto w-screen max-w-5xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+		<div class="grid gap-10 lg:grid-cols-[1fr_0.5fr] lg:grid-rows-[auto_1fr] lg:items-start">
+			<h1 class="text-lg font-bold text-gray-900 sm:text-xl dark:text-amber-500 font-mono mb-5 lg:col-start-1 lg:row-start-1">
 				<I18n en={aboutEn.aboutTitle} fr={aboutFr.aboutTitle} block />
 			</h1>
-			<p>
-				<I18n en={aboutEn.aboutDescription} fr={aboutFr.aboutDescription} />
-				<a
-					class="text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-amber-500"
-					target="_blank"
-					rel="noopener noreferrer"
-					href={aboutEn.aboutDescription2Link}
-					data-i18n-title-en={aboutEn.aboutDescription2LinkTitle}
-					data-i18n-title-fr={aboutFr.aboutDescription2LinkTitle}
-					title={aboutEn.aboutDescription2LinkTitle}
+
+			<div class="mx-auto max-w-2xl gap-2 flex flex-col text-start text-lg lg:mx-0 lg:col-start-1 lg:row-start-2">
+				<p>
+					<I18n en={aboutEn.aboutDescription} fr={aboutFr.aboutDescription} />
+					<I18n en={aboutEn.aboutDescription2} fr={aboutFr.aboutDescription2} />
+				</p>
+				<p>
+					<I18n en={aboutEn.aboutDescription3} fr={aboutFr.aboutDescription3} />
+					<I18n en={aboutEn.aboutDescription4} fr={aboutFr.aboutDescription4} />
+				</p>
+				<p>
+					<I18n en={aboutEn.aboutDescription5} fr={aboutFr.aboutDescription5} />
+				</p>
+				<ul class="grid grid-cols-4 gap-2 text-center">
+					<li>
+						<span>
+							<I18n en={aboutEn.aboutDescription5Stack} fr={aboutFr.aboutDescription5Stack} />
+						</span>
+					</li>
+					<li>
+						<span>
+							<I18n en={aboutEn.aboutDescription5Stack2} fr={aboutFr.aboutDescription5Stack2} />
+						</span>
+					</li>
+					<li>
+						<span>
+							<I18n en={aboutEn.aboutDescription5Stack3} fr={aboutFr.aboutDescription5Stack3} />
+						</span>
+					</li>
+				</ul>
+			</div>
+
+			<div class="w-max-content flex justify-center lg:justify-end lg:col-start-2 lg:row-start-2 lg:self-center">
+				<div
+					id="profil-picture"
+					class="relative h-[350px] w-[250px] overflow-visible"
 				>
-				<I18n en={aboutEn.aboutDescription2LinkText} fr={aboutFr.aboutDescription2LinkText} />.</a>
-				<I18n en={aboutEn.aboutDescription2After} fr={aboutFr.aboutDescription2After} />
-			</p>
-			<p>
-				<I18n en={aboutEn.aboutDescription3} fr={aboutFr.aboutDescription3} />
-				<a
-					class="pointer-events-none text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-amber-500"
-					>
-				<I18n en={aboutEn.aboutDescription3Stack} fr={aboutFr.aboutDescription3Stack} /></a>
-				<I18n en={aboutEn.aboutDescription3After} fr={aboutFr.aboutDescription3After} />
-				<a
-					class="pointer-events-none text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-amber-500"
-					>
-				<I18n en={aboutEn.aboutDescription3Stack2} fr={aboutFr.aboutDescription3Stack2} /></a>
-				<I18n en={aboutEn.aboutDescription3After2} fr={aboutFr.aboutDescription3After2} />
-			</p>
-			<p>
-				<I18n en={aboutEn.aboutDescription4} fr={aboutFr.aboutDescription4} />
-			</p>
-			<p>
-				<I18n en={aboutEn.aboutDescription5} fr={aboutFr.aboutDescription5} />
-				<a
-					class="pointer-events-none text-base text-pretty text-gray-700 sm:text-lg/relaxed dark:text-amber-500"
-					>
-				<I18n en={aboutEn.aboutDescription5Stack} fr={aboutFr.aboutDescription5Stack} /></a>
-				<I18n en={aboutEn.aboutDescription6} fr={aboutFr.aboutDescription6} />
-			</p>
+					<span class="pointer-events-none absolute -left-3 -top-3 h-15 w-10 border-l-2 border-t-2 border-gray-900 dark:border-amber-500"></span>
+					<span class="pointer-events-none absolute -right-3 -top-3 h-5 w-10 border-r-2 border-t-2 border-gray-900 dark:border-amber-500"></span>
+					<span class="pointer-events-none absolute -bottom-3 -left-3 h-5 w-10 border-b-2 border-l-2 border-gray-900 dark:border-amber-500"></span>
+					<span class="pointer-events-none absolute -bottom-3 -right-3 h-15 w-10 border-b-2 border-r-2 border-gray-900 dark:border-amber-500"></span>
+
+					<div class="bg-white h-full w-full overflow-hidden saturate-0 hover:saturate-100 transition-all duration-250">
+						<img src="../../public/images/about/profil.jpg" alt="Profil" class="w-full h-full object-cover" />
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>

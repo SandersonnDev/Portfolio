@@ -53,22 +53,15 @@ export const hero = {
 } as const;
 
 export const about = {
-	aboutTitle: "02. À propos de moi",
-	aboutDescription: "Mon parcours professionnel a débuté en infographie et mise en page, avec une formation de niveau bac axée sur la production graphique, la typographie, ainsi que les supports imprimés et numériques.",
-	aboutDescription2: "La licence en Conception, Développement et Interfaces Utilisateurs",
-	aboutDescription2Link: "https://www.onisep.fr/ressources/univers-metier/metiers/designer-developpeur-interface-utilisateur",
-	aboutDescription2LinkText: "CDUI",
-	aboutDescription2LinkTitle: "Qu'est-ce que le CDUI ?",
-	aboutDescription2After: "m'a permis de passer du design à la conception d'interfaces et de livrables interactifs, avec un accent particulier sur l'ergonomie et la mise en œuvre technique.",
-	aboutDescription3: "Au sein d'une entreprise de services numériques, je travaille sur la création de sites web",
-	aboutDescription3Stack: "(CMS, HTML/CSS)",
-	aboutDescription3After: "le support utilisateur, et la refactorisation du code vers des solutions internes. J'ai également contribué au développement d'un",
-	aboutDescription3Stack2: "framework PHP/JS",
-	aboutDescription3After2: "pour des sites web de petites et moyennes entreprises (TPE/PME), intégrant une approche RSE, ce qui a permis des réductions de coûts, une augmentation du trafic et une simplification de l'intégration de contenu.",
-	aboutDescription4: "Mon expérience avec des sites dynamiques, le développement de logiciels internes avec gestion de base de données et serveurs backend, m'a permis de renforcer mes compétences en JavaScript, ainsi qu'en gestion des pipelines de build, déploiement et optimisation des performances côté frontend.",
-	aboutDescription5: "Actuellement, je perfectionne mes compétences dans des technologies telles que",
-	aboutDescription5Stack: "Git, Docker, SQL,",
-	aboutDescription6: "et l'écosystème d'outils nécessaires pour livrer des solutions alignées avec les besoins métiers. Je contribue également à des projets privés, dont la confidentialité m'empêche de divulguer les détails."
+    aboutTitle: "02. À propos de moi",
+    aboutDescription: "Bonjour ! Je m’appelle Alexandre Kouziaeff et j’aime créer des expériences web utiles, claires et bien pensées.",
+    aboutDescription2: "Mon parcours a commencé en infographie et mise en page, avant d’évoluer vers la conception d’interfaces et le développement web.",
+    aboutDescription3: "Au fil du temps, j’ai travaillé sur des sites, du support utilisateur et des solutions techniques internes, avec une attention particulière portée à l’ergonomie, à la performance et à la qualité visuelle.",
+    aboutDescription4: "Aujourd’hui, je continue d’apprendre et d’affiner mes compétences pour concevoir des projets adaptés aux vrais besoins.",
+	aboutDescription5: "Voici quelques technologies sur lesquelles j’ai récemment travaillé :",
+	aboutDescription5Stack: "Astro",
+	aboutDescription5Stack2: "Tailwind CSS",
+	aboutDescription5Stack3: "TypeScript"
 } as const;
 
 export const work = {

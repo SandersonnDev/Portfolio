@@ -50,23 +50,15 @@ export const hero = {
 } as const;
 
 export const about = {
-	aboutTitle: "01. About me",
-	aboutDescription:"My professional journey began in graphic design and layout, with a background at the high school level focused on graphic production, typography, and both print and digital media",
-	aboutDescription2:"The Bachelor's degree in Design, Development, and User Interfaces",
-	aboutDescription2Link:"https://www.onisep.fr/ressources/univers-metier/metiers/designer-developpeur-interface-utilisateur",
-	aboutDescription2LinkText:"CDUI",
-	aboutDescription2LinkTitle:"What is CDUI?",
-	aboutDescription2After:"enabled me to transition from design to the development of interfaces and interactive deliverables, with an emphasis on ergonomics and technical implementation.",
-	aboutDescription3:"In a digital services company, I work on website creation",
-	aboutDescription3Stack:"(CMS, HTML/CSS)",
-	aboutDescription3After:"user support, and refactoring code to internal solutions. I also contributed to the development of a",
-	aboutDescription3Stack2:"PHP/JS", 
-	aboutDescription3After2:"framework for small and medium-sized business (SMB) websites, incorporating a CSR approach, resulting in cost reductions, increased traffic, and simplified content integration.",
-	aboutDescription4:"My experience with dynamic websites, internal software development with database management and backend servers, has allowed me to strengthen my skills in JavaScript, as well as in build pipelines, deployment, and front-end performance optimization.",
-	aboutDescription5:"Currently, I am deepening my expertise in technologies such as",
-	aboutDescription5Stack:"Git, Docker, SQL,",
-	aboutDescription6:"and the tooling ecosystem necessary to deliver solutions aligned with business needs. I also contribute to private projects, the details of which I am unable to disclose due to confidentiality.",
-
+    aboutTitle: "02. About Me",
+    aboutDescription: "Hello! My name is Alexandre Kouziaeff and I enjoy creating web experiences that are useful, clear, and thoughtfully designed.",
+    aboutDescription2: "My journey began in graphic design and layout, before evolving toward interface design and web development.",
+    aboutDescription3: "Over time, I’ve worked on websites, user support, and internal technical solutions, with a particular focus on usability, performance, and visual quality.",
+    aboutDescription4: "Today, I continue to learn and refine my skills in order to design projects that meet real needs.",
+    aboutDescription5: "Here are a few technologies I’ve recently worked with:",
+	aboutDescription5Stack: "Astro",
+	aboutDescription5Stack2: "Tailwind CSS",
+	aboutDescription5Stack3: "TypeScript"
 } as const;
 
 export const work = {
